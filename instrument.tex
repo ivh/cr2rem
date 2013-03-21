@@ -1,0 +1,264 @@
+\section{<<IIInstrument>> Instrument Description}
+\label{INSTR}
+
+<<IIInstrument>> has been developed under ESO contract by the VIRMOS Consortium, 
+headed by the Laboratoire d'Astrophysique de Marseille. 
+
+The instrument has been made available to the community and started 
+operations in Paranal on April $1^{st}$, 2003.
+
+In this chapter a brief description of the <<IIInstrument>> instrument is given.
+A more complete documentation can be found in the <<IIInstrument>> User Manual,
+downloadable from \ {\tt http://www.eso.org/instruments/vimos/}
+
+\subsection{Overview}
+\label{INSTR:OVER}
+
+<<IIInstrument>> is aimed at survey-type programs with emphasis on large object samples 
+rather than individual objects. <<IIInstrument>> is designed for Wide Field
+Imaging (14' x 16') and extremely high Multi Object Spectroscopy 
+capability (up to several hundred slits). In addition, it has a 
+unique {\it Integral Field Unit} (IFU) providing a field-of-view 
+up to 1 arc minute at 0.67''/fibre in low resolution spectroscopy. 
+
+The field-of-view is split in four identical channels. Field lenses 
+provide a corrected telescope focal plane where flat masks are 
+inserted in MOS mode. For the IFU instrument mode a special
+mask bearing the IFU pseudo-slits is used.
+Pupil relay lenses, folding mirrors and collimators 
+direct the light to the four cameras.
+Grisms are inserted in front of the cameras in spectroscopic mode.
+The detectors are four 2k x 4k EEV CCDs with pixel size 15 $\mu$ 
+(see \ {\tt http://www.eso.org/projects/odt/Vimos/vimos.html} \ for 
+detector design and performance reports of the four <<IIInstrument>> 
+CCD systems).
+
+\subsection{Direct imaging}
+
+The field-of-view consists of 4 quadrants of 7' x 8' each separated 
+by a cross 2' wide, with a sampling of 0.205''/pixel.
+
+The available filters, U, B, V, R, I, and z, are close to the Mould 
+definition, and allow 
+to minimise the colour terms to transform to the Johnson system.
+
+The filter transmission curves are available from  \
+{\tt http://www.eso.org/instruments/vimos}.
+
+\subsection{Multi-Object-Spectroscopy (MOS)}
+\label{INSTR:MOS}
+
+The multi-object mode of <<IIInstrument>> uses grisms and masks. ESO distributes
+the {\it <<IIInstrument>> Mask Preparation Software} (VMMPS), a package
+developed by the VIRMOS Consortium for slit definition and 
+positioning on a preliminary exposure on the sky region to be observed. 
+The user can define rectangular, curved or inclined slits of widths
+larger than 0.4''.
+The masks are laser cut in INVAR plates on Paranal with the 
+{\it Mask Manufacturing Unit} (MMU). 
+The instrument cabinet has a capacity of 15 masks, some of which 
+are meant for maintenance and calibration purposes\footnote{For 
+technical reasons only 7 slots of the masks cabinet
+are currently used.}. 
+
+There are 6 grisms available, all operating in first order.
+Their spectral characteristics are given in Table \ref{TGRISMS}.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{|l|l|c|c|c|c|}
+    \hline
+      {\bf Grism} & {\bf Filter} & {\bf $\lambda_c$} (\AA) & {\bf $\lambda$ range} (\AA) & {\bf R} & {\bf Dispersion} (\AA/pixel) \\
+    \hline
+
+LR\_red    & OS\_red  & 7500 & 5500 - 9500 & 210 - 260 & 7.3 \\
+LR\_blue   & OS\_blue & 4800 & 3700 - 6700 & 180 - 220 & 5.3 \\
+MR         & GG435    & 7000 & 5000 - 10000 & 580 - 720 & 2.5 \\
+HR\_red    & GG475    & 7400 & 5650 - 9500 & 2500 - 3100 & 0.6 \\
+HR\_orange & GG435    & 6310 & 4550 - 8400 & 2150 - 2650 & 0.6 \\
+HR\_blue   & none     & 5100 & 3650 - 6900 & 2050 - 2550 & 0.5 \\
+
+    \hline
+    \end{tabular}
+    \caption{\it <<IIInstrument>> grisms. 
+$\lambda_c$ is the zero deviation
+(or central) wavelength, and $R$ is the spectral resolution for a
+1'' MOS slit, corresponding to $\sim 0.8$ IFU fibre. The spectral ranges
+are given with the specified filter in.
+The HR\_red grism is not available for quadrant 4, and is replaced
+in this case with a HR\_orange grism. The transmission curves for
+the four grism/filter units are available at \
+{\tt http://www.eso.org/instruments/vimos}.}
+    \label{TGRISMS}
+  \end{center}
+\end{table}
+
+With LR grisms, a spectrum will typically span less than 600 pixels 
+along the dispersion direction. This allows a multiplexing factor 
+of 5, {\it i.e.}, to stack up to five spectra along the dispersion 
+direction, provided that there are enough well spaced targets in 
+the field-of-view. 
+
+With MR grisms, a spectrum will span about 2000 pixels when used 
+with the GG435 filter. It is therefore possible to stack
+up to 2 spectra along the dispersion direction, provided that the slits 
+are positioned at the very edges of the imaging field-of-view. 
+
+With HR grisms the spectra extend beyond the detector length,
+therefore multiplexing is impossible and
+the observable spectral interval depends on the position 
+of a slit on the mask, spanning about
+2400 \AA\ for the HR\_red and HR\_orange grisms, and
+about 2000 \AA\ for the HR\_blue grism.
+
+A further constraint on the slit positions comes from the presence of 
+the $0^{th}$, $-1^{st}$ and $2^{nd}$ grism diffraction orders.
+At low spectral resolution, a dim second order spectrum at twice
+the spectral resolution would be included in the CCD in the case of slits
+located in the lower ({\it i.e.}, bluer) regions of the mask. This spectrum
+would likely contaminate the multiplexed first order spectra on the
+red side of the CCD. Similarly, a mirrored $-1^{st}$ order spectrum at the same
+resolution of the $1^{st}$ order spectrum and with about 1/6
+of its luminosity, would be included
+in the CCD in the case of slits from the highest ({\it i.e.}, redder)
+regions of the mask. This spectrum
+would likely contaminate the multiplexed first order spectra on the
+blue side of the CCD (see an illustration of $-1^{st}$ contamination on 
+page \pageref{CONTAM}).
+For this reason multiplexed slits are constrained to be identical,
+and to have the same position along the cross-dispersion direction:
+in the assumption of negligible spectral curvatures in all orders, 
+the $0^{th}$, $2^{nd}$ and $-1^{st}$ contaminations would then be 
+removed by the sky subtraction procedure.
+
+Aside from the above considerations, the number of slits that can be 
+accommodated in one mask obviously depends on the target density. 
+Simulations on real fields using VMMPS show that above a density 
+of about $7\cdot10^4/$degree$^2$ it is possible to define 
+masks with up to 160 10'' long slits/quadrant. 
+This number drops to 125 slits/quadrant at a density of about 
+$4\cdot10^4/$degree$^2$.
+
+\newpage
+
+\subsection{Integral Field Unit (IFU)}
+\label{INSTR:IFU}
+
+The <<IIInstrument>> IFU is the largest ever made for such an application. 
+It consists of 6400 (80 x 80) fibres, coupled to microlenses. 
+The field-of-view is square, with a continuous spatial sampling 
+(the dead space between fibres is below 10\% 
+of the fibre-to-fibre distance). 
+At the entrance of the IFU there is a focal elongator providing 
+two spatial samplings of 0.33''/fibre and 0.67''/fibre. 
+
+The fibres are
+split into 16 bundles of 400 fibres each. Each instrument 
+quadrant receives 4 bundles that are arranged along
+4 parallel pseudo-slits providing 4 multiplexed series of 400
+spectra each.
+
+The field-of-view is modified according to the used
+spectral resolution. At low spectral resolution 
+the field is respectively 54'' x 54'' with 
+0.67''/fibre, and 27'' x 27'' with 0.33''/fibre, 
+80 fibres on a side. All the pseudo-slits are illuminated,
+and the multiplexed spectra belonging to different pseudo-slits
+would contaminate each other in some measure. For instance,
+the second order spectra of a bright object on pseudo-slit 2 
+of quadrant 2 would contaminate the spectra on pseudo-slits
+3 and 4, creating obvious ghosts in the corresponding regions
+of the reconstructed field-of-view (see Figures \ref{IFUSLIT} 
+and \ref{IFUHEAD}, pages \pageref{IFUSLIT}--\pageref{IFUHEAD}).
+
+At medium and high resolution just the 4 central bundles on the 
+IFU head are illuminated (see Figure \ref{IFUHEAD}, page \pageref{IFUHEAD}). 
+Only one pseudo-slit per quadrant is used, since the spectra span 
+the whole detector and multiplexing is impossible. 
+The field-of-view is therefore 4 times smaller, {\it i.e.}, 27'' x 27'' 
+with 0.67''/fibre, and 13'' x 13'' with 0.33''/fibre, 40 fibres on a side. 
+
+The fibre-to-fibre distance at detector level is about 5.0 pixels, 
+while the fibre profile FWHM is about 3.2 pixels. 
+The spectral resolution is approximately 1.25 times the spectral resolution 
+corresponding to a 1'' slit in MOS mode (see Table \ref{TGRISMS}).
+The spectral coverage is identical to the MOS case for
+LR and MR grisms. For HR grisms the situation is different because
+the spectral range is too large to be contained on the CCD,
+and since the central slit-of-fibres is shifted by about 140 pixels 
+from the chip centre in (spectrally) opposite directions
+depending on the instrument quadrant, the usable spectral range
+is reduced by about 160 \AA\, leading to Table \ref{TIFU}.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{|l|l|}
+    \hline
+      {\bf Grism} & {\bf $\lambda$ range (\AA)} \\
+    \hline
+
+HR\_red     & 6350 - 8600 \\
+HR\_orange  & 5250 - 7550 \\ 
+HR\_blue    & 4200 - 6150 \\
+
+    \hline
+    \end{tabular}
+    \caption{\it <<IIInstrument>> IFU usable spectral range in high spectral resolution
+mode.}
+    \label{TIFU}
+  \end{center}
+\end{table}
+
+\newpage 
+
+\subsection{IFU components numbering scheme}
+\label{IFUDEF}
+
+The conventions used in the <<IIInstrument>> IFU pipeline
+recipes to indicate IFU fibers,
+IFU masks and pseudo-slits are described in this section.
+
+\begin{description}
+  \item {\bf IFU masks:} <<IIInstrument>> has 4 IFU masks. They are counted as
+        the <<IIInstrument>> quadrants to which they correspond, {\it i.e.},
+        counterclockwise, with the same convention used in the
+        cartesian plane (see Figure \ref{fig:IFUMASK}).
+
+\putgraph{6}{quadrants.png}{IFUMASK}{Counting <<IIInstrument>> quadrants.}
+
+        In spectral mode, blue is down and red is up in all quadrants.
+
+  \item {\bf IFU pseudo-slits:} Each <<IIInstrument>> mask hosts 4 IFU pseudo-slits,
+        numbered from 1 to 4. The pseudo-slit 1
+        is the one that is somewhat more separated from the other ones
+        (see Figure \ref{fig:IFUSLIT}).
+
+\putgraph{11}{pseudoslits.png}{IFUSLIT}{Counting IFU pseudo-slits.}
+
+
+  \item {\bf IFU fibers:} Each IFU pseudo-slit hosts 400 fibers, divided
+        into 5 blocks of 80 fibers each. The fibers are counted from
+        1 to 400, always starting from the left.
+
+  \item {\bf IFU head:} Each pseudo-slit corresponds to a 20x20 region of the
+        80x80 IFU head (see Figure \ref{fig:IFUHEAD}).
+
+\putgraph{11}{ifuhead.png}{IFUHEAD}{IFU head. The number of the corresponding pseudo-slit is
+         indicated within each 20x20 fiber module.}
+
+        North is to the right, and East is up. The exact spatial position
+        for each individual fiber is listed in the IFU tables (see Table
+        \ref{IFUTABLE}, page \pageref{IFUTABLE}).
+
+\item {\bf Illuminated pseudo-slits:} In LR observations all the
+      pseudo-slits are illuminated (multiplexing). In MR and HR
+      observations, just the central pseudo-slits (numbered 2)
+      are used.
+
+\end{description}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+

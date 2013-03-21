@@ -1,0 +1,82 @@
+\section{Frequently Asked Questions}
+
+\begin{itemize}
+   \item {\bf Where are my intermediate pipeline products?}
+   Intermediate pipeline products are stored in the directory {\tt
+   \verb|<|TMP\_PRODUCTS\_DIR\verb|>|} (defined on the workflow canvas)
+   and organised further in directories by pipeline recipe.
+
+%\item {\bf I have many DataSets in my data directory. How can I reduce
+%  them interactively without having to wait a long time between
+%  interactive windows being displayed?}
+
+%Reduce all the DataSets at once with the interactive windows disabled
+%for all interactive actors. When this reduction has finished, you
+%should re-enable the interactive windows that you require, and run the
+%workflow again. The workflow will run in Lazy mode and no time will be
+%spent on pipeline reductions, unless you specifically change a
+%parameter in one of the interactive windows.
+        
+%      Note that Lazy mode will not work if the workflow parameter {\tt
+%        EraseDirs} is set to {\tt true}.
+
+   \item {\bf Can I use different sets of bias frames to calibrate my
+          flat frames and science data?}
+   Yes. In fact this is what is currently implemented in the workflow(s).
+   Each file in a DataSet has a purpose attached to it (\cite{REFLEXMAN}).
+   It is this purpose that is used by the workflow to send the correct
+   set of bias frames to the recipes for flat frame combination and 
+   science frame reduction, which may or may not be the same set of bias 
+   frames in each case.
+
+   \item {\bf Can I launch {\tt Reflex} from the command line?}
+   Yes, use the command:
+      \begin{verbatim}
+      reflex -- -runwf -nocache -nogui <workflow_path>/<workflow>.xml
+      \end{verbatim}
+   Note that this mode is not fully supported, and the user should be 
+   aware of two points. Firstly, the execution prompt is not returned after the
+   workflow finishes, and therefore {\tt Reflex} must be manually killed.
+   Secondly, all the interactive windows will still appear (if activated in the
+   workflow), so it is not suitable for batch processing.
+        
+   \item {\bf How can I add new actors to an existing workflow?}
+   You can drag and drop the actors in the menu on the left of the {\tt Reflex} 
+   canvas. Under {\tt Eso-reflex -> Workflow} you may find all the actors
+   relevant for pipeline workflows, with the exception of the recipe executer.
+   This actor must be manually instantiated using
+   {\tt Tools -> Instantiate Component}. Fill in the ``Class name'' field with 
+   {\tt org.eso.RecipeExecuter} and in the pop-up window choose the required 
+   recipe from the pull-down menu. To connect the ports of the actor, click on
+   the source port, holding down the left mouse button, and release the mouse
+   button over the destination port. Please consult the Reflex User Manual
+   (\cite{REFLEXMAN}) for more information.
+
+   \item {\bf How can I broadcast a result to different subsequent actors?}
+   If the output port is a multi-port (filled in white), then you may have
+   several relations from the port. However, if the port is a single port
+   (filled in black), then you may use the black diamond from the toolbar.
+   Make a relation from the output port to the diamond. Then make relations 
+   from the input ports to the diamond. Please note that you cannot click to 
+   start a relation from the diamond itself. Please consult the Reflex User 
+   Manual (\cite{REFLEXMAN}) for more information.
+
+   \item {\bf How can I run manually the recipes executed by Reflex?}
+   If a user wants to re-run a recipe on the command line he/she has to go to
+   the appropriate reflex\_book\_keeping directory, which is generally 
+   reflex\_book\_keeping/\instname/<recipe\_name>\_<number> (for instance 
+   reflex\_book\_keeping/\instname/bias\_1/). There, subdirectories exist with 
+   the time stamp of the recipe execution (e.g. 2013-01-25T12:33:53.926/). 
+   If the user wants to re-execute the most recent processing he/she should 
+   go to the {\tt latest} directory and then execute 
+   {\tt ESOREX\_CONFIG="REFLEX\_INST/etc/esorex.rc 
+   REFLEX\_INST/bin/esorex --recipe-config=<recipe>.rc <recipe> data.sof}, 
+   where REFLEX\_INST is the directory where Reflex and the pipelines were
+   installed. If the user knows the name of the input raw files for the 
+   recipe, the correct directory among the many time stamps can be found via 
+   {\tt grep <raw\_file> */data.sof}. Afterwards the procedure is the same 
+   as before. The products will appear in the directory from which the recipe
+   is called, and not in the reflex\_tmp\_products or reflex\_end\_products
+   directory, and they will not be renamed. 
+
+\end{itemize}

@@ -1,0 +1,51 @@
+\section{Software Installation}
+
+The software pre-requisites for {\tt Reflex \reflexvers} may be found at:\newline
+  \http{www.eso.org/sci/software/pipelines/reflex\_workflows}
+
+To install the {\tt Reflex \reflexvers} software and demo data, 
+please follow these instructions:
+\begin{enumerate}
+  \item From any directory, download the installation script:
+        {\small
+        \begin{verbatim}
+        wget ftp://ftp.eso.org/pub/dfs/reflex/install_reflex
+        \end{verbatim}
+        }
+
+  \item Make the installation script executable:
+        {\small
+        \begin{verbatim}
+        chmod u+x install_reflex
+        \end{verbatim}
+        }
+
+  \item Execute the installation script:
+        {\small
+        \begin{verbatim}
+        ./install_reflex
+        \end{verbatim}
+        }
+        and the script will ask you to specify three directories: the download
+        directory {\tt \verb|<|download\_dir\verb|>|}, the software
+        installation directory {\tt \verb|<|install\_dir\verb|>|}, 
+        and the directory to be used to store the demo data 
+        {\tt \verb|<|data\_dir\verb|>|}.
+        If you do not specify these directories, then the installation script 
+        will create them in the current directory with default names.
+
+  \item You will be given a choice of pipelines (with the corresponding 
+        workflows) to install. Please specify the numbers for the pipelines 
+        you require, separated by a space, or type ``A'' for all pipelines.
+
+  \item To start {\tt Reflex}, issue the command:
+        {\small
+        \begin{verbatim}
+        <install_dir>/bin/reflex
+        \end{verbatim}
+        }
+        It may also be desirable to set up an alias command for starting the 
+        {\tt Reflex} software, using the shell command {\tt alias}. 
+        Alternatively, the {\tt PATH} variable can be updated to contain the
+        {\tt \verb|<|install\_dir\verb|>|/bin} directory.
+\end{enumerate}

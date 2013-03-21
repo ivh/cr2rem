@@ -1,0 +1,148 @@
+\section{Instrument Data Description}
+\label{DATA}
+
+IIINSTRUMENT data can be separated into {\it raw} frames and {\it product} frames.
+Raw frames are the unprocessed output of the IIINSTRUMENT instrument observations,
+while product frames are either the result of the IIINSTRUMENT pipeline processing 
+(as reduced frames, master calibration frames, etc.), or are outsourced (as 
+standard stars catalogs, lists of grism characteristics, etc.).
+
+Any raw or product frame can be classified on the basis of a set of keywords 
+read from its header. Data classification is typically carried out by the 
+DO or by \ {\it Gasgano} [7], that apply the same set of classification
+rules. The 
+association of a raw frame with calibration data ($e.g.$, of a science 
+frame with a master bias frame) can be obtained by matching the values 
+of a different set of header keywords.
+
+Each kind of \ raw \ frame is typically associated to a single IIINSTRUMENT
+pipeline recipe, {\it i.e.}, the recipe assigned to the reduction of that
+specific frame type. In the pipeline environment this recipe would 
+be launched automatically. In some cases two recipes are assigned,
+one meant for the reduction of a single frame of that type, and the
+other for the reduction of a \ {\it stack} \ of frames of the same 
+type, as happens in the case of jittered science observations. 
+
+A \ product \ frame may be input to more than one IIINSTRUMENT pipeline recipe, 
+but it may be created by just one pipeline recipe (with the same
+exceptions mentioned above). In the automatic pipeline environment a 
+product data frame alone wouldn't trigger the launch of any recipe.
+
+In the following all raw and product IIINSTRUMENT data frames are listed,
+together with the keywords used for their classification and 
+correct association. The indicated {\it DO category} is a 
+label assigned to any data type after it has been classified,
+which is then used to identify
+the frames listed in the {\it Set of Frames} (see Section
+\ref{SOF}, page \pageref{SOF}).
+
+\label{DATA:RAW}
+
+Raw frames can be distinguished in {\it general} frames, {\it direct imaging}
+frames, {\it MOS} frames and {\it IFU} frames. Their intended use is
+implicitly defined by the assigned recipe.
+
+\subsection{General frames}
+\label{DATA:GEN}
+
+These are data that are in principle independent of the instrument mode 
+(direct imaging, MOS, or IFU), as is the case for bias and dark exposures. 
+The keyword \ {\tt ESO INS MODE} \ is set accordingly to 'IMG' for direct 
+imaging frames, and to 'MOS' for any calibration associated to spectroscopy 
+(either MOS or IFU), to indicate the intended use for the data.
+
+
+{\small \begin{itemize}
+
+\item {\bf Bias:}
+
+DO category: {\tt BIAS} \\
+Processed by: {\tt vmbias}
+
+\begin{tabbing}
+{\tt x} \= {\tt xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxx} \kill
+\> Classification keywords: \> Association keywords: \> Note: \\
+\> {\tt DPR CATG = CALIB} \> {\tt INS MODE} \> Instrument mode \\
+\> {\tt DPR TYPE = BIAS} \> {\tt OCS CON QUAD} \> Quadrant used \\
+\> {\tt DPR TECH = IMAGE} \> {\tt DET CHIP1 ID} \> Chip identification \\
+\> \> {\tt DET WIN1 NY} \> No of pixels in y \\
+\> \> {\tt DET WIN1 BINX} \> Binning along X \\
+\> \> {\tt DET WIN1 BINY} \> Binning along Y \\
+\> \> {\tt DET READ MODE} \> Readout method \\
+\> \> {\tt DET READ SPEED} \> Readout speed \\
+\> \> {\tt DET READ CLOCK} \> Readout clock pattern \\
+\end{tabbing}
+
+\item {\bf Dark current:}
+
+DO category: {\tt DARK} \\
+Processed by: {\tt vmdark}
+
+\begin{tabbing}
+{\tt x} \= {\tt xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxx} \kill
+\> Classification keywords: \> Association keywords: \> Note: \\
+\> {\tt DPR CATG = CALIB} \> {\tt INS MODE} \> Instrument mode \\
+\> {\tt DPR TYPE = DARK} \> {\tt OCS CON QUAD} \> Quadrant used \\
+\> {\tt DPR TECH = IMAGE} \> {\tt DET CHIP1 ID} \> Chip identification \\
+\> \> {\tt DET WIN1 NY} \> No of pixels in y \\
+\> \> {\tt DET WIN1 BINX} \> Binning along X \\
+\> \> {\tt DET WIN1 BINY} \> Binning along Y \\
+\> \> {\tt DET READ MODE} \> Readout method \\
+\> \> {\tt DET READ SPEED} \> Readout speed \\
+\> \> {\tt DET READ CLOCK} \> Readout clock pattern \\
+\end{tabbing}
+
+\item {\bf Screen flat field for gain determination and bad pixels detection:}
+
+DO category: {\tt DETECTOR\_PROPERTIES} \\
+Processed by: {\tt vmdet}
+
+\begin{tabbing}
+{\tt x} \= {\tt xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxx} \kill
+\> Classification keywords: \> Association keywords: \> Note: \\
+\> {\tt DPR CATG = CALIB} \> {\tt INS MODE} \> Instrument mode \\
+\> {\tt DPR TYPE = FLAT,LAMP} \> {\tt OCS CON QUAD} \> Quadrant used \\
+\> {\tt DPR TECH = IMAGE} or {\tt MOS} \> {\tt DET CHIP1 ID} \> Chip identification \\
+\> {\tt TPL ID = IIINSTRUMENT\_img\_tec\_DetLin} \> {\tt DET WIN1 NY} \> No of pixels in y \\
+\> or {\tt IIINSTRUMENT\_mos\_tec\_DetLin} \> {\tt DET WIN1 BINX} \> Binning along X \\
+\> \> {\tt DET WIN1 BINY} \> Binning along Y \\
+\> \> {\tt DET READ MODE} \> Readout method \\
+\> \> {\tt DET READ SPEED} \> Readout speed \\
+\> \> {\tt DET READ CLOCK} \> Readout clock pattern \\
+\end{tabbing}
+
+\end{itemize}}
+
+
+\subsection{Direct imaging frames}
+\label{DATA:DIR}
+
+The direct imaging mode is used to record signal without using any grism.
+
+{\small \begin{itemize}
+
+\item {\bf Exposure of calibration mask:}
+
+DO category: {\tt MASK\_TO\_CCD} \\
+Processed by: {\tt vmmasktoccd}
+
+\begin{tabbing}
+{\tt x} \= {\tt xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxxxxxxxxx} \= {\tt xxxxxxxxxxxx} \kill
+\> Classification keywords: \> Association keywords: \> Note: \\
+\> {\tt DPR CATG = CALIB} \> {\tt INS MODE} \> Instrument mode \\
+\> {\tt DPR TYPE = OTHER,LAMP} \> {\tt OCS CON QUAD} \> Quadrant used \\
+\> {\tt DPR TECH = IMAGE} \> {\tt INS ADF ID} \> ADF file ID \\
+\> {\tt TPL ID = IIINSTRUMENT\_img\_tec\_MaskToCcd} \> {\tt INS FILT[1-4] ID} \> Filter ID on each beam \\
+ \> \> {\tt DET CHIP1 ID} \> Chip identification \\
+ \> \> {\tt DET WIN1 NY} \> No of pixels in y \\
+ \> \> {\tt DET WIN1 BINX} \> Binning along X \\
+ \> \> {\tt DET WIN1 BINY} \> Binning along Y \\
+ \> \> {\tt DET READ MODE} \> Readout method \\
+ \> \> {\tt DET READ SPEED} \> Readout speed \\
+ \> \> {\tt DET READ CLOCK} \> Readout clock pattern \\
+\end{tabbing}
+
+\end{itemize}}
+
+
+

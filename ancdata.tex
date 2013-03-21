@@ -1,0 +1,80 @@
+\section{Static Calibration Data}
+\label{CALDATA}
+
+In the following all raw and product IIINSTRUMENT data frames are listed,
+together with the keywords used for their classification and 
+correct association. The indicated {\it DO category} is a 
+label assigned to any data type after it has been classified,
+which is then used to identify
+the frames listed in the {\it Set of Frames} (see Section
+\ref{SOF}, page \pageref{SOF}).
+
+\subsection{Photometric table} 
+
+The optional determination of the frame magnitude 
+zeropoint from the table of detected standard stars (see ahead) 
+would require to specify in the input SOF a photometric table.
+The photometric table simply holds the necessary parameters
+for the magnitude zeropoint computation, as listed in Table \ref{PHOTO}.
+The standard photometric tables in the calibration directories are
+named \ {\tt ipc\_}$f${\tt .}$q${\tt .tfits} \ (where $f$ is the filter
+name and $q$ the quadrant number).
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{|l|c|l|}
+    \hline
+      {\bf Keyword} & {\bf Example} & {\bf Explanation} \\
+    \hline
+      {\tt PRO MAG ZERO} & 28.15 & Expected magnitude zeropoint  \\
+      {\tt PRO EXTINCT}  &  0.25 & Atmospheric extinction coefficient  \\
+      {\tt PRO COLTERM}  &  0.01 & Correction for star colour  \\
+      {\tt PRO COLOUR}   & 'B-V' & Colour system used  \\
+      {\tt PRO MAGZERO RMS} & 0.05 & Error on expected zeropoint  \\
+      {\tt PRO EXTINCT RMS} & 0.00 & Error on extinction coefficient  \\
+      {\tt PRO COLTERM RMS} & 0.00 & Error on colour term  \\
+    \hline
+    \end{tabular}
+    \caption{\it Photometric table entries.}
+    \label{PHOTO}
+  \end{center}
+\end{table}
+
+
+
+\subsection{Photometric catalog} 
+
+The photometric catalog currently used can be 
+found in the directory  \ {\tt \$PIPE\_HOME/vimos/ima/cal}, 
+\ in the file \ {\tt phstd\_stetson.tfits} \ (see Table \ref{STETSON}). 
+This table includes the photometric stars from the Stetson's fields 
+(see \ {\tt http://cadcwww.dao.nrc.ca/standards}); Landolt's stars 
+(Landolt 1992, AJ 104, 340) that can be found in the Stetson's fields 
+are also included, to permit the determination of zeropoints also in 
+the U band.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{|l|l|}
+    \hline
+      {\bf Column name} & {\bf Explanation} \\
+    \hline
+      {\tt ID}       & Star identification string \\
+      {\tt RA}       & RA of star \\
+      {\tt DEC}      & Dec of star \\
+      {\tt MAG\_U}   & U magnitude of star \\
+      {\tt MAG\_B}   & B magnitude of star \\
+      {\tt MAG\_V}   & V magnitude of star \\
+      {\tt MAG\_R}   & R magnitude of star \\
+      {\tt MAG\_I}   & I magnitude of star \\
+    \hline
+    \end{tabular}
+    \caption{\it Photometric catalog entries.}
+    \label{STETSON}
+  \end{center}
+\end{table}
+
+\newpage
+
+
+\newpage

@@ -1,0 +1,93 @@
+\section{Overview}
+\label{OVER}
+
+In collaboration with instrument consortia, the Data Flow Systems
+Department (DFS) of the Data Management and Operation Division is
+implementing data reduction pipelines for the most commonly used VLT/VLTI
+instrument modes. These data reduction pipelines have the following three
+main purposes:
+
+\begin{description}
+\item [Data quality control:] pipelines are used to produce the
+quantitative information necessary to monitor instrument performance.
+\item [Master calibration product creation:] pipelines are used to
+produce master calibration products ({\it e.g.}, combined bias frames,
+super-flats, wavelength dispersion solutions).
+\item [Science product creation:] using pipeline-generated master
+calibration products, science products are produced for the supported
+instrument modes ({\it e.g.}, combined ISAAC jitter stacks; bias-corrected,
+flat-fielded FORS images, wavelength-calibrated UVES spectra). The
+accuracy of the science products is limited by the quality of the
+available master calibration products and by the algorithmic
+implementation of the pipelines themselves. In particular, adopted
+automatic reduction strategies may not be suitable or optimal for all
+scientific goals.
+\end{description}
+
+Instrument pipelines consist of a set of data processing modules that can be
+called from the command line, from the automatic data management tools 
+available on Paranal or from Gasgano.
+
+
+
+ESO offers two front-end applications for launching pipeline
+recipes, \ {\it Gasgano} [14] \ and \ {\it EsoRex}, both included 
+in the pipeline distribution (see Appendix \ref{installation}, 
+page \pageref{installation}). These applications can also be downloaded 
+separately from \ \texttt{http://www.eso.org/gasgano} 
+\ and \ \texttt{http://www.eso.org/cpl/esorex.html}.
+An illustrated introduction to Gasgano is provided in the "Quick Start" 
+Section of this manual (see page \pageref{COOK}).
+
+
+%A short overview of the instrument and raw data are provided in sections 
+%\ref{instrument} and \ref{rawdata}. Auxiliary data are described in 
+%section \ref{ancillary_data}. An overview of the data reduction, what 
+%are the input data, and the recipes involved in the calibration cascade 
+%together with a brief description on how to execute each recipe is 
+%provided in section \ref{data_reduction}.
+%More details on what is the input to each recipe, its products and quality
+%control parameters, and their input controlling parameters is given 
+%in section \ref{pipeline_recipe_interfaces}.
+%A detailed description of the recipe algorithm used and on how each recipe 
+%is implemented is provided in section \ref{algorithms}.
+%To support the IIINSTRUMENT package installation we also provide 
+%Appendix \ref{installation}.
+
+
+The IIINSTRUMENT instrument and the different types of IIINSTRUMENT raw frames 
+and auxilliary data are described in Sections \ref{instrument}, \ref{DATA}, and \ref{CALDATA}.
+
+
+A brief introduction to the usage of the available reduction recipes 
+using Gasgano or EsoRex is presented in Section \ref{COOK}.
+In section \ref{PROBLEMS} we advice the user 
+about known data reduction problems providing also possible solutions.
+
+An overview of the data reduction, what 
+are the input data, and the recipes involved in the calibration cascade 
+is provided in section \ref{data_reduction}.
+
+
+More details on what are inputs, products, quality control measured quantities,
+ and controlling parameters of each recipe is given 
+in section \ref{pipeline_recipe_interfaces}.
+
+More detailed descriptions of the data reduction algorithms used by
+the individual pipeline recipes can be found in Section \ref{ALGORITHMS}.
+
+%\framebox{
+%\parbox{\linewidth}{
+%In Section \ref{WHATSNEW} an overview of what's new on IIINSTRUMENT Pipeline
+%release 2.0 is given.
+%}}
+
+In Appendix \ref{installation} the installation of the IIINSTRUMENT pipeline 
+recipes is described and 
+in Appendix \ref{ABBREVIATIONS} a list of used abbreviations and acronyms 
+is given.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
