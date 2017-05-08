@@ -33,4 +33,3 @@ install: cr2repdoc.pdf
 	TEXINPUTS=$(TEXINPUTS); export TEXINPUTS; pdflatex $*
 	-grep 'Label.s. may have changed' `basename $*.log` && echo s| TEXINPUTS=$(TEXINPUTS) pdflatex $*
 	-grep 'Label.s. may have changed' `basename $*.log` && echo s| TEXINPUTS=$(TEXINPUTS) pdflatex $*
-	-perl -e 'system("grep -w Warning `basename $*.log`") || die "Warnings are not allowed\n"'
