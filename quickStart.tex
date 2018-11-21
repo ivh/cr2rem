@@ -1,27 +1,19 @@
 \section{\label{COOK}Quick start}
 
-
-This section describes the most immediate usage of the IIINSTRUMENT pipeline 
+This section describes the most immediate usage of the pipename, pipeline 
 recipes.
 
 
-\subsection{IIINSTRUMENT pipeline recipes}
+\subsection{pipename, pipeline recipes}
 \label{RECIPES}
-The current IIINSTRUMENT pipeline is based on a set of 8 stand-alone recipes 
+The current pipename, pipeline is based on a set of 8 stand-alone recipes 
 involved in the data reduction cascade:
 
 \begin{description}
-\item {\bf si\_rec\_detlin} to evaluate the detector non linearity and 
-generate a corresponding non linear pixel map.
-\item {\bf si\_rec\_mdark} to create a master dark and a hot-pixel map. 
-\item {\bf si\_rec\_mflat} to create a master flat and a map of pixels 
-which have intensities greater than a given threshold.
-\item {\bf si\_rec\_distortion} to compute the optical distortions and 
-slitlets distances. 
-\item {\bf si\_rec\_wavecal} for wavelength calibration.
-\item {\bf si\_rec\_psf} for PSF standard data reduction.
-\item {\bf si\_rec\_stdstar} for STD standard data reduction.
-\item {\bf si\_rec\_objnod} for science standard data reduction.
+\item {\bf cr2res\_cal\_detlin} to evaluate the detector non linearity 
+\item {\bf cr2res\_cal\_xxx} ...
+\item {\bf cr2res\_util\_xxx} ...
+\item {\bf cr2res\_obs\_xxx} ...
 \end{description}
 
 \subsection{An introduction to Gasgano and EsoRex}
@@ -63,10 +55,8 @@ directly the pipeline recipes on a set of selected files.
 
 \subsubsection{Using Gasgano}
 \label{GASGANO}
-
-
  
-To get familiar with the IIINSTRUMENT pipeline recipes and their usage, it 
+To get familiar with the pipename, pipeline recipes and their usage, it 
 is advisable to begin with \ {\it Gasgano}, \ because it provides
 a complete graphic interface for data browsing, classification and 
 association, and offers several other utilities such as easy access 
@@ -80,7 +70,7 @@ to recipes documentation and preferred data display tools.
 
 
 The \ {\it Gasgano} \ main window will appear. On Figure \ref{GAS_MAIN}
-(next page), a view on a set of IIINSTRUMENT IFU data is shown as an 
+(next page), a view on a set of pipename, IFU data is shown as an 
 example. \ {\it Gasgano} \ can 
 be pointed to the directories where the data to be handled are located
 using the navigation panels accessible via the \ {\it Add/Remove Files} \
@@ -99,16 +89,6 @@ FITS file header will be displayed on the bottom panel, where
 specific keywords can be opportunely filtered and searched.
 Images and tables may be easily displayed using the 
 viewers specified in the appropriate \ {\it Preferences} \ fields.
-
-% The file names corresponding to raw data ({\it i.e.}, those produced 
-% by the instrument) appear in blue, while the names of the processed 
-% data and of the static calibration tables appear in red. In Figure 
-% \ref{GAS_MAIN} is clearly visible the master bias product, 
-% \ {\tt master\_bias1.fits}, \ already derived from the raw bias 
-% exposures belonging to the same sub-group: in this way the association
-% of a product frame with the corresponding raw files is made evident
-% by the \ {\it Gasgano} \ interface.
-
 
 Frames can be selected from the main window for being processed
 by the appropriate recipe: on Figure \ref{GAS_SEL}, the standard star frame 
@@ -147,13 +127,11 @@ description of the \ {\it Gasgano} \ interface.
 \label{GAS_MAIN}
 \end{figure}
 
-
-
 \begin{figure}[h]
 \begin{center}
 %\includegraphics[width=23truecm]{gasgano2.eps}
 \end{center}
-\caption{\it Selecting files to be processed by a IIINSTRUMENT pipeline recipe.}
+\caption{\it Selecting files to be processed by a pipename, pipeline recipe.}
 \label{GAS_SEL}
 \end{figure}
 
@@ -167,9 +145,6 @@ description of the \ {\it Gasgano} \ interface.
 
 \clearpage
 
-%%%
-
-
 
 \subsubsection{Using EsoRex}
 \label{ESOREX}
@@ -179,8 +154,7 @@ It may be embedded by users into data reduction scripts for the automation
 of processing tasks. On the other side, \ {\it EsoRex} \ doesn't offer 
 all the facilities available with \ {\it Gasgano}, \ and the user must 
 classify and associate the data using the information contained in 
-the FITS header keywords (see Section \ref{DATA:GEN}, 
-page \pageref{DATA:GEN}). 
+the FITS header keywords.
 The user should also take care of defining the input set-of-frames and 
 the appropriate configuration parameters for each recipe run:
 
@@ -195,24 +169,12 @@ the \ {\it set-of-frames} \ (SOF), that is required when launching a recipe.
 \footnote{The set-of-frames corresponds to the \ {\it Input Frames} \ panel
 of the \ {\it Gasgano} \ recipe execution window (see Figure \ref{GAS_REC},
 page \pageref{GAS_REC}).}
-% SOF files containing the frames selected by the user are automatically 
-% created by \ {\it Gasgano} [7], while they need to be created in some
-% way by the user working with \ {\it EsoRex}.
 
-Here is an example of SOF, valid for the \ {\it si\_rec\_wavecal} \ recipe
-\footnote{We list the file SLIT\_POS\_H\_250.fits as an input file, as,
-for robustness, we suggest the user to set the parameter 
-{\bf slitpos\_bootstrap\_switch} to FALSE. A different setting would allow
-to reduce the data without including the SLIT\_POS table}:
+Here is an example of SOF, valid for the \ {\it cr2res\_cal\_dark} \ recipe:
 \begin{verbatim}
-    /file_path/SINFO.2004-08-14T10:20:56.497.fits  WAVE_LAMP
-    /file_path/SINFO.2004-08-14T10:22:44.285.fits  WAVE_LAMP
-    /file_path/xenon.tfits                         REF_LINE_ARC
-    /file_path/MASTER_BP_MAP_H_250.fits            MASTER_BP_MAP
-    /file_path/MASTER_LAMP_FLAT_H_250.fits         MASTER_FLAT_LAMP
-    /file_path/DISTORTION_H.fits                   DISTORTION
-    /file_path/drs_setup_wave.tfits                DRS_SETUP_WAVE
-    /file_path/SLIT_POS_H_250.tfits                SLIT_POS
+    /file_path/CR2RES.2019-08-14T10:20:56.497.fits  DARK
+    /file_path/CR2RES.2019-08-14T10:22:44.285.fits  DARK
+    /file_path/detlinfits                           DETLIN
 \end{verbatim}
 
 It contains for each input frame the full path file name and its 
@@ -220,9 +182,9 @@ DO category.
 The pipeline recipe will access the listed files when required 
 by the reduction algorithm.
 
-Note that the IIINSTRUMENT pipeline recipes do not verify in any way the 
+Note that the pipename, pipeline recipes do not verify in any way the 
 correctness of the {\it DO Category} specified by the user in the SOF. 
-The reason of this lack of control is that the IIINSTRUMENT recipes are just 
+The reason of this lack of control is that the pipename, recipes are just 
 the DRS component of the complete pipeline running on Paranal, where 
 the task of data classification and association is carried out by 
 separate applications. Moreover, using \ {\it Gasgano} \ as
@@ -279,29 +241,28 @@ corresponds to the \ {\it Parameters} \ panel of the \ {\it Gasgano} \
 recipe execution window (see Figure \ref{GAS_REC}, page \pageref{GAS_REC}).}
 The configuration files are normally generated in the directory 
 \ {\tt \$HOME/.esorex}, 
-%(as will be shown in the subsequent examples),
 and have the same name as the recipe to which they are related, 
 with the filename extension \ {\tt .rc}. For instance, the recipe 
-\ {\it si\_rec\_wavecal} \ has its \ {\it EsoRex} \ generated configuration 
-file named \ {\tt si\_rec\_wavecal.rc}, and is generated with the command:
+\ {\it cr2res\_cal\_dark} \ has its \ {\it EsoRex} \ generated configuration 
+file named \ {\tt cr2res\_cal\_dark.rc}, and is generated with the command:
 
 {\bf esorex -\,-create-config si\_rec\_wavecal}
 
 The definition of one parameter of a recipe may look like this:
 \begin{verbatim}
-# --stack-warpfix_kernel
-# Warpfix kernel:  (tanh | sinc | sinc2 | lanczos | hamming | hann)
-sinfoni.stacked.warpfix_kernel=tanh
+# --ron_hsize
+# Half size of the window for RON computation.
+cr2res_cal_dark.ron_hsize=6
 \end{verbatim}
 
 
-In this example, the parameter \ {\tt sinfoni.stacked.warpfix\_kernel} 
-\ is set to the value \ {\tt tanh}. \ In the configuration file
+In this example, the parameter \ {\tt ron\_hsize} 
+\ is set to the value \ {\tt 6}. \ In the configuration file
 generated by \ {\it EsoRex}, \ one or more comment lines are added
 containing information about the possible values of the parameter, and
 an alias that could be used as a command line option.  
 
-The recipes provided by the IIINSTRUMENT pipeline are designed to implement 
+The recipes provided by the pipename, pipeline are designed to implement 
 a cascade of macro data reduction steps, each controlled by 
 its own parameters.
 For this reason and to prevent parameter name clashes we specify as 
@@ -339,11 +300,11 @@ name, should be explicitly specified when launching a recipe.
 A recipe can be run by specifying its name to 
 \ {\it EsoRex}, together with the name of a set-of-frames.
 For instance, the
-following command line would be used to run the recipe \ {\it si\_rec\_wavecal}
+following command line would be used to run the recipe \ {\it cr2res\_cal\_dark}
 \ for processing the files specified in the set-of-frames 
-\ {\tt si\_rec\_wavecal.sof}:
+\ {\tt cr2res\_cal\_dark.sof}:
 
-   {\bf esorex si\_rec\_wavecal si\_rec\_wavecal.sof}
+   {\bf esorex cr2res\_cal\_dark cr2res\_cal\_dark.sof}
 
 The recipe parameters can be modifyed either by editing directly the 
 used configuration file, or by specifying new parameter values
@@ -352,13 +313,12 @@ purpose. Such command line options should be inserted after the
 recipe name and before the SOF name, and they will supersede the
 system defaults and/or the configuration file settings. For instance, 
 to set the
-\ {\it si\_rec\_wavecal} \ recipe \ {\it wcal-pixel\_tol} \ parameter to 
-\ {\tt 3.0},
+\ {\it cr2res\_cal\_dark} \ recipe \ {\it ron\_hsize} \ parameter to 
+\ {\tt 7},
 \ the following should be typed:
 
 
-   {\bf esorex si\_rec\_wavecal -\,-wcal-pixel\_tol=3.0 si\_rec\_wavecal.sof}
-
+   {\bf esorex cr2res\_cal\_dark -\,-ron\_hsize=7 cr2res\_cal\_dark.sof}
 
 \end{description}
 
@@ -373,42 +333,6 @@ A simple, typical data reduction procedure is described
 here.\footnote{The procedure using \ {\it Gasgano} 
 \ is conceptually identical.}
 
-
-We suggest the user to organize his data per type, 
-observed band and camera setting. Dark frames may be
-grouped per detector DIT, frames to compute distortion and frames to
-compute detector non linearities may be organized
-per observed band. The detector DIT is given by the value of the
-FITS keyword DET DIT\footnote{We omit here the prefix HIERARCH ESO}. 
-The observed band is indicated by the value of the FITS keyword 
-INS SETUP ID. The camera setting is indicated by the value of
-INS OPTI1 NAME. In the examples below we suppose the user has data 
-acquired in band K and with the 100 mas pre-optic setting, and DIT=600.
-In the following examples {\tt /path\_raw/} indicates the full path to the
-source tree directory containing raw data.
-
-Dark Frames: those frames are characterized by DPR.TYPE='DARK',
-
-\begin{verbatim}
-/path_raw/DARK/600/SINFO.2004-08-23T09:36:12.316.fits DARK
-/path_raw/DARK/600/SINFO.2004-08-23T09:51:59.824.fits DARK
-/path_raw/DARK/600/SINFO.2004-08-23T10:07:40.760.fits DARK
-\end{verbatim}
-
-
-Detector linearity flat field frames: those frames are caracterized 
-by DPR.TYPE='LINEARITY,LAMP'
-
-\begin{verbatim}
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:09:50.882.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:10:07.455.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:10:23.047.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:10:38.240.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:10:56.403.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:11:31.128.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:11:59.183.fits LINEARITY_LAMP
-/path_raw/LINEARITY/K/SINFO.2005-02-26T20:12:27.247.fits LINEARITY_LAMP
-\end{verbatim}
 
 
 

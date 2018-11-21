@@ -1,192 +1,22 @@
 \section{Algorithms}
 \label{sec:ALGORITHMS}
 
-In this section the data reduction procedures applied by the 23 pipeline
-recipes currently in use (see Section \ref{RECIPES}) are described 
-in some detail. Common algorithms, as cosmic rays removal
-or bad pixel cleaning, are described separately.
 
 \subsection{General Algorthms}
 
 \subsubsection{Bad pixel cleaning}
 \label{sec:ABADPIX}
 
-Bad pixel cleaning consists of replacing any bad pixel value
-with an estimate based on a set of surrounding \ {\it good} 
-\ pixel values. This operation is generally applied to science 
-product frames, having little or no sense when applied to master 
-calibration products. Nevertheless all the \pipename\, pipeline recipes 
-allow bad pixel cleaning on any product frame, for debug reasons 
-or for any other purpose that may be appropriate.
-
-The routine currently used by the \pipename\, pipeline recipes performs 
-a bad pixel correction based on the content of a given bad pixel 
-table \ ({\tt CCD\_TABLE}). \ If the number of bad pixels is more
-than 15\% of the total number of CCD pixels, the correction is not
-applied.
-
-\putgraph{14}{badpix.png}{IBADPIX}{Good pixels to be used in the estimate of
-a given bad pixel are searched along the indicated directions.}
-
-Any bad pixel is given a new value, computed as follow: the closest
-good pixels along the vertical, the horizontal, and the two diagonal 
-directions are found (see Figure \ref{fig:IBADPIX}). This search is
-done within a distance of 100 pixels. If no good pixel is found
-within this range, then the bad pixel is not corrected.
-All the good pixels found within range will 
-be used to compute the bad pixel value.
-
-For each of the four fundamental directions, an estimate of the
-considered bad pixel can generally be obtained. 
-If two good pixel values are available for a given direction,
-the estimate is their linear interpolation at the bad pixel position.
-If just one good pixel value is available for a given direction, 
-then the value itself will be the estimate of the bad pixel value.
-No estimate can be obtained from directions where no good pixel
-was found.
-
-If the available number of estimates is greater than 1, the
-bad pixel value is taken as the median of the estimates (defining
-the median of an even number of values as the mean of the two
-central values), otherwise it is simply set to the single estimate 
-available.
 
 \subsubsection{Cosmic rays removal}
 \label{sec:ACOSMIC}
 
-The core of a cosmic rays removal procedure is to determine what is
-and what is {\it not} a cosmic ray. The algorithm used for this
-purpose by the \pipename\, pipeline recipes is the same applied by the MIDAS 
-command \ {\tt FILTER/COSMIC}, \ with some extensions.
-
-Initially all pixels having an abnormal excess with respect
-to the local noise level are flagged as possibly belonging to a
-cosmic ray event (that typically would involve a group of contiguous 
-pixels).  A candidate is selected at any pixel \ $(x,y)$ \ having a value 
-\ $F(x,y)$ \ exceeding a given threshold. This threshold, expressed in
-units of noise sigma, is specified by the recipe parameter 
-\ {\it CosmicsThreshold}. \ A value 4.0 gives typically good results.
-The theoretical
-noise \ $N(x,y)$ \ of the image at any given pixel position \ $(x,y)$ \ is 
-estimated in ADU as 
-
-$$
-          N(x,y) = \sqrt{r^2 + {M(x,y) \over g}}
-$$
-
-%%% PLEASE NOTE %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%%
-%%% Apparently a good number of people reading this manual came to think
-%%% that this formula is wrong. Indeed it is a bit counter-intuitive,
-%%% so I add an explanation here (I don't want to include it in the manual
-%%% because it is quite a common formula used in CCD data reduction, that
-%%% is very well known among [almost] all DRS developers.
-%%%
-%%% The formula is derived in the following way:
-%%% 
-%%% 1) Let be M the signal level, and r the read-out-noise, both in ADU,
-%%%    and g the conversion factor between ADU and electrons. Then the
-%%%    signal level in electrons is given by gM, and the read-out-noise
-%%%    in electrons is given by gr.
-%%%
-%%% 2) Assuming poissonian statistics, the noise (in electrons) associated
-%%%    to the signal gM is given by sqrt(gM).
-%%%
-%%% 3) The total noise (in electrons) can then be computed as the
-%%%    geometrical average of the noise components:
-%%%
-%%%                sqrt{ [sqrt(gM)]^2 + (gr)^2 }
-%%%
-%%%    that is
-%%%
-%%%                sqrt{ gM + (gr)^2 }
-%%%
-%%% 4) To obtain the total noise in ADU the above result should be divided
-%%%    by the gain factor g, obtaining
-%%%
-%%%                sqrt{ M/g + r^2 }
-%%%
-%%%    that is the used formula shown above.
-%%%
-%%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%%
-
-where \ $M(x,y)$ \ is the median value of the 8 pixels 
-surrounding the \ $(x,y)$ \ position 
-and \ $r$ \ is the read-out-noise, both in ADU, 
-and \ $g$ \ is the gain
-factor in \ $e^-/ADU$. \ Then a pixel \ $(x,y)$ \ is taken as a cosmic 
-ray candidate if
-$$
-             F(x,y) > k \cdot N(x,y)
-$$
-with \ $k$ \ the number of noise sigmas used in thresholding.
-
-After this step is completed, all the groups of contiguous cosmic
-rays candidates are identified. For each group, the position of 
-its maximum pixel value is determined, and the mean 
-\ $\overline{F}_8$ \ of its 
-8 surrounding pixels is computed. A given group will be taken as a
-cosmic ray event if it fulfils the condition
-$$
-             F_{max} - S > R \cdot (\overline{F}_8 - S)
-$$
-where \ $F_{max}$ \ is the maximum pixel value within the considered group,
-\ $S$ \ the fundamental background level (corresponding to the sky level
-in imaging science exposures), and \ $R$ \ is a shape parameter for 
-discriminating between objects and cosmic rays. The ratio \ $R$ \ is 
-specified by the recipe parameter \ {\it CosmicsRatio}. 
-\ A value of 2.0 gives typically good results.
-
-Once all the pixels affected by cosmic ray events has been located
-and listed in a cosmic ray events table, their values are interpolated 
-using the procedure described in Section \ref{sec:ABADPIX}. If a bad pixel 
-table is also given to a recipe, then the bad pixels are avoided in the 
-interpolation procedure.
 
 \subsection{Recipes Algorithms} 
 
-\subsubsection{gi\_rec\_bias}
-\label{sec:ABIAS}
+\subsubsection{cr2res\_cal\_dark}
+\label{sec:RECIPE_DARK}
 
-Removing the bias from any raw frame is a relatively simple
-process, but not simple enough to avoid a description on its own.
-
-A master bias frame ({\tt MASTER\_BIAS}) is used to remove
-the bias level (and, if present, the fixed-pattern-noise related
-to the bias) from a raw frame. Typically a master calibration
-is produced with its overscan regions trimmed, and if this is the
-case with the master bias used then its missing overscan regions
-are extrapolated by repeating the signal contained in its border
-regions with equal size.
-
-The master bias is subtracted from the raw data frame, whose
-overscan regions are then trimmed away. Optionally (when 
-the \ {\it BiasMethod} \ recipe parameter is set to {\it ``Zmaster''})
-the residual signal in the overscan regions is averaged along
-the \ $X$ \ CCD coordinate, and the obtained mean \ $Y$ \ values are
-modeled with a second order polynomial fitting. This model is 
-then subtracted from the rest of the image.
-
-\subsubsection{gi\_rec\_dark}
-\label{sec:ADARK}
-
-Subtracting the dark current component from any raw frame consists 
-of multiplying an input master dark frame by the exposure time 
-(in seconds) of the frame to be corrected, and then subtract such
-rescaled dark frame from it. The dark level is quite low for IIINSTRUMENT CCDs
-(about 5 $e^{-} \cdot $ h$^{-1} \cdot $ pixel$^{-1}$), so this operation
-would be in most cases superfluous.
-
-\subsubsection{gi\_rec\_flat}
-\label{sec:AFLATFIELDING}
-\label{sec:AFLAT}
-\label{sec:AFLATSKY}
-
-The flat field correction merely consists of dividing the frame 
-to be corrected by a given master sky flat field frame produced 
-by the recipe \ {\it vmimflatsky} \ for direct imaging observation
-(see Section \ref{sec:AFLATSKY}, page \pageref{sec:AFLATSKY}), or produced 
-by the recipe \ {\it vmspflat} \ for MOS observations (see Section 
-\ref{sec:AFLAT}, page \pageref{sec:AFLAT}).
 
 \newpage
 
