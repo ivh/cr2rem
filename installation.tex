@@ -2,17 +2,17 @@
 \label{installation}
 
 This chapter gives generic instructions on how to obtain, build and install
-the CR2RE pipeline. Even if this chapter is kept as up-to-date as much as 
+the \instname\, pipeline. Even if this chapter is kept as up-to-date as much as 
 possible, it may not be fully applicable to a particular release. This might
 especially happen for patch releases. One is therefore advised to read the 
-installation instructions delivered with the CR2RE pipeline distribution kit.
+installation instructions delivered with the \instname\, pipeline distribution kit.
 These release-specific instructions can be found in the file \ \texttt{README}
-\ located in the top-level directory of the unpacked CR2RE pipeline source 
+\ located in the top-level directory of the unpacked \instname\, pipeline source 
 tree. The supported platforms are listed in Section \ref{PIP:platforms}. 
 It is recommended reading through Section \ref{PIP:compile-howto} 
 before starting the installation.
 
-A bundled version of the CR2RE pipeline with all the required tools 
+A bundled version of the \instname\, pipeline with all the required tools 
 and an installer script is available from 
 \ \texttt{http://www.eso.org/pipelines/}, \ for users 
 who are not familiar with the installation of software packages.
@@ -22,7 +22,7 @@ who are not familiar with the installation of software packages.
 \label{PIP:platforms}
 
 The utilisation of the GNU build tools should allow to build and install
-the CR2RE pipeline on a variety of UNIX platforms, but it has only been
+the \instname\, pipeline on a variety of UNIX platforms, but it has only been
 verified on the VLT target platforms:
 \begin{itemize}
   \item Linux (glibc 2.1 or later),
@@ -31,15 +31,15 @@ verified on the VLT target platforms:
 using the GNU C compiler (version 3.2 or newer).
 
 
-\subsection{Building the CR2RE pipeline}
+\subsection{Building the IIINSTRUMENT pipeline}
 
-This section shows how to obtain, build and install the CR2RE pipeline 
+This section shows how to obtain, build and install the \instname\, pipeline 
 from the official source distribution.
 
 \subsubsection{Requirements}
 \label{PIP:requirements}
 
-To compile and install the CR2RE pipeline one needs:
+To compile and install the \instname\, pipeline one needs:
 \begin{itemize}
   \item the GNU C compiler (version 3.2 or later),
   \item the GNU \ \texttt{gzip} \ data compression program,
@@ -56,7 +56,7 @@ The qfits sources are available from the CPL download page or directly from
 the qfits homepage at \ \texttt{http://www.eso.org/projects/aot/qfits}. \ In
 conjunction with CPL 2.1.1 qfits 5.3.1 must be used.
 
-In order to run the CR2RE pipeline recipes a front-end application is also
+In order to run the \instname\, pipeline recipes a front-end application is also
 required. Currently there are two such applications available, a
 command-line tool called \ \textit{EsoRex} \ and the Java based data file
 organizer, \ \textit{Gasgano}, \ which provides an intuitive graphical user
@@ -70,31 +70,27 @@ For installation instructions of any of the additional packages mentioned
 before please refer to the documentation of these packages.
 
 
-\subsubsection{Compiling and installing the CR2RE pipeline}
+\subsubsection{Compiling and installing the IIINSTRUMENT pipeline}
 \label{PIP:compile-howto}
 
-The CR2RE pipeline distribution kit 1.0 contains:
+The \instname\, pipeline distribution kit 1.0 contains:
 
 \begin{tabbing}
 xxxxxxx \=  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \= xxxxxxxxxxxxxxxxx \kill
-\> cr2re-manual-1.0.pdf     \> The CR2RE pipeline manual      \\
+\> \pipename-manual-1.0.pdf     \> The \instname\, pipeline manual      \\
 \> install\_pipeline          \> Install script                 \\
-\> qfits-5.3.1.tar.gz         \> QFITS 5.3.1                    \\
-\> cpl-2.1.1.tar.gz           \> CPL 2.1.1                      \\
-\> esorex-3.5.1.tar.gz        \> esorex 3.5.1                   \\
-\> gasgano-2.2.3-Linux.tar.gz \> GASGANO 2.2.3 for Linux        \\
-\> gasgano-2.2.3-SunOS.tar.gz \> GASGANO 2.2.3 for SunOS        \\
-\> eclipse-sinfo.tar.gz       \> eclipse library modified       \\
-\>                            \> to support CR2RE data reduction \\
-\> cr2re-1.2.0.tar.gz         \> CR2RE 1.2.0                    \\
-\> cr2re-calib-1.2.0.tar.gz   \> CR2RE calibration files 1.2.0  \\
+\> cpl-\cplvers.tar.gz           \> CPL \cplvers                      \\
+\> esorex-\esorexvers.tar.gz        \> esorex \esorexvers                   \\
+\> gasgano-\gasganovers.tar.gz \> GASGANO \gasganovers for Linux        \\
+\> \pipename-\pipelinevers.tar.gz         \> \instname\, \pipelinevers                    \\
+\> \pipename-calib-\pipelinevers.tar.gz   \> \instname\, calibration files \pipelinevers  \\
 \end{tabbing}
 
 Here is a description of the installation procedure:
 
 \begin{enumerate}
-\item Change directory to where you want to retrieve the CR2RE pipeline 
-recipes 1.2.0 package. It can be any directory of your choice but not: 
+\item Change directory to where you want to retrieve the \instname\, pipeline 
+recipes \pipelinevers package. It can be any directory of your choice but not: 
 \begin{verbatim}
               $HOME/gasgano 
               $HOME/.esorex
@@ -102,13 +98,13 @@ recipes 1.2.0 package. It can be any directory of your choice but not:
 
 \item Download from the ESO ftp server, 
 \ \texttt{http://www.eso.org/pipelines/},
-\ the latest release of the CR2RE pipeline distribution.
+\ the latest release of the \instname\, pipeline distribution.
 
 \item Verify the checksum value of the tar file with the cksum command. 
 
 \item Unpack using the following command:
 \begin{verbatim}
-           tar -xvf cr2re-kit-1.2.tar
+           tar -xvf \pipename-kit-\pipelinevers.tar
 \end{verbatim}
 
 Note that the size of the installed software (including {\it Gasgano}) 
@@ -116,7 +112,7 @@ together with the static calibration data is about 27Mb.
 
 \item Install: after moving to the top installation directory,
 \begin{verbatim}
-           cd sinfo-kit-1.2
+           cd \pipename-kit-\pipelinevers
 \end{verbatim}
 
 it is possible to perform a simple installation using the available 
@@ -135,7 +131,7 @@ by the installation script, needs to source an file
 user shell) to set a few environment variables used by a few
 low level eclipse library based modules.
 
-By default the script will install the CR2RE recipes, \ {\it Gasgano}, 
+By default the script will install the \instname\, recipes, \ {\it Gasgano}, 
 \ {\it EsoRex}, all the necessary libraries, and the static calibration 
 tables, into a directory tree rooted at \ {\tt \$HOME}. A different path 
 may be specified as soon as the script is run.

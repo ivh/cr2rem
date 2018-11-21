@@ -79,25 +79,15 @@ out\_bp\_lin.fits            & BP\_MAP\_NL & Non linear bad pixel map \\
 
 \subsubsection{Quality control}
 
-The pipeline computes the non linear coefficients, the number of non linear
+The pipeline computes the number of non linear
 pixels per grating, the detector gain. 
-
-\paragraph{Detector non linearity}
-The detector non linearity is computed as described in
-\ref{detector_non_linearity}. The computed coefficients are
-QC.BP-MAP.LINi.MED (i=0,1,2).
-
-A different method is applied to determine the same quantity as described in
-\ref{detector_non_linearity2}. The computed coefficients are
-QC.BP-MAP.LINi.MEAN (i=0,1,2).
 
 \paragraph{Non linear bad pixels}
 The pipeline computes the number of non linear bad pixels. Those are given
 by QC.BP-MAP.NBADPIX and are obtained with the method QC.BP-MAP.METHOD.
 
 \paragraph{Detector gain}
-The detector gain is computed as described in \ref{gain} and is given by the
-value of QC.GAIN.
+The detector gain is given by the value of QC.GAIN.
 
 
 \subsubsection{Parameters}

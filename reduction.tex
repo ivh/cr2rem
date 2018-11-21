@@ -11,7 +11,7 @@ figure \ref{ifs_principle}. A two-dimensional image of the sky is
 separated by an image slicer into several components. Those are then  
 aligned on a slit and dispersed to separate its spectral information
 and then imaged on a detector. 
-The main IIINSTRUMENT data reduction problems to solve are the following.
+The main \instname\, data reduction problems to solve are the following.
 
 \begin{itemize}
 \item Correct for the detector signature: bad pixels, detector contribution 
@@ -88,7 +88,7 @@ with a final image realignment to get sub pixel accuracy.
 The final product is thus a 3D data cube where the full spatial information 
 is stored along the X and Y directions, and the wavelength information is 
 stored along the Z direction. Each plane of the cube is a monochromatic 
-reconstruction of the IIINSTRUMENT FOV.
+reconstruction of the \instname\, FOV.
 
 The north south test template traces each of the 32 slitlets by only one 
 fibre exposure; therefore non linearities of the image scale within the 64 
@@ -99,7 +99,7 @@ slice to slit ripples in the reconstructed cube.
 To be able to reduce science data one needs to use raw, product data and 
 pipeline recipes in a given sequence which provides all the input necessary 
 to each pipeline recipe. We call this sequence a data reduction cascade. 
-The IIINSTRUMENT data reduction cascade involves the following input data:
+The \instname\, data reduction cascade involves the following input data:
 \begin{itemize}
 \item Reference files:
 \begin{itemize}
@@ -155,12 +155,12 @@ matching values of the FITS keyword HIERARCH ESO DET DIT.
 \subsection{Reduction cascade} 
 
 
-The IIINSTRUMENT data reduction follows the following sequence. A short 
+The \instname\, data reduction follows the following sequence. A short 
 description of the available recipes is given in section \ref{RECIPES}.
 In parenthesis we provide the value of the DO category corresponding to each 
 frame.
 
-\putgraph{18}{girassocmap.png}{ASSOCMAP}{IIINSTRUMENT Association Map}                        
+\putgraph{16}{girassocmap.png}{ASSOCMAP}{\instname\, Association Map}                        
 
 \begin{itemize}
 \item Run {\bf si\_rec\_detlin} on a set of flats with increasing 
@@ -218,7 +218,7 @@ SLIT\_POS and a WAVE\_MAP to reduce science data.
 
 
 The main data products involved in the data reduction cascade are indicated 
-in the IIINSTRUMENT association map shown in Figure \ref{fig:ASSOCMAP}. It summarise 
+in the \instname\, association map shown in Figure \ref{fig:ASSOCMAP}. It summarise 
 dependencies between raw data, calibration products and recipes involved in 
 the correction of the instrument signature and reduction of science data. 
 Examples of set of frames input for each recipe are provided in section 

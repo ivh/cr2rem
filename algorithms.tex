@@ -15,11 +15,11 @@ Bad pixel cleaning consists of replacing any bad pixel value
 with an estimate based on a set of surrounding \ {\it good} 
 \ pixel values. This operation is generally applied to science 
 product frames, having little or no sense when applied to master 
-calibration products. Nevertheless all the IIINSTRUMENT pipeline recipes 
+calibration products. Nevertheless all the \pipename\, pipeline recipes 
 allow bad pixel cleaning on any product frame, for debug reasons 
 or for any other purpose that may be appropriate.
 
-The routine currently used by the IIINSTRUMENT pipeline recipes performs 
+The routine currently used by the \pipename\, pipeline recipes performs 
 a bad pixel correction based on the content of a given bad pixel 
 table \ ({\tt CCD\_TABLE}). \ If the number of bad pixels is more
 than 15\% of the total number of CCD pixels, the correction is not
@@ -56,7 +56,7 @@ available.
 
 The core of a cosmic rays removal procedure is to determine what is
 and what is {\it not} a cosmic ray. The algorithm used for this
-purpose by the IIINSTRUMENT pipeline recipes is the same applied by the MIDAS 
+purpose by the \pipename\, pipeline recipes is the same applied by the MIDAS 
 command \ {\tt FILTER/COSMIC}, \ with some extensions.
 
 Initially all pixels having an abnormal excess with respect
@@ -178,13 +178,15 @@ would be in most cases superfluous.
 
 \subsubsection{gi\_rec\_flat}
 \label{sec:AFLATFIELDING}
+\label{sec:AFLAT}
+\label{sec:AFLATSKY}
 
 The flat field correction merely consists of dividing the frame 
 to be corrected by a given master sky flat field frame produced 
 by the recipe \ {\it vmimflatsky} \ for direct imaging observation
-(see Section \ref{AFLATSKY}, page \pageref{AFLATSKY}), or produced 
+(see Section \ref{sec:AFLATSKY}, page \pageref{sec:AFLATSKY}), or produced 
 by the recipe \ {\it vmspflat} \ for MOS observations (see Section 
-\ref{AFLAT}, page \pageref{AFLAT}).
+\ref{sec:AFLAT}, page \pageref{sec:AFLAT}).
 
 \newpage
 
