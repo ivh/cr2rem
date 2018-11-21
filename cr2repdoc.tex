@@ -3,7 +3,6 @@
 \usepackage[dvips]{graphicx}
 \usepackage[usenames,dvipsnames]{color}
 
-\usepackage{picinpar}
 \usepackage{float}
 \usepackage{graphics}
 \usepackage{varioref}
@@ -24,8 +23,8 @@
 \hypersetup{
 % Prevents the automatic display of bookmarks in Acrobat Reader 7.0
 % pdfpagemode = {None},
-pdftitle = {CRIRES+ Pipeline User Manual},
-pdfauthor = {CRIRES+ Pipeline Team},
+pdftitle = {CR2RES Pipeline User Manual},
+pdfauthor = {CR2RES Pipeline Team},
 pdfsubject= {ESO Pipeline Manual}
 }
 
@@ -34,12 +33,12 @@ pdfsubject= {ESO Pipeline Manual}
 \input{shortcut}
 
 
-\dmdTitle{CRIRES+ Pipeline User Manual}
+\dmdTitle{\pipename\, Pipeline User Manual}
 \dmdDocId{VLT-MAN-ESO-19500-XXXX}
 \dmdIssue{\pipelinemanualvers}
 \dmdDate{\releasedate}
 
-\dmdPreparedBy{CRIRES+ Pipeline Team}
+\dmdPreparedBy{\pipename\, Pipeline Team}
 \dmdPreparedOn{\releasedate}
 \dmdApprovedBy{}
 \dmdApprovedOn{}
@@ -49,7 +48,7 @@ pdfsubject= {ESO Pipeline Manual}
 \setlongtables
 \makeindex
 
-%\bibliographystyle{plain} 
+\bibliographystyle{plain} 
 
 \begin{document}
 \pagenumbering{arabic}
@@ -59,17 +58,16 @@ pdfsubject= {ESO Pipeline Manual}
 \begin{center}
   \textbf{Change record}
 
-  \tablehead{\hline
+  \begin{tabular}{|l|l|l|l|}
+    \hline
     \multicolumn{1}{|c|}{Issue/Rev.}\tbspa &
     \multicolumn{1}{|c|}{Date} &
     \multicolumn{1}{|c|}{Section/Parag.\ affected} &
     \multicolumn{1}{|c|}{Reason/Initiation/Documents/Remarks}\tbspb \\
-    \hline}
-  \tabletail{\hline}
-
-  \begin{supertabular}{|l|l|l|l|}
-    1.0\tbspa & 01/10/2019 & All & First version   \\
-  \end{supertabular}
+    \hline
+    0.5.0\tbspa & 21/11/2018 & All & First version   \\
+    \hline
+  \end{tabular}
 \end{center}
 \emptypage{This page was intentionally left blank}
 
@@ -77,19 +75,19 @@ pdfsubject= {ESO Pipeline Manual}
 \cleardoublepage
 
 
-%\include{introduction}
-%\include{overview_dfs}
-%\include{overview_iins}
-%\include{quickStart}
-%\include{knownProblems}
-%\include{rawdata}
-%\include{ancdata}
-%\include{reduction}
-%\include{recipes_io}
-%\include{algorithms}
-%\appendix
-%\include{installation}
-%\include{abbreviations}
-%\include{troubleshoot} 
+\include{introduction}
+\include{overview_dfs}
+\include{overview_iins}
+\include{quickStart}
+\include{knownProblems}
+\include{rawdata}
+\include{ancdata}
+\include{reduction}
+\include{recipes_io}
+\include{algorithms}
+\appendix
+\include{installation}
+\include{abbreviations}
+\include{troubleshoot} 
 
 \end{document}
