@@ -1,0 +1,138 @@
+\documentclass[pdftex,a4paper,twoside,11pt]{article}
+\NeedsTeXFormat{LaTeX2e}
+% check whether we are running pdflatex
+\usepackage[dvips]{graphicx}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{varioref}
+\usepackage{natbib}
+\usepackage{afterpage}
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{green}{rgb}{0,1,0}
+\definecolor{orange}{rgb}{1,0.5,0}
+
+\newcommand{\black}[1]{\color{black}{#1}\color{black}\ }
+\newcommand{\yellow}[1]{\color{yellow}{#1}\color{black}\ }
+\newcommand{\red}[1]{\color{red}{#1}\color{black}\ }
+%\newcommand{\green}[1]{\color{green}{#1}\color{black}\ }
+
+\usepackage[pdftex,colorlinks=true,
+                   pdfstartview=FitV,
+                   linkcolor=darkblue,
+                   citecolor=darkblue,
+                   urlcolor=darkblue,
+                   plainpages=false,
+                   pdfpagelabels,
+                   linktocpage,
+                   backref,pagebackref]{hyperref}
+
+\hypersetup{
+%pdfpagemode = {None}, % Verhindert die automatische Anzeige der Lesezeichen
+pdftitle = {Reflex IIINSTRUMENT Tutorial},
+pdfauthor = {Name Surname},
+pdfsubject= {Reflex IIINSTRUMENT Tutorial}
+}
+
+%% Include layout, additional commands and abbreviations
+\graphicspath{{../figures/}{../pipedoc/figures/}}
+\input{layout}
+\input{shortcut}
+
+%% Remember to update shortcut.tex
+\def\reldate{\releasedate}
+\def\pipeno{\pipelinevers}
+\def\kitno{\pipeno}
+\def\docno{\pipelinemanualvers}
+\def\qfitsno{\qfitsvers}
+\def\cplno{\cplvers}
+\def\esorexno{\esorexvers}
+\def\reflexno{\reflexvers}
+\def\gasganono{\gasganovers}
+\def\jdkno{\jdkvers}
+\def\dmdissue{\docno}
+
+\dmdTitle{Reflex IIINSTRUMENT Tutorial}
+\dmdDocId{VLT-MAN-ESO-19500-....}
+\dmdIssue{0.1}
+\dmdDate{\releasedate}
+
+\dmdPreparedBy{N. Surname}
+\dmdPreparedOn{\releasedate}
+\dmdApprovedBy{N. Surname}
+\dmdApprovedOn{}
+\dmdReleasedBy{N. Surname}
+\dmdReleasedOn{}
+
+\setlongtables
+\makeindex
+\bibliographystyle{plain} 
+
+\begin{document}
+\pagenumbering{arabic}
+\dmdmaketitle
+\emptypage{This page was intentionally left blank}
+
+\begin{center}
+  \textbf{Change record}
+
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \multicolumn{1}{|c|}{Issue/Rev.}\tbspa &
+    \multicolumn{1}{|c|}{Date} &
+    \multicolumn{1}{|c|}{Section/Parag.\ affected} &
+    \multicolumn{1}{|c|}{Reason/Initiation/Documents/Remarks}\tbspb \\
+    \hline
+    1.0\tbspa    & 25/09/2012 & All & Beta release   \\
+%    1.1\tbspa    & 20/03/2012 & All & Comments from Beta release   \\
+%    2.0\tbspa & \releasetime & Updated details & Update\\
+    \hline
+  \end{tabular}
+\end{center}
+\emptypage{This page was intentionally left blank}
+
+\tableofcontents
+\cleardoublepage
+
+\input{reflex_intro_scope.tex} %This file is in the pipedoc directory
+
+Add here some explanation about this specific workflow. Instrument modes supported, etc...
+
+\input{reflex_wkf_installation} %This file is in the pipedoc directory
+
+\section{Demo Data}
+Add some explanation about the demo data used.
+
+\newcommand{\wkffilename}{iiinstrument.xml} %Needed by reflex_wkf_quickstart
+\input{reflex_wkf_quickstart} %This file is in the pipedoc directory
+
+%The following three graphs are referenced by reflex_wkf_quickstart
+\putgraph{16}{wkf_layout.png}{pipe_wkf_layout}{IIInstrument workflow general layout}
+\putgraph{8}{select_data_sets.png}{reflex_select_data_sets}{The
+``Select Datasets'' pop-up window}
+\putgraph{12}{product_explorer.png}{reflex_provenance_explorer}{The
+    Product Explorer shows all datasets reduced in previous executions
+    together with the full reduction chain for all the pipeline products}
+
+\input{reflex_about_canvas} %This file is in the pipedoc directory
+\input{reflex_wkf_general_desc} %This file is in the pipedoc directory
+\subsection{Workflow Actors}
+\input{reflex_simple_actors} %This file is in the pipedoc directory
+
+Add here a description of this workflow specific actors 
+(probably including some composite actors).
+
+\input{reflex_lazy_mode} %This file is in the pipedoc directory
+
+Add here a description of the workflow steps like Data organisation,
+routing, creation of calibration files and science reduction.
+
+Add here a description on how to optimise the results of the workflow.
+
+\input{reflex_faq.tex}
+
+Add here a section on troubleshooting problems.
+
+\bibliography{iiinstrumentpdoc}
+\end{document}
