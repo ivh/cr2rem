@@ -1,8 +1,8 @@
 #
-# Builds the MOONS Reflex tutorial from latex sources
+# Builds the CR2RES Reflex tutorial from latex sources
 #
 
-instrument = moons
+instrument = cr2res
 
 version = $(shell grep '\\dmdDocVersion' $(TEX_MASTER).tex | \
             head -n 1 | sed -e 's/.*{\(.*\)}/\1/' )
@@ -19,7 +19,7 @@ MV = mv -f
 CLEANFILES = *.aux *.idx *.log *.toc *.out *.bbl *.blg *.brf
 
 
-TEX_MASTER = moons_reflex_tutorial
+TEX_MASTER = cr2res_reflex_tutorial
 
 TEX_SOURCES = \
 	$(TEX_MASTER).tex \
