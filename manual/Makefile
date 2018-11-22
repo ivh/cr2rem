@@ -1,8 +1,8 @@
 #
-# Builds the MOONS pipeline manual from latex sources
+# Builds the CR2RES pipeline manual from latex sources
 #
 
-instrument = moons
+instrument = cr2res
 
 version = $(shell grep '\\newcommand{\\release}' $(TEX_SOURCES) | \
             head -n 1 | sed -e 's/.*{\(.*\)}/\1/' )
@@ -19,25 +19,25 @@ MV = mv -f
 CLEANFILES = *.aux *.idx *.log *.toc *.out *.bbl *.blg *.brf
 
 
-TEX_MASTER = moons-pipeline-manual
+TEX_MASTER = cr2res-pipeline-manual
 
 TEX_SOURCES = \
 	$(TEX_MASTER).tex \
 	layout.tex \
 	shortcut.tex \
-	moons_abbreviations.tex \
-	moons_algorithms.tex \
-	moons_ancdata.tex \
-	moons_installation.tex \
-	moons_instrument.tex \
-	moons_introduction.tex \
-	moons_overview.tex \
-	moons_knownissues.tex \
-	moons_quickstart.tex \
-	moons_rawdata.tex \
-	moons_recipes.tex \
-	moons_reduction.tex \
-	moons_troubleshooting.tex
+	cr2res_abbreviations.tex \
+	cr2res_algorithms.tex \
+	cr2res_ancdata.tex \
+	cr2res_installation.tex \
+	cr2res_instrument.tex \
+	cr2res_introduction.tex \
+	cr2res_overview.tex \
+	cr2res_knownissues.tex \
+	cr2res_quickstart.tex \
+	cr2res_rawdata.tex \
+	cr2res_recipes.tex \
+	cr2res_reduction.tex \
+	cr2res_troubleshooting.tex
 
 TEX_EXTRA_SOURCES = \
 	texmf/eso-pdm.sty \
