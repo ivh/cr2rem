@@ -1,44 +1,25 @@
 \documentclass[pdftex,a4paper,twoside,11pt]{article}
 \NeedsTeXFormat{LaTeX2e}
-% check whether we are running pdflatex
-\usepackage[dvips]{graphicx}
-\usepackage{float}
-\usepackage{graphics}
-\usepackage{varioref}
-\usepackage{natbib}
-\usepackage{afterpage}
-\usepackage[usenames,dvipsnames]{color}
-\definecolor{darkblue}{rgb}{0,0,0.5}
-\definecolor{red}{rgb}{1,0,0}
-\definecolor{green}{rgb}{0,1,0}
-\definecolor{orange}{rgb}{1,0.5,0}
-
-\newcommand{\black}[1]{\color{black}{#1}\color{black}\ }
-\newcommand{\yellow}[1]{\color{yellow}{#1}\color{black}\ }
-\newcommand{\red}[1]{\color{red}{#1}\color{black}\ }
-%\newcommand{\green}[1]{\color{green}{#1}\color{black}\ }
-
-\usepackage[pdftex,colorlinks=true,
-                   pdfstartview=FitV,
-                   linkcolor=darkblue,
-                   citecolor=darkblue,
-                   urlcolor=darkblue,
-                   plainpages=false,
-                   pdfpagelabels,
-                   linktocpage,
-                   backref,pagebackref]{hyperref}
-
-\hypersetup{
-%pdfpagemode = {None}, % Verhindert die automatische Anzeige der Lesezeichen
-pdftitle = {Reflex CR2RES Tutorial},
-pdfauthor = {Name Surname},
-pdfsubject= {Reflex CR2RES Tutorial}
-}
 
 %% Include layout, additional commands and abbreviations
-\graphicspath{{../figures/}{../pipedoc/figures/}}
 \input{layout}
 \input{shortcut}
+
+
+\dmdProgram{GEN}
+\dmdProject{Science Operation Software Department}
+\dmdTitle{Reflex MOONS Tutorial}
+\dmdDocId{ESO-XXXXXX}
+\dmdDocVersion{0.1}
+\dmdDocType{Manual (MAN)}
+\dmdDocDate{2016-05-02}
+
+\dmdPreparedBy{MOONS Pipeline Team}
+\dmdValidatedBy{}
+\dmdApprovedBy{}
+
+%% Additional commands and abbreviations
+\graphicspath{{../figures/}{../pipedoc/figures/}}
 
 %% Remember to update shortcut.tex
 \def\reldate{\releasedate}
@@ -53,18 +34,6 @@ pdfsubject= {Reflex CR2RES Tutorial}
 \def\jdkno{\jdkvers}
 \def\dmdissue{\docno}
 
-\dmdTitle{Reflex CR2RES Tutorial}
-\dmdDocId{VLT-MAN-ESO-19500-....}
-\dmdIssue{0.1}
-\dmdDate{\releasedate}
-
-\dmdPreparedBy{N. Surname}
-\dmdPreparedOn{\releasedate}
-\dmdApprovedBy{N. Surname}
-\dmdApprovedOn{}
-\dmdReleasedBy{N. Surname}
-\dmdReleasedOn{}
-
 \setlongtables
 \makeindex
 \bibliographystyle{plain} 
@@ -74,22 +43,30 @@ pdfsubject= {Reflex CR2RES Tutorial}
 \dmdmaketitle
 \emptypage{This page was intentionally left blank}
 
-\begin{center}
-  \textbf{Change record}
+\section*{Authors}
+\begin{tabularx}{\linewidth}{|p{0.25\linewidth}|X|}
+  \hline
+  \multicolumn{1}{|l|}{\textbf{Name}}\tbspa &
+  \multicolumn{1}{l|}{\textbf{Affiliation}} \tbspb \\
+  \hline
+  \tbspa
+  N.N. & Far out in the uncharted backwaters of the unfashionable end of the western spiral arm of the Galaxy
+  \tbspb\\
+  \hline
+\end{tabularx}
+\emptypage{This page was intentionally left blank}
 
-  \begin{tabular}{|l|l|l|l|}
-    \hline
-    \multicolumn{1}{|c|}{Issue/Rev.}\tbspa &
-    \multicolumn{1}{|c|}{Date} &
-    \multicolumn{1}{|c|}{Section/Parag.\ affected} &
-    \multicolumn{1}{|c|}{Reason/Initiation/Documents/Remarks}\tbspb \\
-    \hline
-    1.0\tbspa    & 25/09/2012 & All & Beta release   \\
-%    1.1\tbspa    & 20/03/2012 & All & Comments from Beta release   \\
-%    2.0\tbspa & \releasetime & Updated details & Update\\
-    \hline
-  \end{tabular}
-\end{center}
+\section*{Change Record from previous Version}
+\begin{tabularx}{\linewidth}{|p{0.25\linewidth}|X|}
+  \hline
+  \multicolumn{1}{|l|}{\textbf{Affected Section(s)}}\tbspa &
+  \multicolumn{1}{l|}{\textbf{Changes/Reason/Remarks}}\tbspb \\
+  \hline
+  \tbspa
+  All                      & First draft
+  \tbspb\\
+  \hline
+\end{tabularx}
 \emptypage{This page was intentionally left blank}
 
 \tableofcontents
@@ -104,16 +81,9 @@ Add here some explanation about this specific workflow. Instrument modes support
 \section{Demo Data}
 Add some explanation about the demo data used.
 
-\newcommand{\wkffilename}{cr2res.xml} %Needed by reflex_wkf_quickstart
-\input{reflex_wkf_quickstart} %This file is in the pipedoc directory
+\section{Quick Start: Reducing The Demo Data \label{sec:quick_start}}
 
-%The following three graphs are referenced by reflex_wkf_quickstart
-\putgraph{16}{wkf_layout.png}{pipe_wkf_layout}{IIInstrument workflow general layout}
-\putgraph{8}{select_data_sets.png}{reflex_select_data_sets}{The
-``Select Datasets'' pop-up window}
-\putgraph{12}{product_explorer.png}{reflex_provenance_explorer}{The
-    Product Explorer shows all datasets reduced in previous executions
-    together with the full reduction chain for all the pipeline products}
+Add here a two pages maximum explanation on how to quickly reduce the demo data set.
 
 \input{reflex_about_canvas} %This file is in the pipedoc directory
 \input{reflex_wkf_general_desc} %This file is in the pipedoc directory
@@ -134,5 +104,5 @@ Add here a description on how to optimise the results of the workflow.
 
 Add here a section on troubleshooting problems.
 
-\bibliography{cr2repdoc}
+%\bibliography{moons_reflex_tutorial}
 \end{document}
