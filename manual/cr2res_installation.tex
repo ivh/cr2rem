@@ -11,13 +11,11 @@
 \subsection{Installing the \instrument{} Pipeline}
 \label{sec:install-howto}
 
-For Fedora, CentOS, Scientific Linux users within ESO, you can use the RPM
-installation.
+For Fedora, CentOS, Scientific Linux users within ESO, you can use the RPM installation.
 For that, you need to refer to the RPM installation instructions:
-http://eso.org/sci/software/pipelines/installation/rpm.html
+{\it http://eso.org/sci/software/pipelines/installation/rpm.html}
 
-CR2RES pipeline is not public yet, therfore you will need to setup the
-repositories to a different place: 
+The CR2RES pipeline is not public yet, therfore you will need to setup the repositories to a different place: 
 USE 'devel' instead of 'stable' ! 
 
 For example:
@@ -31,44 +29,52 @@ sudo dnf config-manager --add-repo=ftp://ftp.eso.org/pub/dfs/pipelines/repositor
 
 For any other system, or if you are outside ESO, you will need to download the installation script, and run it on your computer:
 
-- Create an new directory and change to it
-- Download http://eso.org/sci/software/pipelines/install\_pipelinekit
-and change its permission to execute (chmod u+x install\_pipelinekit)
-- Download the CR2RES package:
-  
-ftp://ftp.eso.org/pub/dfs/pipelines/kit\_devel/cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz
+\begin{itemize}
+\item Create an new directory and change to it
+\item Download {\it http://eso.org/sci/software/pipelines/install\_pipelinekit} and change its permission to execute ({\it chmod u+x install\_pipelinekit})
+\item Download the CR2RES package from 
 
-- Execute 
-    ./install\_pipelinekit cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz
+{\it ftp://ftp.eso.org/pub/dfs/pipelines/kit\_devel/cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz}
+\item Execute {\it ./install\_pipelinekit cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz}
 
-    The execution scipt will ask you where to install the package. I recommend to have a local installation in order to easily update at a later stage.
+The execution scipt will ask you where to install the package. I recommend to have a local installation in order to easily update at a later stage.
 
-    Questions asked by the installation script:
+Questions asked by the installation script:
+\begin{itemize}
 
-    * Where should I install the software packages ? 
-        Use a new directory (e.g. /home/user/cr2res\_install)
+\item Where should I install the software packages ? 
+      
+Use a new directory (e.g. /home/user/cr2res\_install)
 
-    * Where should I install the pipeline calibration files ?
-        Use a subdirectory (e.g. /home/user/cr2res\_install/cdb)
+\item Where should I install the pipeline calibration files ?
+     
+Use a subdirectory (e.g. /home/user/cr2res\_install/cdb)
 
-- Configuration
+\item Configuration
+\end{itemize}
 
-    * esorex is installed here : /home/user/cr2res\_install/bin/esorex 
+\item Configuration
+
+\begin{itemize}
+\item esorex is installed here : /home/user/cr2res\_install/bin/esorex 
         Make sure it is in your path.
 
-    * The CR2RES recipes are installed under : /home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
+\item The CR2RES recipes are installed under : /home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
         esorex needs to be configured to know where th CRI2RES recipes are installed. This is done through the recipe-dir parameter.
         Please update :
         esorex.caller.recipe-dir=/home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
         in the esorex configuration file (usually \$HOME/.esorex/esorex.rc)
 
-    * If you do not have any esorex configuration file, you can run
+\item If you do not have any esorex configuration file, you can run
         esorex --create-config 
         to create a default one.
 
-    * You know you are all set when running 
-        esorex --recipes
+\item You know you are all set when running 
+    {\it esorex --recipes}
         gives you the list of installed recipes.
+
+\end{itemize}
+\end{itemize}
 
 If you want to install a new version, simply remove the directory
 /home/user/cr2res\_install and start again.
