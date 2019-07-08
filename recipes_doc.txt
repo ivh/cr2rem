@@ -48,6 +48,7 @@ products:
     cr2res_cal_detlin_coeffs.fits (DETLIN_COEFFS)
 
 QC:
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
 Description:
     group the input frames by different valueѕ of "ESO INS WLEN ID"
@@ -120,6 +121,7 @@ products:
     cr2res_cal_dark_[DITxNDIT]_bpm.fits (DARK_BPM)
 
 QC: 
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
 Description:
     group the input frames by different valueѕ of "DET SEQ1 DIT" or/and "DET NDIT"
@@ -193,6 +195,7 @@ products:
     cr2res_cal_flat_[setting]_tracewave_merged.fits (FLAT_TRACE_WAVE_MERGED)
 
 QC: 
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
 Description:
     group the input frames by different valueѕ of "ESO INS WLEN ID"
@@ -268,6 +271,7 @@ products:
     cr2res_cal_flat_K_1_4_Decker2_master_bpm_splitted_[BPM CODE].fits (UTIL_BPM_SPLIT)
 
 QC:
+    No QCs for utilities
 
 Description:
     loop on input raw frames f:
@@ -305,6 +309,9 @@ products:
     cr2res_cal_flat_K_2_4_tracewave_merged_wave.fits (UTIL_TRACE_MAP_WL)
     cr2res_cal_flat_K_2_4_tracewave_merged_trace.fits (UTIL_TRACE_MAP_TRACE)
 
+QC:
+    No QCs for utilities
+
 Description:
     loop on detectors d:
         Load the trace_wave extension
@@ -338,13 +345,14 @@ parameters:
   --min_cluster         : size in pixels of the smallest allowed cluster. [10000]
   --smooth              : Length of the smoothing kernel. [5.0]
   --opening             : Use a morphological opening to rejoin clusters. [FALSE]
-  --split_traces        : Split the traces when only 1 per order. [FALSE]
+  --split_traces        : Split the full slit traces. [0]
   --detector            : Only reduce the specified detector. [0]
 
 products:
     FLAT_K24_Open_1_tracewave.fits (UTIL_TRACE_WAVE)
 
 QC:
+    No QCs for utilities
 
 Description:
     loop on detectors d:
@@ -357,6 +365,7 @@ Library functions uѕed:
     cr2res_io_load_image()
     cr2res_trace()
     cr2res_trace_add_extra_columns()
+    cr2res_trace_split_traces()
     cr2res_io_save_TRACE_WAVE()
 
 TODO: 
@@ -388,6 +397,7 @@ products:
     FLAT_K14_Open_3_calibrated.fits (CALIBRATED)
 
 QC:
+    No QCs for utilities
 
 Description:
     loop on raw frames f:
@@ -432,6 +442,7 @@ products:
     OBS1D_A_1_extr1D.fits (UTIL_EXTRACT_1D)
 
 QC:
+    No QCs for utilities
 
 Description:
     loop on detectors d:
@@ -467,6 +478,7 @@ parameters:
 products:
 
 QC:
+    No QCs for utilities
 Description:
 
 Library functions uѕed: 
@@ -491,6 +503,7 @@ products:
     cr2res_util_genlines.fits (EMISSION_LINES)
 
 QC:
+    No QCs for utilities
 
 Description:
     Parse the 2 column text file
@@ -533,6 +546,7 @@ products:
     WAVE_Kr_J12cd9_extr1D_wave_map.fits (UTIL_WAVE_MAP)
 
 QC:
+    No QCs for utilities
 
 Description:
     loop on detectors d:
@@ -587,6 +601,7 @@ parameters:
 products:
 
 QC:
+    No QCs for utilities
 Description:
 
 Library functions uѕed: 
@@ -633,19 +648,42 @@ TODO:
 * cr2res_obs_pol *
 ******************
 cmd:
+    esorex --mem-check=TRUE cr2res_obs_pol pol.sof
 
 inputs:
+    more pol.sof
 
 parameters:
+
 products:
+    cr2res_obs_pol_StokesA.fits obs_pol_StokesA
+    cr2res_obs_pol_StokesB.fits obs_pol_StokesB
+ 
+QC: TODO
+    median value of the null spectrum 
 
-QC:
-Description:
+Description: TODO
+    The input SOF is for one Stokes parameter (V,Q or I)
+    and spectrograph setting only, so no sorting
+    in this regard.
+    Positions A and B refer to decker13 and decker24.
+    "1" and "2" refer to the two beams switched with
+    each other. The sequence "1221" is mandatory and
+    can be assumed to always be present.
+    The recipe passes each 1221-seq to the library-func
+    and collects the outputs for saving.
 
-Library functions uѕed: 
+    obs_pol_Stokes* outputs are like extr1D, but with
+    column name prefixes "STOKES_I_", "NULL_" and
+    "STOKES_X_" where X is one of [VQI] as read
+    from INS.POL.TYPE
 
-TODO: 
+Library functions uѕed: TODO
 
+TODO:
+    Implement the actual de-modulation.
+    Lib-finc for selecting the traceNB for given decker
+        based on slit_frac.
 
 **********************
 * cr2res_util_splice *
@@ -658,6 +696,7 @@ parameters:
 products:
 
 QC:
+    No QCs for utilities
 Description:
 
 Library functions uѕed: 
@@ -677,6 +716,7 @@ parameters:
 products:
 
 QC:
+    No QCs for utilities
 Description:
 
 Library functions uѕed: 
