@@ -1,22 +1,29 @@
+
 cd /home/yjung/P_cr2res/demodata
 
 TODO:
-    - Write DESCRIPTION in all recipes/utils consistently
-    - Write a use case
+    - Check whySlit model has both 0s and NANs between orders
 
 ********************
 * KEYWORDS Summary *
 ********************
 
 Primary
-HIERARCH ESO INS WLEN ID         Setting
+HIERARCH ESO INS WLEN ID        Setting
+HIERARCH ESO INS OPTI8 NO       Decker
 
 Extension
-
 HIERARCH ESO INS WLEN STRT%d or ESO INS WLEN BEGINT%d ??
 HIERARCH ESO INS WLEN END%d
 
 HIERARCH ESO INS WLEN CEN%d     Y position in pixels of order %d
+
+********************
+* Classification   *
+********************
+    Use always setting for the matching
+    Slit width might be use to get the wavelength calibration / flat
+    Generic offset template is reduced with cr2res_obs_2d
 
 *********************
 * cr2res_cal_detlin *
@@ -25,33 +32,29 @@ cmd:
     esorex --mem-check=TRUE cr2res_cal_detlin detlin.sof
 
 inputs:
-    more detlin.sof 
-    DETLIN_A_1.fits DETLIN            
-    DETLIN_A_2.fits DETLIN
-    DETLIN_A_3.fits DETLIN
-    DETLIN_B_1.fits DETLIN
-    DETLIN_B_2.fits DETLIN
-    DETLIN_B_3.fits DETLIN
+    raw.fits DETLIN
 
 parameters:
   --bpm_kappa           : Kappa threshold for BPM detection. [1.8]
   --trace_degree        : polynomial degree for the fit to the orders. [5]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster. [10000]
-  --trace_smooth        : Length of the smoothing kernel. [5.0]
+  --trace_smooth_x      : Length of the smoothing kernel in x. [11]
+  --trace_smooth_y      : Length of the smoothing kernel in y. [201]
+  --trace_threshold     : Detection Threshold. [-200.0]
   --trace_opening       : Use a morphological opening to rejoin clusters. [FALSE]
   --single_settings     : Create the products for each setting. [FALSE]
   --trace_collapse      : Collapse the input frames for the trace analysis. [TRUE]
   --detector            : Only reduce the specified detector. [0]
 
 products:
-    cr2res_cal_detlin_bpm.fits (DETLIN_BPM)
-    cr2res_cal_detlin_coeffs.fits (DETLIN_COEFFS)
+  cr2res_cal_detlin_coeffs.fits DETLIN_COEFFS
+  cr2res_cal_detlin_bpm.fits DETLIN_BPM
 
 QC:
     See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
 Description:
-    group the input frames by different valueѕ of "ESO INS WLEN ID"
+    group the input raw frames by different settings
     loop on groups g:
         loop on detectors d:
             cr2res_cal_detlin_reduce() computes bpm(g, d) and coeffs(g, d)
@@ -97,10 +100,7 @@ cmd:
     esorex --mem-check=TRUE cr2res_cal_dark dark.sof
 
 inputs:
-    more dark.sof
-    DARK_1.fits DARK
-    DARK_2.fits DARK
-    DARK_3.fits DARK
+    raw.fits DARK
 
 parameters:
   --detector            : Only reduce the specified detector. [0]
@@ -117,8 +117,8 @@ parameters:
   --collapse.minmax.nhigh  : High number of pixels to reject for the minmax clipping algorithm. [1.0]
 
 products:
-    cr2res_cal_dark_[DITxNDIT]_master.fits (MASTER_DARK)
-    cr2res_cal_dark_[DITxNDIT]_bpm.fits (DARK_BPM)
+  cr2res_cal_dark_DITxNDIT_master.fits MASTER_DARK
+  cr2res_cal_dark_DITxNDIT_bpm.fits DARK_BPM
 
 QC: 
     See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
@@ -154,19 +154,13 @@ cmd:
     esorex --mem-check=TRUE cr2res_cal_flat flat.sof
 
 inputs:
-    more flat.sof
-    FLAT_K14_Open_1.fits FLAT
-    FLAT_K14_Open_2.fits FLAT
-    FLAT_K14_Open_3.fits FLAT
-    FLAT_K24_Open_1.fits FLAT
-    FLAT_K24_Open_2.fits FLAT
-    FLAT_K24_Open_3.fits FLAT
-    FLAT_K24_Pol2_1.fits FLAT
-    FLAT_K24_Pol2_2.fits FLAT
-    FLAT_K24_Pol2_3.fits FLAT
-    cr2res_cal_dark_5x20_master.fits    MASTER_DARK
-    cr2res_cal_dark_5x20_bpm.fits       DARK_BPM
-    cr2res_cal_detlin_coeffs.fits       DETLIN_COEFFS
+  raw.fits FLAT
+  detlin.fits DETLIN_COEFFS (optional) 
+  master_dark.fits MASTER_DARK (optional) 
+  bpm.fits DARK_BPM (optional) 
+        or FLAT_BPM
+        or DETLIN_BPM
+        or UTIL_BPM_SPLIT
 
 parameters:
   --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
@@ -175,7 +169,9 @@ parameters:
   --bpm_lines_ratio     : Maximum ratio of bad pixels per line. [0.5]
   --trace_degree        : polynomial degree for the fit to the orders. [5]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster. [10000]
-  --trace_smooth        : Length of the smoothing kernel. [2.0]
+  --trace_smooth_x      : Length of the smoothing kernel in x. [11]
+  --trace_smooth_y      : Length of the smoothing kernel in y. [201]
+  --trace_threshold     : Detection Threshold. [300.0]
   --trace_opening       : Use a morphological opening to rejoin clusters. [TRUE]
   --extract_oversample  : factor by which to oversample the extraction. [2]
   --extract_swath_width : The swath width. [24]
@@ -186,19 +182,19 @@ parameters:
   --trace_nb            : Only reduce the specified trace number. [-1]
 
 products:
-    cr2res_cal_flat_[setting]_[Decker]_slit_model.fits (FLAT_SLIT_MODEL)
-    cr2res_cal_flat_[setting]_[Decker]_blaze.fits (FLAT_EXTRACT_1D)
-    cr2res_cal_flat_[setting]_[Decker]_master_flat.fits (FLAT_MASTER_FLAT)
-    cr2res_cal_flat_[setting]_[Decker]_tracewave.fits (FLAT_TRACE_WAVE)
-    cr2res_cal_flat_[setting]_[Decker]_slit_func.fits (FLAT_SLIT_FUNC)
-    cr2res_cal_flat_[setting]_[Decker]_master_bpm.fits (FLAT_BPM)
-    cr2res_cal_flat_[setting]_tracewave_merged.fits (FLAT_TRACE_WAVE_MERGED)
+  cr2res_cal_flat_[setting]_[Decker]_bpm.fits FLAT_BPM
+  cr2res_cal_flat_[setting]_[Decker]_blaze.fits FLAT_EXTRACT_1D
+  cr2res_cal_flat_[setting]_[Decker]_slit_model.fits FLAT_SLIT_MODEL
+  cr2res_cal_flat_[setting]_[Decker]_slit_func.fits FLAT_SLIT_FUNC
+  cr2res_cal_flat_[setting]_[Decker]_master.fits FLAT_MASTER_FLAT
+  cr2res_cal_flat_[setting]_[Decker]_tracewave.fits FLAT_TRACE_WAVE
+  cr2res_cal_flat_[setting]_tracewave_merged.fits FLAT_TRACE_WAVE
 
 QC: 
     See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
 Description:
-    group the input frames by different valueѕ of "ESO INS WLEN ID"
+    group the input frames by different settings
     loop on groups g:
         loop on decker positions p:
             loop on detectors d:
@@ -223,13 +219,14 @@ Description:
         Compute the master flat with cr2res_master_flat(avg, slit_model, --bpm_low, --bpm_high, --bpm_lines_ratio)
             -> master_flat, bpm
         Merge the bpm with the input bpm
-        Compute QCs with 
+        Compute QCs 
         store the qc parameters in the returned property list
 
 Library functions uѕed: 
-    cr2res_extract_decker_frameset()
+    cr2res_io_extract_decker_frameset()
     cr2res_trace()
     cr2res_extract_slitdec_curved()
+    cr2res_master_flat()
     cr2res_qc_flat_lamp_ints()
     cr2res_qc_flat_mean_level()
     cr2res_qc_flat_mean_med_flux()
@@ -261,14 +258,13 @@ cmd:
     esorex --mem-check=TRUE cr2res_util_bpm_split bpm_split.sof
 
 inputs:
-    more bpm_split.sof
-    cr2res_cal_flat_K_1_4_Decker2_master_bpm.fits BPM
+  raw.fits BPM
 
 parameters:
   --detector            : Only reduce the specified detector. [0]
 
 products:
-    cr2res_cal_flat_K_1_4_Decker2_master_bpm_splitted_[BPM CODE].fits (UTIL_BPM_SPLIT)
+  <input_name>_splitted_<bpm_code>.fits UTIL_BPM_SPLIT
 
 QC:
     No QCs for utilities
@@ -287,17 +283,16 @@ Library functions uѕed:
     cr2res_io_save_BPM()
 
 TODO: 
-    Memory leak                 YJ
-    Product naming is wrong     YJ
+    Nothing
 
 *************************
 * cr2res_util_trace_map *
 *************************
 cmd:
-    esorex --mem-check=TRUE cr2res_util_trace_map cr2res_cal_flat_K_2_4_tracewave_merged.fits
+    esorex --mem-check=TRUE cr2res_util_trace_map trace_map.sof
 
 inputs:
-    Fits file of PRO TYPE TRACE_WAVE
+  raw.fits TRACE_WAVE
 
 parameters:
   --detector            : Only reduce the specified detector. [0]
@@ -305,20 +300,21 @@ parameters:
   --trace_nb            : Only reduce the specified trace number. [-1]
 
 products:
-    cr2res_cal_flat_K_2_4_tracewave_merged_slit_curve.fits (UTIL_TRACE_MAP_SLIT_CURVE)
-    cr2res_cal_flat_K_2_4_tracewave_merged_wave.fits (UTIL_TRACE_MAP_WL)
-    cr2res_cal_flat_K_2_4_tracewave_merged_trace.fits (UTIL_TRACE_MAP_TRACE)
+  <input_name>_slit_curve.fits UTIL_TRACE_MAP_SLIT_CURVE
+  <input_name>_wave.fits UTIL_TRACE_MAP_WL
+  <input_name>_trace.fits UTIL_TRACE_MAP_TRACE
 
 QC:
     No QCs for utilities
 
 Description:
-    loop on detectors d:
-        Load the trace_wave extension
-        Call cr2res_wave_gen_wave_map() to generate wave_map(d)
-        Call cr2res_trace_gen_image() to generate traces_map(d)
-        Call cr2res_slit_curv_gen_map() to generate slit_curv_map(d)
-    Save wave_map, traces_map and slit_curv_map
+    loop on input raw frames f:
+        loop on detectors d:
+            Load the trace_wave extension
+            Call cr2res_wave_gen_wave_map() to generate wave_map(d)
+            Call cr2res_trace_gen_image() to generate traces_map(d)
+            Call cr2res_slit_curv_gen_map() to generate slit_curv_map(d)
+        Save wave_map, traces_map and slit_curv_map
 
 Library functions uѕed: 
     cr2res_io_load_TRACE_WAVE()
@@ -335,31 +331,34 @@ TODO:
 * cr2res_util_trace *
 *********************
 cmd:
-    esorex --mem-check=TRUE cr2res_util_trace FLAT_K24_Open_1.fits
+    esorex --mem-check=TRUE cr2res_util_trace trace.sof
 
 inputs:
-    RAW fits file from which the traces are measured
+  raw.fits FLAT
 
 parameters:
   --degree              : polynomial degree for the fit to the orders. [5]
   --min_cluster         : size in pixels of the smallest allowed cluster. [10000]
-  --smooth              : Length of the smoothing kernel. [5.0]
+  --smooth_x            : Length of the smoothing kernel in x. [11]
+  --smooth_y            : Length of the smoothing kernel in y. [201]
+  --threshold           : Detection Threshold. [300.0]
   --opening             : Use a morphological opening to rejoin clusters. [FALSE]
   --split_traces        : Split the full slit traces. [0]
   --detector            : Only reduce the specified detector. [0]
 
 products:
-    FLAT_K24_Open_1_tracewave.fits (UTIL_TRACE_WAVE)
+  <input_name>_tracewave.fits UTIL_TRACE_WAVE
 
 QC:
     No QCs for utilities
 
 Description:
-    loop on detectors d:
-        Use cr2res_trace(--degree, --min_cluster, --smooth, --opening) to measure the traces
-        if --split_traces, call cr2res_trace_split_traces() to split the traces
-        Use cr2res_trace_add_extra_columns() to add the additional columns (slit fraction, wl, slit curvature)
-    Save the trace wave table
+    loop on input raw frames f:
+        loop on detectors d:
+            Use cr2res_trace(--degree, --min_cluster, --smooth, --opening) to measure the traces
+            if --split_traces, call cr2res_trace_split_traces() to split the traces
+            Use cr2res_trace_add_extra_columns() to add the additional columns (slit fraction, wl, slit curvature)
+        Save the trace wave table
 
 Library functions uѕed: 
     cr2res_io_load_image()
@@ -378,23 +377,25 @@ cmd:
     esorex --mem-check=TRUE cr2res_util_calib calib.sof
 
 inputs:
-    more calib.sof
-    FLAT_K14_Open_1.fits CALIB
-    FLAT_K14_Open_2.fits CALIB
-    FLAT_K14_Open_3.fits CALIB
-    cr2res_cal_dark_5x20_master.fits    MASTER_DARK
-    cr2res_cal_dark_5x20_bpm.fits       DARK_BPM
-    cr2res_cal_detlin_coeffs.fits       DETLIN_COEFFS
-    cr2res_cal_flat_K_1_4_Open_master_flat.fits FLAT_MASTER_FLAT
+  raw.fits FLAT
+        or WAVE
+        or OBS_NODDING
+        or OBS_2D
+        or OBS_POL
+  detlin.fits DETLIN_COEFFS (optional) 
+  bpm.fits DARK_BPM (optional) 
+        or FLAT_BPM
+        or DETLIN_BPM
+        or UTIL_BPM_SPLIT
+  master_dark.fits MASTER_DARK (optional) 
+  master_flat.fits FLAT_MASTER_FLAT (optional) 
 
 parameters:
   --detector            : Only reduce the specified detector. [0]
   --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
 
 products:
-    FLAT_K14_Open_1_calibrated.fits (CALIBRATED)
-    FLAT_K14_Open_2_calibrated.fits (CALIBRATED)
-    FLAT_K14_Open_3_calibrated.fits (CALIBRATED)
+  <input_name>_calibrated.fits CALIBRATED
 
 QC:
     No QCs for utilities
@@ -418,12 +419,24 @@ TODO:
 * cr2res_util_extract *
 ***********************
 cmd:
-    esorex --mem-check=TRUE cr2res_util_extract OBS1D_A_1.fits cr2res_cal_flat_K_2_4_Open_tracewave.fits cr2res_cal_flat_K_2_4_Open_master_bpm.fits
+    esorex --mem-check=TRUE cr2res_util_extract extract.sof
 
 inputs:
-    1st file : Fits file where the extraction is done
-    2nd file : Trace wave fits file
-    3rd file : BPM fits file
+  science.fits FLAT
+            or WAVE
+            or OBS_NODDING
+            or OBS_2D
+            or OBS_POL
+  trace.fits FLAT_TRACE_WAVE
+          or FLAT_TRACE_WAVE_MERGED
+          or UTIL_TRACE_WAVE
+          or UTIL_WAVE_TRACE_WAVE
+          or WAVE_TRACE_WAVE
+          or UTIL_SLIT_CURV_TRACE_WAVE
+  bpm.fits DARK_BPM (optional) 
+        or FLAT_BPM
+        or DETLIN_BPM
+        or UTIL_BPM_SPLIT
 
 parameters:
   --oversample          : factor by which to oversample the extraction. [5]
@@ -437,9 +450,9 @@ parameters:
   --trace_nb            : Only reduce the specified trace number. [-1]
 
 products:
-    OBS1D_A_1_extrModel.fits (UTIL_SLIT_MODEL)
-    OBS1D_A_1_extrSlitFu.fits (UTIL_SLIT_FUNC)
-    OBS1D_A_1_extr1D.fits (UTIL_EXTRACT_1D)
+  <input_name>_extr1D.fits UTIL_EXTRACT_1D
+  <input_name>_extrSlitFu.fits UTIL_SLIT_FUNC
+  <input_name>_extrModel.fits UTIL_SLIT_MODEL
 
 QC:
     No QCs for utilities
@@ -470,20 +483,64 @@ TODO:
 ************************
 * cr2res_util_normflat *
 ************************
+
 cmd:
+    esorex --mem-check=TRUE cr2res_cal_flat flat_norm.sof
+        ---> cr2res_cal_flat_K_1_4_Open_master_flat.fits
+    esorex --mem-check=TRUE cr2res_util_calib calib_norm.sof
+    esorex --mem-check=TRUE  cr2res_util_normflat norm.sof
+        ---> cr2res_util_normflat_Open_master_flat.fits
+    Both files should be identical
 
 inputs:
+  raw-file.fits FLAT
+  slit_model.fits FLAT_SLIT_MODEL
+               or UTIL_SLIT_MODEL
+               or OBS_1D_SLITMODELA
+               or OBS_1D_SLITMODELB
 
 parameters:
+  --bpm_low             : Low threshold for BPM detection. [0.5]
+  --bpm_high            : High threshold for BPM detection. [2.0]
+  --bpm_lines_ratio     : Maximum ratio of bad pixels per line. [0.5]
+  --detector            : Only reduce the specified detector. [0]
+
 products:
+  cr2res_util_normflat_[setting]_[Decker]_bpm.fits UTIL_MASTER_FLAT
+  cr2res_util_normflat_[setting]_[Decker]_master.fits UTIL_MASTER_FLAT
 
 QC:
     No QCs for utilities
+
 Description:
+    group the input frames by different settings
+    loop on groups g:
+        group the input frames by different decker positions
+        loop on decker positions p:
+            loop on detectors d:
+                cr2res_util_normflat_reduce() computes (master_flat,bpm)(g,p,d) 
+            Save master_flat(g,d) (FLAT_MASTER_FLAT)
+            Save bpm(g,p) (FLAT_BPM)
+
+    cr2res_util_normflat_reduce()
+        Load the images list
+        Average the images to avg
+        Load the input slit_model with the proper setting/decker
+        Compute the master flat with cr2res_master_flat(avg, slit_model, --bpm_low, --bpm_high, --bpm_lines_ratio)
+            -> master_flat, bpm
 
 Library functions uѕed: 
+    cr2res_extract_frameset()
+    cr2res_io_extract_decker_frameset()
+    cr2res_io_find_SLIT_MODEL()
+    cr2res_io_load_image_list_from_set()
+    cr2res_io_load_SLIT_MODEL()
+    cr2res_master_flat()
+    cr2res_io_save_MASTER_FLAT()
+    cr2res_io_save_BPM()
 
 TODO: 
+    Nothing
 
 ************************
 * cr2res_util_genlines *
@@ -493,7 +550,7 @@ cmd:
 
 inputs:
     more genlines.sof
-    lines_thar.txt EMISSION_LINES
+    /home/yjung/P_cr2res/cr2re/cr2rep/catalogs/lines_thar.txt EMISSION_LINES
 
 parameters:
   --wl_factor           : The factor used to multiply the wl. [1.0]
@@ -521,29 +578,36 @@ TODO:
 ********************
 * cr2res_util_wave *
 ********************
+TODO
 cmd:
     esorex --mem-check=TRUE cr2res_util_wave WAVE_Kr_J12cd9_extr1D.fits TRACE_J12cd9.fits catalogKr.fits
 
 inputs:
-    WAVE_Kr_J12cd9_extr1D.fits      The lamp exposure
-    TRACE_J12cd9.fits               The trace file
-    catalogKr.fits                  The lines catalog
+  raw.fits EXTRACT_1D
+  trace_wave.fits FLAT_TRACE_WAVE
+               or FLAT_TRACE_WAVE_MERGED
+               or UTIL_TRACE_WAVE
+               or UTIL_WAVE_TRACE_WAVE
+               or WAVE_TRACE_WAVE
+               or UTIL_SLIT_CURV_TRACE_WAVE
+  lines.fits EMISSION_LINES (optional) 
 
 parameters:
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
-  --method              : Data Type (XCORR / LINE1D / LINE2D / ETALON). [XCORR]
+  --wl_method           : Data Type (XCORR / LINE1D / LINE2D / ETALON). [XCORR]
   --wl_shift            : Wavelength shift (nm) to apply to the guess. [0.0]
   --wl_est              : Estimated wavelength [start, end] (in nm). [-1.0, -1.0]
   --wl_err              : Estimated wavelength error [start_err, end_err] (in nm). [-1.0, -1.0]
-  --degree              : Wavelength Polynomial degree. [3]
+  --wl_degree           : Wavelength Polynomial degree. [3]
   --log                 : Flag for taking the Log() value of the lines. [FALSE]
+  --propagate           : Flag for using the input WL when no computation. [FALSE]
   --display             : Flag for display. [FALSE]
 
 products:
-    WAVE_Kr_J12cd9_extr1D_tracewave.fits (UTIL_WAVE_TRACE_WAVE)
-    WAVE_Kr_J12cd9_extr1D_wave_map.fits (UTIL_WAVE_MAP)
+  <input_name>_trace.fits UTIL_WAVE_TRACE_WAVE
+  <input_name>_map.fits UTIL_WAVE_MAP
 
 QC:
     No QCs for utilities
@@ -559,9 +623,6 @@ Description:
             Apply the wavelength shift --wl_shift if requested
 
 
-
-
-
 Library functions uѕed: 
     cr2res_io_load_TRACE_WAVE()
     cr2res_io_load_EXTRACT_1D()
@@ -569,9 +630,7 @@ Library functions uѕed:
     cr2res_get_trace_wave_poly()
     cr2res_get_trace_table_index()
 
-
 TODO: 
-
 
 *******************
 * cr2res_cal_wave *
@@ -579,11 +638,46 @@ TODO:
 cmd:
 
 inputs:
+  raw.fits WAVE
+  trace_wave.fits FLAT_TRACE_WAVE
+               or FLAT_TRACE_WAVE_MERGED
+               or UTIL_TRACE_WAVE
+               or UTIL_WAVE_TRACE_WAVE
+               or WAVE_TRACE_WAVE
+               or UTIL_SLIT_CURV_TRACE_WAVE
+  lines.fits EMISSION_LINES (optional) 
+  detlin_coeffs.fits DETLIN_COEFFS (optional) 
+  master_dark.fits MASTER_DARK (optional) 
+  master_flat.fits FLAT_MASTER_FLAT (optional) 
+  bpm.fits FLAT_BPM (optional) 
+        or DETLIN_BPM
+        or DARK_BPM
+        or UTIL_BPM_SPLIT
 
 parameters:
+  --detector            : Only reduce the specified detector. [0]
+  --order               : Only reduce the specified order. [-1]
+  --trace_nb            : Only reduce the specified trace number. [-1]
+  --ext_oversample      : factor by which to oversample the extraction. [5]
+  --ext_swath_width     : The swath width. [32]
+  --ext_height          : Extraction height. [-1]
+  --ext_smooth_slit     : Smoothing along the slit (1 for high S/N, 5 for low). [1.0]
+  --wl_method           : Data Type (XCORR / LINE1D / LINE2D / ETALON). [XCORR]
+  --wl_shift            : Wavelength shift (nm) to apply to the guess. [0.0]
+  --wl_est              : Estimated wavelength start and end. [-1.0, -1.0]
+  --wl_err              : Estimated wavelength error [start_err, end_err] (in nm). [-1.0, -1.0]
+  --wl_degree           : Wavelegth Polynomial degree. [3]
+  --log                 : Flag for taking the Log() value of the lines. [FALSE]
+  --propagate           : Flag for using the input WL when no computation. [FALSE]
+  --display             : Flag for display. [FALSE]
+
 products:
+  cr2res_cal_wave_trace.fits WAVE_TRACE_WAVE
+  cr2res_cal_wave_map.fits WAVE_MAP
 
 QC:
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
+
 Description:
 
 Library functions uѕed: 
@@ -593,38 +687,108 @@ TODO:
 *************************
 * cr2res_util_slit_curv *
 *************************
+
 cmd:
+    esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
 
 inputs:
+  raw.fits TRACE_WAVE
 
 parameters:
+  --detector            : Only reduce the specified detector. [0]
+  --order               : Only reduce the specified order. [-1]
+  --trace_nb            : Only reduce the specified trace number. [-1]
+  --display             : X value to display (1->2048). [0]
+
 products:
+  <input_name>_slit_curv_map.fits UTIL_SLIT_CURV_MAP
+  <input_name>_slit_curv.fits UTIL_SLIT_CURV
+  <input_name>_trace.fits UTIL_SLIT_CURV_TRACE_WAVE
 
 QC:
     No QCs for utilities
+
 Description:
+    loop on input TRACE_WAVE files f:
+        loop on detectors d:
+            Load the TRACE_WAVE table for the current detector
+            Loop over the traces t:
+                Call cr2res_slit_curv_compute_order_trace() to get the current trace curvatures
+                Update the slit curvature in the TRACE_WAVE table with the result
+                Update the SLIT_CURVE table with the result
+            Generate a slit curve map
+        Save the TRACE_WAVE
+        Save the SLIT_CURVE
+        Save the SLIT_CURVE_MAP
+
+    cr2res_slit_curv_compute_order_trace()
+        loop on the x positions (along the trace)
+            Px іs computed for each x : X=Px(Y)
+                where (X,Y) are the detector position, (1, 1) being the lower left pixel.
 
 Library functions uѕed: 
+    cr2res_io_load_TRACE_WAVE()
+    cr2res_slit_curv_compute_order_trace()
+    cr2res_get_nb_traces_with_wavelength()
+    cr2res_get_trace_wave_poly()
+    cr2res_slit_curv_get_position()
+    cr2res_slit_curv_fit_coefficients()
+    cr2res_slit_curv_gen_map()
+    cr2res_io_save_SLIT_CURV_MAP()
+    cr2res_io_save_SLIT_CURV()
+    cr2res_io_save_TRACE_WAVE()
 
 TODO: 
+    Nothing
 
-*****************
-* cr2res_obs_1d *
-*****************
+**********************
+* cr2res_obs_nodding *
+**********************
 cmd:
+    esorex --mem-check=TRUE cr2res_obs_nodding obs.sof 
 
 inputs:
+  raw.fits OBS_NODDING
+  trace_wave.fits FLAT_TRACE_WAVE
+               or FLAT_TRACE_WAVE_MERGED
+               or UTIL_TRACE_WAVE
+               or UTIL_WAVE_TRACE_WAVE
+               or WAVE_TRACE_WAVE
+               or UTIL_SLIT_CURV_TRACE_WAVE
+  detlin.fits DETLIN_COEFFS (optional) 
+  master_dark.fits MASTER_DARK (optional) 
+  master_flat.fits FLAT_MASTER_FLAT (optional) 
+  bpm.fits FLAT_BPM (optional) 
+        or DETLIN_BPM
+        or DARK_BPM
+        or UTIL_BPM_SPLIT
 
 parameters:
+  --extract_oversample  : factor by which to oversample the extraction. [2]
+  --extract_swath_width : The swath width. [24]
+  --extract_height      : Extraction height. [-1]
+  --extract_smooth      : Smoothing along the slit (1 for high S/N, 5 for low). [1.0]
+  --detector            : Only reduce the specified detector. [0]
+
 products:
+  cr2res_obs_nodding_extractA.fits OBS_1D_EXTRACTA
+  cr2res_obs_nodding_extractB.fits OBS_1D_EXTRACTB
+  cr2res_obs_nodding_combinedA.fits OBS_1D_COMBINEDA
+  cr2res_obs_nodding_combinedB.fits OBS_1D_COMBINEDB
+  cr2res_obs_nodding_modelA.fits OBS_1D_SLITMODELA
+  cr2res_obs_nodding_modelB.fits OBS_1D_SLITMODELB
+  cr2res_obs_nodding_slitfuncA.fits OBS_1D_SLITFUNCA
+  cr2res_obs_nodding_slitfuncB.fits OBS_1D_SLITFUNCB
 
 QC:
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
+
 Description:
 
 Library functions uѕed: 
 
 TODO: 
-
+    - Add QCs
 
 *****************
 * cr2res_obs_2d *
@@ -632,17 +796,39 @@ TODO:
 cmd:
 
 inputs:
+  raw.fits OBS_2D
+  trace_wave.fits FLAT_TRACE_WAVE
+               or FLAT_TRACE_WAVE_MERGED
+               or UTIL_TRACE_WAVE
+               or UTIL_WAVE_TRACE_WAVE
+               or WAVE_TRACE_WAVE
+               or UTIL_SLIT_CURV_TRACE_WAVE
+  detlin.fits DETLIN_COEFFS (optional) 
+  master_dark.fits MASTER_DARK (optional) 
+  master_flat.fits FLAT_MASTER_FLAT (optional) 
+  bpm.fits FLAT_BPM (optional) 
+        or DETLIN_BPM
+        or DARK_BPM
+        or UTIL_BPM_SPLIT
+
 
 parameters:
+  --detector            : Only reduce the specified detector. [0]
+  --order               : Only reduce the specified order. [-1]
+  --trace_nb            : Only reduce the specified trace number. [-1]
+
 products:
+  cr2res_obs_2d_extract.fits OBS_2D_EXTRACT
 
 QC:
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
+
 Description:
 
 Library functions uѕed: 
 
 TODO: 
-
+    - Add QCs
 
 ******************
 * cr2res_obs_pol *
@@ -651,18 +837,37 @@ cmd:
     esorex --mem-check=TRUE cr2res_obs_pol pol.sof
 
 inputs:
-    more pol.sof
+  raw.fits OBS_POL
+  trace_wave.fits FLAT_TRACE_WAVE
+               or FLAT_TRACE_WAVE_MERGED
+               or UTIL_TRACE_WAVE
+               or UTIL_WAVE_TRACE_WAVE
+               or WAVE_TRACE_WAVE
+               or UTIL_SLIT_CURV_TRACE_WAVE
+  detlin.fits DETLIN_COEFFS (optional) 
+  master_dark.fits MASTER_DARK (optional) 
+  master_flat.fits FLAT_MASTER_FLAT (optional) 
+  bpm.fits FLAT_BPM (optional) 
+        or DETLIN_BPM
+        or DARK_BPM
+        or UTIL_BPM_SPLIT
 
 parameters:
+  --extract_oversample  : factor by which to oversample the extraction. [2]
+  --extract_swath_width : The swath width. [24]
+  --extract_height      : Extraction height. [-1]
+  --extract_smooth      : Smoothing along the slit (1 for high S/N, 5 for low). [1.0]
+  --detector            : Only reduce the specified detector. [0]
 
 products:
-    cr2res_obs_pol_StokesA.fits obs_pol_StokesA
-    cr2res_obs_pol_StokesB.fits obs_pol_StokesB
- 
-QC: TODO
-    median value of the null spectrum 
+  cr2res_obs_pol_specA.fits OBS_POL_SPECA
+  cr2res_obs_pol_specB.fits OBS_POL_SPECB
 
-Description: TODO
+  
+QC:
+    See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
+
+Description: 
     The input SOF is for one Stokes parameter (V,Q or I)
     and spectrograph setting only, so no sorting
     in this regard.
@@ -678,49 +883,14 @@ Description: TODO
     "STOKES_X_" where X is one of [VQI] as read
     from INS.POL.TYPE
 
-Library functions uѕed: TODO
+Library functions uѕed: 
 
 TODO:
-    Implement the actual de-modulation.
-    Lib-finc for selecting the traceNB for given decker
-        based on slit_frac.
+    Add QCs : median value of the null spectrum
+    Lib-func for selecting the traceNB for given decker based on slit_frac.
 
-**********************
-* cr2res_util_splice *
-**********************
-cmd:
-
-inputs:
-
-parameters:
-products:
-
-QC:
-    No QCs for utilities
-Description:
-
-Library functions uѕed: 
-
-TODO: 
-
-
-
-********************
+**********
+*  TODO  *        
+**********
 * cr2res_util_plot *
-********************
-cmd:
-
-inputs:
-
-parameters:
-products:
-
-QC:
-    No QCs for utilities
-Description:
-
-Library functions uѕed: 
-
-TODO: 
-
-
+* cr2res_util_splice *
