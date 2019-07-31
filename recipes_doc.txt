@@ -1,8 +1,63 @@
+in bashrc:
+=========
+set C2RAWDIR to /home/yjung/P_cr2res/2019_07_22_LAB_DATA
+set C2STATCALDIR to /home/yjung/P_cr2res/cr2re/cr2re-calib
 
-cd /home/yjung/P_cr2res/demodata
+usec2 ; cd /home/yjung/P_cr2res/2019_07_31_demo
 
-TODO:
-    - Check whySlit model has both 0s and NANs between orders
+esorex --mem-check=TRUE cr2res_cal_detlin cr2res_cal_detlin.sof
+cd Y12
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+esorex --mem-check=TRUE cr2res_util_calib cr2res_cal_flat.sof
+trace 
+extract
+esorex --mem-check=TRUE  cr2res_util_normflat cr2res_util_normflat.sof
+
+
+
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+
+
+
+esorex --mem-check=TRUE cr2res_util_genlines cr2res_util_genlines.sof 
+esorex --mem-check=TRUE cr2res_util_bpm_split cr2res_util_bpm_split.sof
+esorex --mem-check=TRUE cr2res_util_trace_map cr2res_util_trace_map.sof
+esorex --mem-check=TRUE cr2res_util_trace cr2res_util_trace.sof
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract.sof
+
+
+    
+
+
+
+
+esorex --mem-check=TRUE cr2res_util_wave WAVE_Kr_J12cd9_extr1D.fits TRACE_J12cd9.fits catalogKr.fits
+esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
+
+esorex --mem-check=TRUE cr2res_obs_nodding obs.sof 
+
+esorex --mem-check=TRUE cr2res_obs_pol pol.sof
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ********************
 * KEYWORDS Summary *
@@ -32,36 +87,30 @@ HIERARCH ESO INS WLEN END<N>    End WL for order N
 ******
     See QC dictionary in cr2rec/dic/ESO-DFS-DIC.CR2RE_QC
 
-*********************
-* cr2res_cal_detlin *
-*********************
-cmd:
-    esorex --mem-check=TRUE cr2res_cal_detlin detlin.sof
+****************
+***   TODO   ***
+****************
 
-TODO: 
+
+* BPM handling : Cleaning vs attaching it (special handling in cr2res_util_extract)
+
+*  Check why Slit model has both 0s and NANs between orders
+* Add a cr2res_util_bpm_merge
+
+* cr2res_cal_detlin 
     In cr2res_detlin_compute(), add the error                   TM
     QC fit_quality                                              YJ/TM
     Write cr2res_qc_detlin_gain()                               TM
     Write cr2res_qc_detlin_min_max_level()                      TM
     Pass the proper input to cr2res_qc_detlin_min_max_level()   YJ
+    Should accept a BPM as input to merge to the output (like the flat recipe)
 
-*******************
 * cr2res_cal_dark *
-*******************
-cmd:
-    esorex --mem-check=TRUE cr2res_cal_dark dark.sof
-
-TODO: 
     Check the passed ron value (compare with old CRIRES) to cr2res_detector_shotnoise_model()   YJ
     Check the gain default value                                                                YJ
+    Should accept a BPM as input to merge to the output (like the flat recipe)
 
-*******************
 * cr2res_cal_flat *
-*******************
-cmd:
-    esorex --mem-check=TRUE cr2res_cal_flat flat.sof
-
-TODO: 
     Implement Cosmics correction                        TM
     Detlin correction does not work                     YJ
     cr2res_qc_flat_lamp_ints()                          YJ/TM
@@ -71,108 +120,23 @@ TODO:
     cr2res_qc_flat_nb_overexposed()                     YJ/TM
     cr2res_qc_flat_trace_center_y()                     YJ/TM
 
-*************************
-* cr2res_util_bpm_split *
-*************************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_bpm_split bpm_split.sof
-
-*************************
-* cr2res_util_trace_map *
-*************************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_trace_map trace_map.sof
-
-*********************
 * cr2res_util_trace *
-*********************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_trace trace.sof
-
-TODO: 
     Implement and call cr2res_trace_split_traces()      YJ/TM
 
-*********************
 * cr2res_util_calib *
-*********************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_calib calib.sof
-
-TODO: 
     Detlin correction does not work                     YJ
     Implement Cosmics correction                        TM
 
-***********************
 * cr2res_util_extract *
-***********************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_extract extract.sof
-
-TODO: 
     Add documentation in cr2res_trace_new_slit_fraction() header
 
-************************
-* cr2res_util_normflat *
-************************
-
-cmd:
-    esorex --mem-check=TRUE cr2res_cal_flat flat_norm.sof
-        ---> cr2res_cal_flat_K_1_4_Open_master_flat.fits
-    esorex --mem-check=TRUE cr2res_util_calib calib_norm.sof
-    esorex --mem-check=TRUE  cr2res_util_normflat norm.sof
-        ---> cr2res_util_normflat_Open_master_flat.fits
-    Both files should be identical
-
-************************
-* cr2res_util_genlines *
-************************
-cmd:
-    esorex --mem-check=TRUE cr2res_util_genlines genlines.sof 
-
-********************
-* cr2res_util_wave *
-********************
-
-cmd:
-    esorex --mem-check=TRUE cr2res_util_wave WAVE_Kr_J12cd9_extr1D.fits TRACE_J12cd9.fits catalogKr.fits
-
-*******************
-* cr2res_cal_wave *
-*******************
-
-cmd:
-
-*************************
-* cr2res_util_slit_curv *
-*************************
-
-cmd:
-    esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
-
-**********************
 * cr2res_obs_nodding *
-**********************
-cmd:
-    esorex --mem-check=TRUE cr2res_obs_nodding obs.sof 
-
-TODO: 
     - Add QCs
 
-*****************
 * cr2res_obs_2d *
-*****************
-cmd:
-
-TODO: 
     - Add QCs
 
-******************
 * cr2res_obs_pol *
-******************
-cmd:
-    esorex --mem-check=TRUE cr2res_obs_pol pol.sof
-
-TODO:
     cr2res_pol_sort_frames()
     cr2res_pol_spec_pol_merge()
     Add QCs : median value of the null spectrum
