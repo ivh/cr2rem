@@ -2,58 +2,127 @@ in bashrc:
 =========
 set C2RAWDIR to /home/yjung/P_cr2res/2019_07_22_LAB_DATA
 set C2STATCALDIR to /home/yjung/P_cr2res/cr2re/cr2re-calib
+set C2SRCDIR to /home/yjung/P_cr2res/cr2re/cr2rep
 
 usec2 ; cd /home/yjung/P_cr2res/2019_07_31_demo
 
+###
+### Detlin
+###
+# DETLIN -> BPM, DETLIN_COEFFS
 esorex --mem-check=TRUE cr2res_cal_detlin cr2res_cal_detlin.sof
+
 cd Y12
+
+###
+### Dark
+###
+# DARK -> BPM, MASTER_DARK
 esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
 
+###
+### Flatfield / Tracing
+###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
 esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
 
-esorex --mem-check=TRUE cr2res_util_calib cr2res_cal_flat.sof
-trace 
-extract
+# FLAT -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib.sof
+# CALIBRATED -> TW
+esorex --mem-check=TRUE cr2res_util_trace cr2res_util_trace.sof
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract.sof
+# CALIBRATED, SLIT_MODEL -> BPM, MASTER_FLAT
 esorex --mem-check=TRUE  cr2res_util_normflat cr2res_util_normflat.sof
 
-
-
+###
+### Wavelength Calibration
+###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
 esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
 
+# WAVE -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib2.sof
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
+
+###
+### Compute the Slit curvature
+###
+# TW -> SLIT_CURV_MAP, SLIT_CURV, TW
+esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
+
+###
+### Recompute the Extraction / Wavelength calibration
+###
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+
+### Core dump
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract3.sof
+
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+TODO : esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave2.sof
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cd ../J12
+
+###
+### Nodding Observation
+###
+# TODO
+esorex --mem-check=TRUE cr2res_obs_nodding cr2res_obs_nodding.sof 
+
+###
+### Polarimetry Observation
+###
+# TODO
+esorex --mem-check=TRUE cr2res_obs_pol cr2res_obs_pol.sof
+
+###
+### 2D Observation
+###
+# TODO
+esorex --mem-check=TRUE cr2res_obs_2d cr2res_obs_2d.sof
+
+###
+### Various utilities
+###
 esorex --mem-check=TRUE cr2res_util_genlines cr2res_util_genlines.sof 
 esorex --mem-check=TRUE cr2res_util_bpm_split cr2res_util_bpm_split.sof
 esorex --mem-check=TRUE cr2res_util_trace_map cr2res_util_trace_map.sof
-esorex --mem-check=TRUE cr2res_util_trace cr2res_util_trace.sof
-esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract.sof
 
-
-    
-
+# TODO
+esorex --mem-check=TRUE cr2res_util_plot
 
 
 
-esorex --mem-check=TRUE cr2res_util_wave WAVE_Kr_J12cd9_extr1D.fits TRACE_J12cd9.fits catalogKr.fits
-esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
+TODO : other bands
 
-esorex --mem-check=TRUE cr2res_obs_nodding obs.sof 
-
-esorex --mem-check=TRUE cr2res_obs_pol pol.sof
-
-
-
-
-
-
-
-
-
-
-
-
-
+cd ../
 
 
 
@@ -90,7 +159,6 @@ HIERARCH ESO INS WLEN END<N>    End WL for order N
 ****************
 ***   TODO   ***
 ****************
-
 
 * BPM handling : Cleaning vs attaching it (special handling in cr2res_util_extract)
 
