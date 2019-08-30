@@ -1,5 +1,3 @@
-usec2 ; cd /home/yjung/P_cr2res/2019_07_31_demo
-
 # RAW data are those in crires@wcrires.hq.eso.org:/mnt.staging/DETDATA/PAE/201906_CR_cooldown13/
 set C2RAWDIR to /home/yjung/P_cr2res/2019_07_22_LAB_DATA
 
@@ -13,6 +11,9 @@ set C2SRCDIR to /home/yjung/P_cr2res/cr2re/cr2rep
 
 # Browse the data 
 dfits $C2RAWDIR/*.fits | fitsort TPL.ID TPL.EXPNO TPL.NEXP INS.WLEN.ID DPR.CATG DPR.TYPE DPR.TECH > data_classif.txt
+
+usec2
+cd ~/P_cr2res/cr2re/cr2rem/cr2res_pae_tutorial1
 
 
 ##################################################################################
