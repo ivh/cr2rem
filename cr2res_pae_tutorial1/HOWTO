@@ -159,6 +159,15 @@ esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
 # WAVE, EMISSION_LINES -> WAVE_MAP, TW
 esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
 
+# WAVE -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib2.sof
+
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
+
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
+
 ##################################################################################
 cd ../H24
 ### Dark ###
