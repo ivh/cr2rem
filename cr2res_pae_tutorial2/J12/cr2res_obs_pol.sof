@@ -1,9 +1,0 @@
-$C2RAWDIR/SimPol_J12_A1.fits OBS_POL
-$C2RAWDIR/SimPol_J12_A2.fits OBS_POL
-$C2RAWDIR/SimPol_J12_A3.fits OBS_POL
-$C2RAWDIR/SimPol_J12_A4.fits OBS_POL
-$C2RAWDIR/SimPol_J12_B1.fits OBS_POL
-$C2RAWDIR/SimPol_J12_B2.fits OBS_POL
-$C2RAWDIR/SimPol_J12_B3.fits OBS_POL
-$C2RAWDIR/SimPol_J12_B4.fits OBS_POL
-../J13/cr2res_cal_flat_J_1_3_tw_merged.fits CAL_FLAT_TW
