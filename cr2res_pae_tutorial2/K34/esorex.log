@@ -1,0 +1,28 @@
+
+Start time     : 2019-08-02T11:15:22
+Program name   : esorex
+Severity level : [ INFO  ] 
+
+11:15:22 [ INFO  ] : [tid=000] This is EsoRex, version 3.13.1
+11:15:22 [ INFO  ] : [tid=000] using the libraries: CPL = 7.1, CFITSIO = 3.36, WCSLIB = 4.24, FFTW (normal precision) = 3.3.7, FFTW (single precision) = 3.3.7, CPL FLOP counting is unavailable, enable with -DCPL_ADD_FLOPS, OPENMP = 201511
+11:15:22 [ INFO  ] : [tid=000] Invocation command line was: esorex --mem-check=TRUE cr2res_util_trace_map cr2res_util_trace_map.sof
+11:15:22 [ INFO  ] cr2res_util_trace_map: [tid=000] Reduce Frame cr2res_cal_flat_J_1_3_tw_merged.fits
+11:15:22 [ INFO  ] cr2res_util_trace_map: [tid=000]   Process detector number 1
+11:15:22 [ INFO  ] cr2res_util_trace_map: [tid=000]     Load the trace table
+11:15:23 [ INFO  ] cr2res_util_trace_map: [tid=000]   Process detector number 2
+11:15:23 [ INFO  ] cr2res_util_trace_map: [tid=000]     Load the trace table
+11:15:23 [ INFO  ] cr2res_util_trace_map: [tid=000]   Process detector number 3
+11:15:23 [ INFO  ] cr2res_util_trace_map: [tid=000]     Load the trace table
+11:15:23 [ INFO  ] cpl_dfs_product_save: [tid=000]   Writing FITS propertylist product(UTIL_TRACE_MAP_SLIT_CURVE): cr2res_cal_flat_J_1_3_tw_merged_slit_curve.fits
+11:15:23 [ INFO  ] cpl_dfs_product_save: [tid=000]   Writing FITS propertylist product(UTIL_TRACE_MAP_WL): cr2res_cal_flat_J_1_3_tw_merged_wave.fits
+11:15:23 [ INFO  ] cpl_dfs_product_save: [tid=000]   Writing FITS propertylist product(UTIL_TRACE_MAP_TRACE): cr2res_cal_flat_J_1_3_tw_merged_trace.fits
+11:15:23 [ INFO  ] : [tid=000] Calculating product checksums
+11:15:25 [ INFO  ] : [tid=000] Created product cr2res_cal_flat_J_1_3_tw_merged_slit_curve.fits (in place)
+11:15:25 [ INFO  ] : [tid=000] Created product cr2res_cal_flat_J_1_3_tw_merged_wave.fits (in place)
+11:15:25 [ INFO  ] : [tid=000] Created product cr2res_cal_flat_J_1_3_tw_merged_trace.fits (in place)
+11:15:25 [ INFO  ] : [tid=000] 3 products created
+11:15:25 [ INFO  ] : [tid=000] Recipe operation(s) took           2.28 seconds to complete.
+11:15:25 [ INFO  ] : [tid=000] Size of single raw input frame  =     0.14 MB
+
+11:15:25 [ INFO  ] : [tid=000] => processing rate of     0.06 MB/sec 
+

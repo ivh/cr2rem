@@ -1,0 +1,6 @@
+$C2RAWDIR/CRIRES_SPEC_WAVE206_0030.fits     WAVE 
+$C2RAWDIR/CRIRES_SPEC_WAVE206_0031.fits     WAVE 
+$C2RAWDIR/CRIRES_SPEC_WAVE206_0032.fits     WAVE 
+cr2res_cal_flat_H_3_4_tw_merged.fits        CAL_FLAT_TW_MERGED
+$C2STATCALDIR/lines_urne.fits               EMISSION_LINES
+

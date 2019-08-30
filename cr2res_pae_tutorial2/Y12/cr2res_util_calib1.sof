@@ -1,0 +1,9 @@
+$C2RAWDIR/CRIRES_SPEC_FLAT203_0001.fits     FLAT
+$C2RAWDIR/CRIRES_SPEC_FLAT203_0002.fits     FLAT
+$C2RAWDIR/CRIRES_SPEC_FLAT203_0003.fits     FLAT
+$C2RAWDIR/CRIRES_SPEC_FLAT203_0004.fits     FLAT
+$C2RAWDIR/CRIRES_SPEC_FLAT203_0005.fits     FLAT
+#../cr2res_cal_detlin_coeffs.fits            DETLIN_COEFFS
+cr2res_cal_dark_60x1_master.fits            MASTER_DARK
+cr2res_cal_dark_60x1_bpm.fits               DARK_BPM
+
