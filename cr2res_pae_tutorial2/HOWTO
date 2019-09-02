@@ -15,28 +15,8 @@ dfits $C2RAWDIR/*241*.fits | fitsort TPL.ID TPL.EXPNO TPL.NEXP INS.WLEN.ID DPR.C
 usec2
 cd ~/P_cr2res/cr2re/cr2rem/cr2res_pae_tutorial2
 
-
-
-
-
-usec2 ; cd /home/yjung/P_cr2res/2019_07_31_demo
-
-# RAW data are those in crires@wcrires.hq.eso.org:/mnt.staging/DETDATA/PAE/201906_CR_cooldown13/
-set C2RAWDIR to /home/yjung/P_cr2res/2019_07_22_LAB_DATA
-
-# Static Calibrations (currently only lines list) are under 
-# SVN:  http://svnhq2.hq.eso.org/p2/trunk/Pipelines/cr2re/cr2re-calib
-set C2STATCALDIR to /home/yjung/P_cr2res/cr2re/cr2re-calib
-
-# Src (used for the txt version of the lines list) is under
-# SVN:  http://svnhq2.hq.eso.org/p2/trunk/Pipelines/cr2re/cr2rep
-set C2SRCDIR to /home/yjung/P_cr2res/cr2re/cr2rep
-
-# Browse the data 
-dfits $C2RAWDIR/*.fits | fitsort TPL.ID TPL.EXPNO TPL.NEXP INS.WLEN.ID DPR.CATG DPR.TYPE DPR.TECH > data_classif.txt
-
 ##################################################################################
-cd ../H24
+cd H24
 ### Dark ###
 # DARK -> BPM, MASTER_DARK
 esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
@@ -50,7 +30,7 @@ esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
 esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
 
 # WAVE -> CALIBRATED
-esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib2.sof
+esorex --mem-check=TRUE cr2res_util_calib --collapse=MEAN cr2res_util_calib2.sof
 
 # CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
 esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof

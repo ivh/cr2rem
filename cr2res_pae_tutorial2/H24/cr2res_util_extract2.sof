@@ -1,5 +1,3 @@
-CRIRES_SPEC_WAVE206_0018_calibrated.fits    CALIBRATED
-CRIRES_SPEC_WAVE206_0019_calibrated.fits    CALIBRATED
-CRIRES_SPEC_WAVE206_0020_calibrated.fits    CALIBRATED
-cr2res_cal_flat_H_1_4_tw_merged.fits        CAL_FLAT_TW_MERGED
+cr2res_util_calib_calibrated_collapsed.fits CALIBRATED
+cr2res_cal_flat_H_2_4_tw_merged.fits        CAL_FLAT_TW_MERGED	
 
