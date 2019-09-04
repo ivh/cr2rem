@@ -39,4 +39,10 @@ esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
 esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
 
 
+# DEBUG
+esorex --mem-check=TRUE cr2res_util_wave --detector=1 --order=4 cr2res_util_wave.sof
+
+esorex cr2res_util_trace_map cr2res_util_trace_map.sof
+esorex cr2res_util_plot --detector=1 --order=4 --trace=1 cr2res_util_plot.sof
+esorex cr2res_util_plot  --xmin=1000.0 --xmax=1100.0 $C2STATCALDIR/lines_urne.fits
 
