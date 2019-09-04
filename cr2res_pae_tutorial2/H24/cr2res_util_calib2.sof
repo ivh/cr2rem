@@ -1,7 +1,5 @@
 $C2RAWDIR/CRIRES_SPEC_WAVE241_0332.fits	WAVE
 $C2RAWDIR/CRIRES_SPEC_WAVE241_0333.fits	WAVE
 $C2RAWDIR/CRIRES_SPEC_WAVE241_0334.fits	WAVE
-#cr2res_cal_dark_15x1_master.fits		CAL_DARK_MASTER
-#cr2res_cal_flat_H_2_4_Open_bpm.fits		CAL_FLAT_BPM
-#cr2res_cal_flat_H_2_4_Open_master_flat.fits	CAL_FLAT_MASTER
+cr2res_cal_dark_15x1_bpm.fits           CAL_DARK_BPM
 
