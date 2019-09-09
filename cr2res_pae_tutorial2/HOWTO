@@ -28,6 +28,9 @@ esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
 ### Wavelength Calibration ###
 # WAVE, EMISSION_LINES -> WAVE_MAP, TW
 esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+    --> cr2res_cal_wave_wave_map.fits
+        cr2res_cal_wave_extracted.fits
+        cr2res_cal_wave_tw.fits
 
 # WAVE -> CALIBRATED
 esorex --mem-check=TRUE cr2res_util_calib --collapse=MEDIAN cr2res_util_calib2.sof
@@ -38,12 +41,13 @@ esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
     --> cr2res_util_calib_calibrated_collapsed_extr1D.fits EXTRACT_1D
 
 # EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
-esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
-
-# DEBUG
-esorex --mem-check=TRUE cr2res_util_wave --display  --detector=1  --order=5 cr2res_util_wave.sof
+esorex --mem-check=TRUE cr2res_util_wave --display --detector=1  --order=5 cr2res_util_wave.sof
+    --> cr2res_util_calib_calibrated_collapsed_extr1D_extracted.fits
+    --> cr2res_util_calib_calibrated_collapsed_extr1D_tw.fits
 
 esorex cr2res_util_trace_map cr2res_util_trace_map.sof
-esorex cr2res_util_plot --detector=1 --order=4 --trace=1 cr2res_util_plot.sof
 esorex cr2res_util_plot  --xmin=1000.0 --xmax=1100.0 $C2STATCALDIR/lines_urne.fits
 
+esorex --mem-check=TRUE cr2res_util_plot --detector=1 --order=5  --trace_nb=1 cr2res_util_calib_calibrated_collapsed_extr1D.fits $C2STATCALDIR/lines_urne.fits
+
+esorex --mem-check=TRUE cr2res_util_plot --detector=1 --order=5  --trace_nb=1 cr2res_cal_wave_extracted.fits $C2STATCALDIR/lines_urne.fits
