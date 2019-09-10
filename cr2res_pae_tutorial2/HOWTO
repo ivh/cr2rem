@@ -15,6 +15,12 @@ dfits $C2RAWDIR/*241*.fits | fitsort TPL.ID TPL.EXPNO TPL.NEXP INS.WLEN.ID DPR.C
 usec2
 cd ~/P_cr2res/cr2re/cr2rem/cr2res_pae_tutorial2
 
+
+##################################################################################
+### Detlin ###
+# DETLIN -> BPM, DETLIN_COEFFS
+esorex --mem-check=TRUE cr2res_cal_detlin cr2res_cal_detlin.sof
+
 ##################################################################################
 cd H24
 ### Dark ###
