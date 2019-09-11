@@ -57,3 +57,27 @@ esorex cr2res_util_plot  --xmin=1000.0 --xmax=1100.0 $C2STATCALDIR/lines_urne.fi
 esorex --mem-check=TRUE cr2res_util_plot --detector=1 --order=5  --trace_nb=1 cr2res_util_calib_calibrated_collapsed_extr1D.fits $C2STATCALDIR/lines_urne.fits
 
 esorex --mem-check=TRUE cr2res_util_plot --detector=1 --order=5  --trace_nb=1 cr2res_cal_wave_extracted.fits $C2STATCALDIR/lines_urne.fits
+
+
+##################################################################################
+cd ../J23
+
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave  --trace_nb=1 --detector=2 --order=5 --wl_method=XCORR  --wl_degree=2 cr2res_cal_wave.sof
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+# WAVE -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib.sof
+
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract --detector=3  --order=2 --height=20 cr2res_util_extract.sof
+
