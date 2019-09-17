@@ -1,40 +1,40 @@
 
-Start time     : 2019-08-02T11:12:07
+Start time     : 2019-09-12T09:44:40
 Program name   : esorex
 Severity level : [ INFO  ] 
 
-11:12:07 [ INFO  ] : [tid=000] This is EsoRex, version 3.13.1
-11:12:07 [ INFO  ] : [tid=000] using the libraries: CPL = 7.1, CFITSIO = 3.36, WCSLIB = 4.24, FFTW (normal precision) = 3.3.7, FFTW (single precision) = 3.3.7, CPL FLOP counting is unavailable, enable with -DCPL_ADD_FLOPS, OPENMP = 201511
-11:12:07 [ INFO  ] : [tid=000] Invocation command line was: esorex --mem-check=TRUE --msg-level=debug cr2res_obs_pol cr2res_obs_pol.sof
-11:12:07 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 1
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
-11:12:07 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 2
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
-11:12:07 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 3
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
-11:12:07 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
-11:12:07 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
-11:12:07 [ INFO  ] cpl_dfs_product_save: [tid=000] Writing FITS propertylist product(OBS_POL_SPECA): cr2res_obs_pol_pol_specA.fits
-11:12:07 [ INFO  ] cpl_dfs_product_save: [tid=000] Writing FITS propertylist product(OBS_POL_SPECB): cr2res_obs_pol_pol_specB.fits
-11:12:07 [ INFO  ] : [tid=000] Calculating product checksums
-11:12:07 [ INFO  ] : [tid=000] Created product cr2res_obs_pol_pol_specA.fits (in place)
-11:12:07 [ INFO  ] : [tid=000] Created product cr2res_obs_pol_pol_specB.fits (in place)
-11:12:07 [ INFO  ] : [tid=000] 2 products created
-11:12:07 [ INFO  ] : [tid=000] Recipe operation(s) took         0.0651 seconds to complete.
-11:12:07 [ INFO  ] : [tid=000] Total size of 8 raw input frames  =   201.48 MB
+09:44:40 [ INFO  ] : [tid=000] This is EsoRex, version 3.13.1
+09:44:40 [ INFO  ] : [tid=000] using the libraries: CPL = 7.1, CFITSIO = 3.36, WCSLIB = 4.24, FFTW (normal precision) = 3.3.7, FFTW (single precision) = 3.3.7, CPL FLOP counting is unavailable, enable with -DCPL_ADD_FLOPS, OPENMP = 201511
+09:44:40 [ INFO  ] : [tid=000] Invocation command line was: esorex --mem-check=TRUE --msg-level=debug cr2res_obs_pol cr2res_obs_pol.sof
+09:44:40 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 1
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
+09:44:40 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 2
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
+09:44:40 [ INFO  ] cr2res_obs_pol: [tid=000] Process Detector 3
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding A position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce A nodding frames
+09:44:40 [ INFO  ] cr2res_obs_pol_reduce: [tid=000]   Compute Polarimetry for nodding B position
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce_one: [tid=000]     Input number of frames is 0 and should be multiple of 4
+09:44:40 [ ERROR ] cr2res_obs_pol_reduce: [tid=000]     Failed to Reduce B nodding frames
+09:44:40 [ INFO  ] cpl_dfs_product_save: [tid=000] Writing FITS propertylist product(OBS_POL_SPECA): cr2res_obs_pol_pol_specA.fits
+09:44:40 [ INFO  ] cpl_dfs_product_save: [tid=000] Writing FITS propertylist product(OBS_POL_SPECB): cr2res_obs_pol_pol_specB.fits
+09:44:40 [ INFO  ] : [tid=000] Calculating product checksums
+09:44:40 [ INFO  ] : [tid=000] Created product cr2res_obs_pol_pol_specA.fits (in place)
+09:44:40 [ INFO  ] : [tid=000] Created product cr2res_obs_pol_pol_specB.fits (in place)
+09:44:40 [ INFO  ] : [tid=000] 2 products created
+09:44:40 [ INFO  ] : [tid=000] Recipe operation(s) took         0.0514 seconds to complete.
+09:44:40 [ INFO  ] : [tid=000] Total size of 8 raw input frames  =   201.48 MB
 
-11:12:07 [ INFO  ] : [tid=000] => processing rate of  3094.94 MB/sec 
+09:44:40 [ INFO  ] : [tid=000] => processing rate of  3922.53 MB/sec 
 
