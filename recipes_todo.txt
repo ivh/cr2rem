@@ -32,7 +32,7 @@ HIERARCH ESO INS WLEN END<N>    End WL for order N
 
 * BPM handling : Cleaning vs attaching it (special handling in cr2res_util_extract)
 
-*  Check why Slit model has both 0s and NANs between orders
+* Check why Slit model has both 0s and NANs between orders
 * Add a cr2res_util_bpm_merge
 
 * cr2res_cal_detlin 
