@@ -1,45 +1,38 @@
 \section{Recipes Reference} 
 \label{sec:recipes-reference}
 
+\subsection{cr2res\_cal\_detlin}
+\label{sec:cr2res_cal_detlin}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    DETLIN & - & - & 3 or more & DETLIN raw calibration file \\ 
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
 \subsection{cr2res\_cal\_dark}
 \label{sec:cr2res_cal_dark}
 
 \subsubsection{Description}
-
-
 \subsubsection{Input Frames}
 
-\begin{longtable}{@{\extracolsep{\fill}}|p{0.35\linewidth}|p{0.1\linewidth}|p{0.1\linewidth}|p{0.35\linewidth}|}
-  \hline
-  \multicolumn{1}{|l|}{\textbf{Frame Tag}}\tbspa &
-  \multicolumn{1}{l|}{\textbf{Type}} &
-  \multicolumn{1}{l|}{\textbf{Count}} &
-  \multicolumn{1}{l|}{\textbf{Description}}\tbspb \\
-  \hline
-  \endfirsthead
-  \hline
-  \multicolumn{4}{|l|}{continued from previous page}\\
-  \hline
-  \multicolumn{1}{|l|}{\textbf{Frame Tag}}\tbspa &
-  \multicolumn{1}{l|}{\textbf{Type}} &
-  \multicolumn{1}{l|}{\textbf{Count}} &
-  \multicolumn{1}{l|}{\textbf{Description}}\tbspb \\
-  \hline
-  \endhead
-  \hline
-  \multicolumn{4}{|r|}{continued on next page}\\
-  \hline
-  \endfoot
-  \hline
-  \endlastfoot
-  \tbspa
-  BIAS          & raw   & 3 (min) &
-  Raw bias \\
-  BAD\_PIXEL\_TABLE & calib & 1 (opt) &
-  Table of a priori known bad pixel locations
-  \tbspb\\
-\end{longtable}
-
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    DARK & - & - & 3 or more & DARK raw calibration file \\ 
+    \hline
+\end{tabular}
 
 \subsubsection{Product Frames}
 
@@ -70,7 +63,6 @@
  \tbspb\\
 \end{longtable}
 
-
 \subsubsection{Quality Control Parameters}
 
 \begin{longtable}{@{\extracolsep{\fill}}p{0.25\linewidth}p{0.65\linewidth}}
@@ -78,7 +70,6 @@
   \texttt{QC.BIAS.MASTER.MED} & Median pixel value of the master bias frame \\
   \texttt{QC.BIAS.MASTER.RMS} & RMS of the master bias frame \\
 \end{longtable}
-
 
 \subsubsection{Recipe Parameters}
 
@@ -114,3 +105,409 @@
   High sigma threshold for \textit{ksigma} pixel rejection method
   \tbspb\\
 \end{longtable}
+
+\subsection{cr2res\_cal\_flat}
+\label{sec:cr2res_cal_flat}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    FLAT & - & - & 1 or more & FLAT raw calibration file \\ 
+    \hline
+    - & CAL\_DETLIN\_COEFFS & DETLIN\_COEFFS & 0 or 1 & DETLIN coefficients \\
+    \hline
+    - & CAL\_DARK\_MASTER & MASTER\_DARK & 0 or 1 & Master DARK \\
+    \hline
+    - & 
+        \begin{tabular}{llll}
+            CAL\_DARK\_BPM \\ or CAL\_FLAT\_BPM \\ or CAL\_DETLIN\_BPM \\ or UTIL\_BPM\_SPLIT
+        \end{tabular}
+        & BPM & 0 or 1 & BPM \\
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_cal\_wave}
+\label{sec:cr2res_cal_wave}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    WAVE & - & - & 1 or more & WAVE raw calibration file \\ 
+    \hline
+    - & CAL\_DETLIN\_COEFFS & DETLIN\_COEFFS & 0 or 1 & DETLIN coefficients \\
+    \hline
+    - & CAL\_DARK\_MASTER & MASTER\_DARK & 0 or 1 & Master DARK \\
+    \hline
+    - & 
+        \begin{tabular}{llll}
+            CAL\_DARK\_BPM \\ or CAL\_FLAT\_BPM \\ or CAL\_DETLIN\_BPM \\ or UTIL\_BPM\_SPLIT
+        \end{tabular}
+        & BPM & 0 or 1 & BPM \\
+    \hline
+    - & CAL\_FLAT\_MASTER & MASTER\_FLAT & 0 or 1 & Master FLAT \\
+    \hline
+    - & 
+        \begin{tabular}{llllll}
+            CAL\_FLAT\_TW \\ or CAL\_FLAT\_TW\_MERGED \\ or UTIL\_TRACE\_TW \\ or UTIL\_WAVE\_TW \\
+                or CAL\_WAVE\_TW \\ or UTIL\_SLIT\_CURV\_TW
+        \end{tabular}
+        & TW & 1 & Trace-Wave table \\
+    \hline
+    - & EMISSION\_LINES & CATALOG & 0 or 1 & Lines catalog \\
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_obs\_nodding}
+\label{sec:cr2res_obs_nodding}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \begin{tabular}{l}
+        OBS\_NODDING \\ CAL\_NODDING \\ OBS\_NODDING\_- \\ ASTROMETRY
+    \end{tabular}
+        & - & - & 2 to 2n & WAVE raw calibration file \\ 
+    \hline
+    - & CAL\_DETLIN\_COEFFS & DETLIN\_COEFFS & 0 or 1 & DETLIN coefficients \\
+    \hline
+    - & CAL\_DARK\_MASTER & MASTER\_DARK & 0 or 1 & Master DARK \\
+    \hline
+    - & 
+        \begin{tabular}{llll}
+            CAL\_DARK\_BPM \\ or CAL\_FLAT\_BPM \\ or CAL\_DETLIN\_BPM \\ or UTIL\_BPM\_SPLIT
+        \end{tabular}
+        & BPM & 0 or 1 & BPM \\
+    \hline
+    - & CAL\_FLAT\_MASTER & MASTER\_FLAT & 0 or 1 & Master FLAT \\
+    \hline
+    - & 
+        \begin{tabular}{llllll}
+            CAL\_FLAT\_TW \\ or CAL\_FLAT\_TW\_MERGED \\ or UTIL\_TRACE\_TW \\ or UTIL\_WAVE\_TW \\
+                or CAL\_WAVE\_TW \\ or UTIL\_SLIT\_CURV\_TW
+        \end{tabular}
+        & TW & 1 & Trace-Wave table \\
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_obs\_2d}
+\label{sec:cr2res_obs_2d}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+        OBS\_2D & - & - & 1 or more & 2D science \\ 
+    \hline
+    - & CAL\_DETLIN\_COEFFS & DETLIN\_COEFFS & 0 or 1 & DETLIN coefficients \\
+    \hline
+    - & CAL\_DARK\_MASTER & MASTER\_DARK & 0 or 1 & Master DARK \\
+    \hline
+    - & 
+        \begin{tabular}{llll}
+            CAL\_DARK\_BPM \\ or CAL\_FLAT\_BPM \\ or CAL\_DETLIN\_BPM \\ or UTIL\_BPM\_SPLIT
+        \end{tabular}
+        & BPM & 0 or 1 & BPM \\
+    \hline
+    - & CAL\_FLAT\_MASTER & MASTER\_FLAT & 0 or 1 & Master FLAT \\
+    \hline
+    - & 
+        \begin{tabular}{llllll}
+            CAL\_FLAT\_TW \\ or CAL\_FLAT\_TW\_MERGED \\ or UTIL\_TRACE\_TW \\ or UTIL\_WAVE\_TW \\
+                or CAL\_WAVE\_TW \\ or UTIL\_SLIT\_CURV\_TW
+        \end{tabular}
+        & TW & 1 & Trace-Wave table \\
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_obs\_pol}
+\label{sec:cr2res_obs_pol}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+        OBS\_POL & - & - & 4 to 4n & Polarimetry science \\ 
+    \hline
+    - & CAL\_DETLIN\_COEFFS & DETLIN\_COEFFS & 0 or 1 & DETLIN coefficients \\
+    \hline
+    - & CAL\_DARK\_MASTER & MASTER\_DARK & 0 or 1 & Master DARK \\
+    \hline
+    - & 
+        \begin{tabular}{llll}
+            CAL\_DARK\_BPM \\ or CAL\_FLAT\_BPM \\ or CAL\_DETLIN\_BPM \\ or UTIL\_BPM\_SPLIT
+        \end{tabular}
+        & BPM & 0 or 1 & BPM \\
+    \hline
+    - & CAL\_FLAT\_MASTER & MASTER\_FLAT & 0 or 1 & Master FLAT \\
+    \hline
+    - & 
+        \begin{tabular}{llllll}
+            CAL\_FLAT\_TW \\ or CAL\_FLAT\_TW\_MERGED \\ or UTIL\_TRACE\_TW \\ or UTIL\_WAVE\_TW \\
+                or CAL\_WAVE\_TW \\ or UTIL\_SLIT\_CURV\_TW
+        \end{tabular}
+        & TW & 1 & Trace-Wave table \\
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_genstd}
+\label{sec:cr2res_util_genstd}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    DARK & - & - & 3 or more & DARK raw calibration file \\ 
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_genlines}
+\label{sec:cr2res_util_genlines}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_calib}
+\label{sec:cr2res_util_calib}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_trace}
+\label{sec:cr2res_util_trace}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_extract}
+\label{sec:cr2res_util_extract}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+
+\subsection{cr2res\_util\_normflat}
+\label{sec:cr2res_util_normflat}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_wave}
+\label{sec:cr2res_util_wave}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_slit\_curv}
+\label{sec:cr2res_util_slit_curv}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_splice}
+\label{sec:cr2res_util_splice}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_bpm\_split}
+\label{sec:cr2res_util_bpm_split}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_trace\_map}
+\label{sec:cr2res_util_trace_map}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    DARK & - & - & 3 or more & DARK raw calibration file \\ 
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
+\subsection{cr2res\_util\_plot}
+\label{sec:cr2res_util_plot}
+
+\subsubsection{Description}
+
+\subsubsection{Input Frames}
+
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{DO.CATG} & \textbf{PRO.CATG} & \textbf{PRO.TYPE} & \textbf{Number} & \textbf{Description} \\
+    \hline
+    \hline
+\end{tabular}
+
+\subsubsection{Product Frames}
+\subsubsection{Quality Control Parameters}
+\subsubsection{Recipe Parameters}
+
