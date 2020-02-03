@@ -54,8 +54,9 @@ TEXINPUTS := .:./texmf//:./pipedoc//:
 all: $(USER_MANUAL)
 
 $(USER_MANUAL): $(TEX_OUTPUT)
-	@echo $(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL); \
-	$(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL)
+#@echo $(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL); \
+#$(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL)
+	@echo "Not moving PDF; look in manual/"; 
 
 $(TEX_OUTPUT): $(TEX_SOURCES) $(TEX_EXTRA_SOURCES) $(TEX_FIGURES)
 	@echo "$(LATEX) $<"; \
