@@ -15,14 +15,66 @@ dfits $C2RAWDIR/*241*.fits | fitsort TPL.ID TPL.EXPNO TPL.NEXP INS.WLEN.ID DPR.C
 usec2
 cd ~/P_cr2res/cr2re/cr2rem/cr2res_pae_tutorial2
 
+### Lines ###
+# EMISSION_LINES_TXT, LINES_SELECTION_TXT -> EMISSION_LINES
+esorex --mem-check=TRUE cr2res_util_genlines cr2res_util_genlines.sof
 
-##################################################################################
 ### Detlin ###
 # DETLIN -> BPM, DETLIN_COEFFS
 esorex --mem-check=TRUE cr2res_cal_detlin cr2res_cal_detlin.sof
+cd H24
+
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+# FLAT -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib --collapse="MEAN" cr2res_util_calib.sof
+# CALIBRATED -> TW
+esorex --mem-check=TRUE cr2res_util_trace cr2res_util_trace.sof
+# ETALON, TW -> TW
+esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract.sof   __core dump
+
+
+
+
+
+
+
+
+
+# CALIBRATED, SLIT_MODEL -> BPM, MASTER_FLAT
+esorex --mem-check=TRUE  cr2res_util_normflat cr2res_util_normflat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+# WAVE -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib2.sof
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
+
+### Slit curvature ###
+# TW -> SLIT_CURV_MAP, SLIT_CURV, TW
+esorex --mem-check=TRUE cr2res_util_slit_curv cr2res_util_slit_curv.sof 
+
+### Recompute the Extraction / Wavelength calibration ###
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+
+### !!! ### Core dump
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract3.sof
+
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+TODO : esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave2.sof
+
 
 ##################################################################################
-cd H24
+cd ../J13
+
 ### Dark ###
 # DARK -> BPM, MASTER_DARK
 esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
@@ -30,6 +82,204 @@ esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
 ### Flatfield / Tracing ###
 # FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
 esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+### Various utilities ###
+esorex --mem-check=TRUE cr2res_util_bpm_split cr2res_util_bpm_split.sof
+esorex --mem-check=TRUE cr2res_util_trace_map cr2res_util_trace_map.sof
+
+##################################################################################
+cd ../J12 
+
+### Nodding Observation ###
+# Failing because of incomplete headers
+esorex --mem-check=TRUE cr2res_obs_nodding cr2res_obs_nodding.sof 
+
+### Polarimetry Observation ###
+esorex --mem-check=TRUE cr2res_obs_pol cr2res_obs_pol.sof
+
+### 2D Observation ###
+# TODO
+esorex --mem-check=TRUE cr2res_obs_2d cr2res_obs_2d.sof
+
+
+##################################################################################
+cd ../Y22
+
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+
+
+##################################################################################
+cd ../J23
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../J33
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../H14
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+# WAVE -> CALIBRATED
+esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib2.sof
+
+# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
+esorex --mem-check=TRUE cr2res_util_extract cr2res_util_extract2.sof
+
+# EXTRACT_1D, TW, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_util_wave cr2res_util_wave.sof
+
+##################################################################################
+cd ../H24
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../H34
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../H44
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../K14
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../K24
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../K34
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+##################################################################################
+cd ../K44
+### Dark ###
+# DARK -> BPM, MASTER_DARK
+esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
+
+### Flatfield / Tracing ###
+# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
+esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
+
+### Wavelength Calibration ###
+# WAVE, EMISSION_LINES -> WAVE_MAP, TW
+esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
+
+
+
+
+
+
+
+
 
 ### Wavelength Calibration ###
 # WAVE, EMISSION_LINES -> WAVE_MAP, TW
@@ -60,31 +310,3 @@ esorex --mem-check=TRUE cr2res_util_plot --detector=1 --order=5  --trace_nb=1 cr
 
 
 ##################################################################################
-cd ../J23
-
-### Dark ###
-# DARK -> BPM, MASTER_DARK
-esorex --mem-check=TRUE cr2res_cal_dark cr2res_cal_dark.sof
-
-### Flatfield / Tracing ###
-# FLAT -> TW, EXTRACT_1D, SLIT_MODEL, SLIT_FUNC, BPM, MASTER_FLAT
-esorex --mem-check=TRUE cr2res_cal_flat cr2res_cal_flat.sof
-
-### Wavelength Calibration ###
-# WAVE, EMISSION_LINES -> WAVE_MAP, TW
-esorex --mem-check=TRUE cr2res_cal_wave  --trace_nb=1 --detector=3 --order=2 --wl_method=XCORR  --wl_degree=2 cr2res_cal_wave.sof
-esorex --mem-check=TRUE cr2res_cal_wave cr2res_cal_wave.sof
-
-# WAVE -> CALIBRATED
-esorex --mem-check=TRUE cr2res_util_calib cr2res_util_calib.sof
-
-# CALIBRATED, TW -> EXTRACT_1D, SLIT_MODEL, SLIT_FUNC
-esorex --mem-check=TRUE cr2res_util_extract --detector=3  --order=2 --height=20 cr2res_util_extract.sof
-
-esorex --mem-check cr2res_util_plot --trace_nb=1 --detector=3 --order=2 CRIRES_SPEC_WAVE241_0315_calibrated_extr1D.fits
-
-
-
-
-
-
