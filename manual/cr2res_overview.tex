@@ -20,20 +20,30 @@
     .}
 \end{figure}
 
+\begin{figure}[!tb]
+  \begin{center}
+    \psfig{file=figures/fits_ext.pdf,width=0.99\linewidth}
+  \end{center}
+  \caption{
+    \label{fig:fits_ext}
+    .}
+\end{figure}
 
 
-The calibrations that are needed to characterize the instrument are
+
+The basic characteristics of the data that we need to characterize are the following
 \begin{enumerate}
-    \item Detector linearity, "Detlin"
-    \item Dark
-    \item Bad Pixel Map, BPM
-    \item Find order locations, "tracing".
-    \item Slit tilt characterization
+    \item Detector linearity
+    \item Dark current
+    \item Bad Pixel Map
+    \item The location and shape of the spectral orders on each detector.
     \item Flat-fielding
+    \item Blaze spectrum
+    \item The orientation (tilt) of the slit within each order.
     \item Wavelength calibration
 \end{enumerate} 
 
-The results of steps 1,2,3 and 6 are stored as separate master calibrations, respectively. Information about the orders 4,5,7 are stored together in a TW-table, as described in more detail %TODO ref.
+The results of steps 1,2,3 and 5 are stored as separate master calibrations, respectively. Information about the orders 4,5,7 are stored together in a TW-table, as described in more detail %TODO ref.
 
 To fully reduce a science frame, the following steps are carried out:
 \begin{enumerate}
