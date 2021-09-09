@@ -40,8 +40,8 @@ TEX_SOURCES = \
 	cr2res_troubleshooting.tex
 
 TEX_EXTRA_SOURCES = \
-	texmf/eso-pdm.sty \
-	texmf/sfmath.sty
+	eso-pdm.sty \
+	sfmath.sty
 
 TEX_FIGURES = $(wildcard figures/*.pdf figures/*.png figures/*.jpg)
 TEX_OUTPUT = $(addsuffix .pdf, $(TEX_MASTER))
@@ -57,6 +57,10 @@ $(USER_MANUAL): $(TEX_OUTPUT)
 #@echo $(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL); \
 #$(MV) $(TEX_OUTPUT) $(DOCDIR)/$(USER_MANUAL)
 	@echo "Not moving PDF; look in manual/"; 
+
+$(TEX_EXTRA_SOURCES):
+	test -s $(TEX_EXTRA_SOURCES) || { echo "Style files missing! Exiting..."; exit 1; }
+
 
 $(TEX_OUTPUT): $(TEX_SOURCES) $(TEX_EXTRA_SOURCES) $(TEX_FIGURES)
 	@echo "$(LATEX) $<"; \

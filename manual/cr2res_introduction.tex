@@ -3,9 +3,19 @@
 
 \subsection{Scope}
 \label{sec:scope}
+This document is the user manual to processing of \instrument{}
+observations using the CR2RES
+Pipeline Recipes, also known as the \instrument{} Data Reduction Software 
+(DRS).
 
 
-%\subsection{Acknowledgements}
+\subsection{Acknowledgements}
+We are thankful for comments on this manual from
+Ulf Seemann, ...
+
+Special thanks also to Nikolai Piskunov and Ansgar
+Wehrhahn for their extensive contributions of code
+to the DRS.
 
 \subsection{Stylistic conventions}
 \label{sec:style}
@@ -31,29 +41,32 @@ words.
 \subsection{Notational Conventions}
 \label{sec:notation}
 
+Explain CR2RES name prefix, compared to oCRIRES %TODO YJ
+
 Hierarchical FITS keyword names, appearing in the document, are given using the
 dot--notation to improve readability. This means, that the prefix ``HIERARCH
 ESO'' is left out, and the spaces separating the keyword name constituents in
 the actual FITS header are replaced by a single dot.
 
-\section{Related Documents}
-\label{sec:doc-related}
+%\section{Related Documents}
+%\label{sec:doc-related}
 
 \subsection{Applicable Documents}
 \label{sec:doc-applicable}
 
-\begin{tabularx}{\linewidth}{lllX}
-  {[}AD01{]} & ESO-XXXXXX & 1.0
-             & TBD \\
-\end{tabularx}
+% \begin{tabularx}{\linewidth}{lllX}
+%    {[}AD01{]} & ESO-XXXXXX & 1.0
+%               & TBD \\
+% \end{tabularx}
 
 \subsection{Reference Documents}
 \label{sec:doc-reference}
 
 \begin{tabularx}{\linewidth}{llX}
-  {[}RD01{]} & ESO-XXXXXX
+  {[}RD01{]} & ESO-254264 \cite{CIRESMAN}
              & CRIRES+ User Manual \\
-\end{tabularx}
+  {[}RD02{]} & 2021A\&A...646A..32P \cite{2021A&A...646A..32P} 
+             & Optimal extraction of echelle spectra
 
-%%\bibliography{cr2repdoc}
+\end{tabularx}
 

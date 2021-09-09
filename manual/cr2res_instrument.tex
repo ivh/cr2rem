@@ -1,13 +1,59 @@
-\section{The \instrument{} Instrument}
+\section{The Instrument}
 \label{sec:instrument}
 
-\begin{figure}[!tb]
-  \begin{center}
-    \psfig{file=figures/cr2res_instrument.jpg,width=0.75\linewidth}
-  \end{center}
-  \caption{
-    \label{fig:cr2res_instrument}
-    Graphical representations of \instrument{}.}
-\end{figure}
+\instrument{} is a major upgrade of the original CRyogenic Infra-Red Echelle
+Spectrograph, henceforth \textit{oCRIRES}. The upgrade foremost introduces
+\begin{itemize}
+  \item A cross-diperser unit (CDU) with one grating per band (YJHKLM).
+  \item New detectors, 3x 2048x2048.
+  \item A spectropolarimeter (SPU) with beam-splitters in YJHK for both linear
+        and circular polarization.
+  \item New calibration sources (U-Ne-lamp, Fabry-Pérot, gas cell)
+\end{itemize}
 
+For details about the instrument's function and operation, we refer to the
+\textbf{User Manual} \cite{CIRESMAN} and only give a short overview over the
+most important changes from the perspective of data reduction.
 
+A look at the echellogram makes the most important aspects apparent:
+\putgraph{\linewidth}{yband_etalon.png}{yetalon}{Example raw frame in J-band,
+  with the regularly spaced lines from the Fabry-P\'erot etalon.}
+
+\begin{itemize}
+  \item There are up to 9 spectral orders (depending on band).
+  \item The orders are spaced unevenly over the detectors,
+  \item and not perfectly horizontal.
+  \item The projection of the slit is tilted, i.e. not aligned with detector
+    columns. And the tilt changes with wavelength.
+\end{itemize}
+
+This in essence made necessary the development of a new DRS from scratch, around
+robust algorithms for tracing the spectral orders, characterizing the slit tilt
+and then making use of this information for optimally extracting the spectra
+into 1D-arrays \cite{2021A&A...646A..32P}.
+
+In order to increase the validity of daytime calibrations for observations
+from the night, a metrology system is in place that iterates on the position
+of the echellogram, both in main dispersion and cross-dispersion direction, thereby
+improving repeatability.
+
+Therefore, and to minimize the calibration overhead,
+\instrument\ is operated with fixed \textbf{standard settings}. These are
+chosen such that the full wavelength range is covered in each band, as well as
+the detector gaps. In general, the DRS does not rely on these settings, as long
+as it receives a set of calibrations that match the data. However, only
+the standard settings are supported for the time being and the DRS uses
+header keys like \texttt{INS.WLEN.ID} for consistency checks, where appropriate.
+
+\begin{table}[htbp]
+  \centering\begin{tabular}{cc}
+  Y  & 2\\
+  J  & 3\\
+  H  & 4\\
+  K  & 4\\
+  L  & 7\\
+  M  & 9\\
+  \end{tabular}
+  \caption{The number of standard settings per band.}
+  \label{tab:nsettings}
+\end{table}

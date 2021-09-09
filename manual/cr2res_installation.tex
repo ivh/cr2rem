@@ -2,89 +2,99 @@
 \label{sec:installation}
 
 \red{\textit{Installation instructions for the different package types offered
-    by ESO and build instructions for experienced users. This part will be
-    filled by ESO to a large extent.}}
+                by ESO and build instructions for experienced users. This part will be
+                filled by ESO to a large extent.}}
 
 \subsection{System Requirements}
 \label{sec:platforms}
 
-\subsection{Installing the \instrument{} Pipeline}
+\subsection{Installation}
 \label{sec:install-howto}
 
-For Fedora, CentOS, Scientific Linux users within ESO, you can use the RPM installation.
+For Fedora, CentOS, Scientific Linux users within ESO, you can use the RPM
+installation.
 For that, you need to refer to the RPM installation instructions:
 {\it http://eso.org/sci/software/pipelines/installation/rpm.html}
 
-The CR2RES pipeline is not public yet, therfore you will need to setup the repositories to a different place: 
-USE 'devel' instead of 'stable' ! 
+The CR2RES pipeline is not public yet, therfore you will need to setup the
+repositories to a different place:
+USE 'devel' instead of 'stable' !
 
 For example:
 
-sudo dnf config-manager --add-repo=ftp://ftp.eso.org/pub/dfs/pipelines/repositories/stable/fedora/esorepo.repo
+sudo dnf config-manager
+--add-repo=ftp://ftp.eso.org/pub/dfs/pipelines/repositories/stable/fedora/esore
+po.repo
 
 needs to be replaced by:
 
-sudo dnf config-manager --add-repo=ftp://ftp.eso.org/pub/dfs/pipelines/repositories/devel/fedora/esorepo.repo
+sudo dnf config-manager
+--add-repo=ftp://ftp.eso.org/pub/dfs/pipelines/repositories/devel/fedora/esorep
+o.repo
 
-
-For any other system, or if you are outside ESO, you will need to download the installation script, and run it on your computer:
-
-\begin{itemize}
-\item Create an new directory and change to it
-\item Download {\it http://eso.org/sci/software/pipelines/install\_pipelinekit} and change its permission to execute ({\it chmod u+x install\_pipelinekit})
-\item Download the CR2RES package from 
-
-{\it ftp://ftp.eso.org/pub/dfs/pipelines/kit\_devel/cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz}
-\item Execute {\it ./install\_pipelinekit cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz}
-
-The execution scipt will ask you where to install the package. I recommend to have a local installation in order to easily update at a later stage.
-
-Questions asked by the installation script:
-\begin{itemize}
-
-\item Where should I install the software packages ? 
-      
-Use a new directory (e.g. /home/user/cr2res\_install)
-
-\item Where should I install the pipeline calibration files ?
-     
-Use a subdirectory (e.g. /home/user/cr2res\_install/cdb)
-
-\item Configuration
-\end{itemize}
-
-\item Configuration
+For any other system, or if you are outside ESO, you will need to download the
+installation script, and run it on your computer:
 
 \begin{itemize}
-\item esorex is installed here : /home/user/cr2res\_install/bin/esorex 
-        Make sure it is in your path.
+        \item Create an new directory and change to it
+        \item Download {\it http://eso.org/sci/software/pipelines/install\_pipelinekit}
+              and change its permission to execute ({\it chmod u+x install\_pipelinekit})
+        \item Download the CR2RES package from
 
-\item The CR2RES recipes are installed under : /home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
-        esorex needs to be configured to know where th CRI2RES recipes are installed. This is done through the recipe-dir parameter.
-        Please update :
-        esorex.caller.recipe-dir=/home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
-        in the esorex configuration file (usually \$HOME/.esorex/esorex.rc)
+                      {\it
+                              ftp://ftp.eso.org/pub/dfs/pipelines/kit\_devel/cr2re-kit-0.5.0-2\_svn232540\_he
+                              ad.tar.gz}
+        \item Execute {\it ./install\_pipelinekit
+              cr2re-kit-0.5.0-2\_svn232540\_head.tar.gz}
 
-\item If you do not have any esorex configuration file, you can run
-        esorex --create-config 
-        to create a default one.
+              The execution scipt will ask you where to install the package. I recommend to
+              have a local installation in order to easily update at a later stage.
 
-\item You know you are all set when running 
-    {\it esorex --recipes}
-        gives you the list of installed recipes.
+              Questions asked by the installation script:
+              \begin{itemize}
 
-\end{itemize}
+                      \item Where should I install the software packages ?
+
+                            Use a new directory (e.g. /home/user/cr2res\_install)
+
+                      \item Where should I install the pipeline calibration files ?
+
+                            Use a subdirectory (e.g. /home/user/cr2res\_install/cdb)
+
+                      \item Configuration
+              \end{itemize}
+
+        \item Configuration
+
+              \begin{itemize}
+                      \item esorex is installed here : /home/user/cr2res\_install/bin/esorex
+                            Make sure it is in your path.
+
+                      \item The CR2RES recipes are installed under :
+                            /home/user/cr2res\_install/lib/esopipes-plugins/cr2re-0.5.0
+                            esorex needs to be configured to know where th CRI2RES recipes are
+                            installed. This is done through the recipe-dir parameter.
+                            Please update :
+
+                            esorex.caller.recipe-dir=/home/user/cr2res\_install/lib/esopipes-plugins/cr2re-
+                            0.5.0
+                            in the esorex configuration file (usually \$HOME/.esorex/esorex.rc)
+
+                      \item If you do not have any esorex configuration file, you can run
+                            esorex --create-config
+                            to create a default one.
+
+                      \item You know you are all set when running
+                                    {\it esorex --recipes}
+                            gives you the list of installed recipes.
+
+              \end{itemize}
 \end{itemize}
 
 If you want to install a new version, simply remove the directory
 /home/user/cr2res\_install and start again.
 
-
-
-
-
-
-\subsection{Building the \instrument{} Pipeline}
+\subsection{Building the CR2RES Pipeline}
 \label{sec:compile-howto}
 
 \subsubsection{Build Requirements}
@@ -93,4 +103,4 @@ If you want to install a new version, simply remove the directory
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
-%%% End: 
+%%% End:

@@ -1,0 +1,12 @@
+*.swp
+*.swo
+.vscode
+*.aux
+*.log
+*.toc
+*.out
+*.bbl
+*.blg
+*.brf
+*.idx
+cr2res-pipeline-manual.pdf

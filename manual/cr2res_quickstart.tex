@@ -3,7 +3,31 @@
 
 \red{\textit{Cookbook-like description of pipeline recipes and their usage}}
 
-\subsection{The \instrument{} Pipeline Recipes}
+\subsection{Important Concepts}
+\subsubsection{The Trace-Wave Table}
+
+\subsubsection{Detectors and Extensions}
+Always use FITS extension names, not rely on the index/ordering.
+
+
+\subsubsection{Pixels, Indices and Spectral Bins}
+Pixel index starts at 1, not 0.
+
+Also true when evaluating polynomials like race or wavecal.
+
+Spectral bins correspond to detector columns at the mid-line of the extracted region (constant height).
+
+Orders are indexed from 1..9, not always starting at 1, depending on cut-off orders. Index set by headers, conversion
+to order number $m$ by XXX...
+
+\subsubsection{Recipe naming conventions}
+\begin{itemize}
+    \item Cal
+    \item Obs
+    \item Util
+\end{itemize}
+
+\subsection{The Pipeline Recipes}
 \label{sec:recipes-quick}
 
 \red{\textit{Overview and/or summary of available pipeline recipes, i.e. list
@@ -16,14 +40,50 @@ The naming convention groups the recipes into
     \item \textit{Utility recipes}, named like \texttt{cr2res\_util\_*}
 \end{itemize}
 
-\subsection{\instrument{} Data Formats}
-\label{sec:exec-recipes-quick}
+\subsection{Data Formats}
+\label{sec:data-fmt-quick}
+
+\begin{figure}[!tb]
+  \begin{center}
+    \includegraphics[width=0.99\linewidth]{fits_ext.pdf}
+  \end{center}
+  \caption{
+    \label{fig:fits_ext}
+    FITS extenstions in raw frames and data products.
+    }
+\end{figure}
+
+
+\begin{figure}[!tb]
+  \begin{center}
+    \includegraphics[width=0.99\linewidth]{J_2_3_03_cr2res_util_trace_out.png}
+  \end{center}
+  \caption{
+    \label{fig:flat_trace}
+    An example of a raw flat-field frame in J/2/3. Overplotted in white is 
+    the result of the order tracing, the polynomial fit to the mid-line
+    (dashed) and edges (dotted) for each detector-order.
+    }
+\end{figure}
 
 trace-wave
 image formats
 BPM integers
 
-\subsection{Running the \instrument{} Pipeline Recipes}
+
+The results of %TODO
+are each stored as separate master calibration maps. Information about the orders 4,5,7 are stored together in a TW-table, as described in more detail %TODO ref.
+
+\subsubsection{The Tracewave-Table}
+\label{sec:tracewave}
+
+table columns
+
+polynomials, eval from 1 to 2048
+
+meta-polynomials for slit curve.
+
+\subsection{Executing Recipes}
 \label{sec:exec-recipes-quick}
 
 

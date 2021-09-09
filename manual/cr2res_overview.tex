@@ -1,45 +1,238 @@
-\section{Overview}
+\section{Data Reduction Overview}
 \label{sec:overview}
 
+It makes sense to start from the end, that is to assume for a moment to
+have valid master calibrations already available and look at the reduction of
+the science frames first.
+
+\subsection{Science reduction}
+\label{sec:sci-reduc}
+
+The recipes that reduce the science frames all are named as
+\texttt{cr2res\_obs\_*}
+all have in common that they receive as \textit{input} a set of raw science
+frames, and the master calibrations, i.e. \textit{output} of calibration
+recipes. They then first combine raw frames that belong together, for example
+the frames from the same nodding position. Then the master calibrations are
+applied, after which the appropriate algorithms for the data at hand are applied
+to create the output data products.
+
+The SOF to reduce a nodding sequence (three frames  each in positions A and B)
+looks like:
+\begin{verbatim}
+$RAW/CRIRE.2021-08-16T23:22:50.334.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:23:54.728.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:24:58.960.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:26:18.394.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:27:22.616.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:28:26.956.fits OBS_NODDING_OTHER
+$CALIB/K2192_masterflat.fits           CAL_MASTER_FLAT
+$CALIB/K2192_tw.fits                   UTIL_WAVE_TW
+$CALIB/cr2res_cal_dark_bpm.fits        CAL_DARK_BPM
+$CALIB/cr2res_detlin_coeffs.fits       CAL_DETLIN_COEFFS
+\end{verbatim}
+
+It is then given to the recipe like this:
+\begin{shell}
+    # esorex cr2res_obs_nodding <SOF>
+\end{shell}
+
+For nodding observations of point sources, what happens next is that
+position B is subtracted from position A and the so background-subtracted
+spectra gets extracted into 1D arrays, using the supplied TW-table
+for information on order trace, slit tilt and wavelength calibration.
+
+The full list of observing recipes is:
+\begin{itemize}
+    \item \texttt{cr2res\_obs\_nodding} for nodding observations of
+        point-sources. Also spectro-astrometry.
+    \item \texttt{cr2res\_obs\_staring} for point-sources without nodding.
+    \item \texttt{cr2res\_obs\_2d} for observations in which the spatial
+        resolution along the slit should be conserved, i.e. no extraction.
+    \item \texttt{cr2res\_obs\_pol} for observations with the spectro-polarimeter,
+        including the demodulation into Stokes parameters. 
+\end{itemize}
+
+
+In general, data reduction is performed separately on each detector-order,
+that is a single spectral order in a single detector.
+Consequently, results are also stored this way in data products.
+
+%%%
+%%%%%%%%%%%%%% SCIENCE ABOVE  %%%%% CALIBS BELOW
+%%%%
+
+\subsection{Reducing Calibrations}
+\label{sec:calib:reduc}
+
+The following instrument properties need to be characterized:
+\begin{itemize}
+    \item Detector: non-linearity
+    \item Detector: dark current
+    \item Detector: bad pixel map
+    \item Flat-fielding\footnote{By \textit{flat-field} we always mean the
+              normalized pixel-to-pixel variations
+              in sensitivity, not the response at larger scales.}
+    \item The location and shape of the spectral orders on each detector.
+    \item The orientation (tilt) of the slit within each order.
+    \item Wavelength calibration.
+\end{itemize}
+
+The \emph{detector non-linearity} is derived from a long series of flat-field
+frames. These are not taken on a frequent basis and are valid for a long time.
+Users will almost always be able to use the provided master calibration and not
+need to run this step.
+
+The \emph{master dark} is ideally derived from dark exposures with the
+same DIT, and as high NDIT as possible. For short exposures the dark current
+itself is negligible, but the detector readout-mode leaves a residual pattern
+that scales non-trivially with DIT, so that scaling dark by unmatched exposure
+time is not recommended.
+
+Darks exposures are not really "dark", but contain come background thermal emission,
+especially in the longer bands. Therefore, Darks are considered specific to
+each instrument setting.
+
+The \emph{master flat} is derived from a halogen lamp exposure; it is specific
+to each spectrograph setting, for obvious reasons. By \emph{flat-field} the DRS
+means the \emph{normalized flat-field}, that is the pixel-to-pixel sensitivity
+variations, alone. The wavelength-dependency within each spectral order is
+saved as the \emph{blaze} to a separate data product.
+
+\emph{Bad pixel masks} can come from several steps
+\begin{itemize}
+    \item darks, rejecting outliers like hot and dark pixels.
+    \item flats, rejecting pixels outside a range of sensitivity.
+    \item detlin, rejecting pixels with deviating linearity behaviour.
+    \item edge pixels. Each detector has 4 colunms and rows at the edges that
+        are tnot sensitive to light.
+    \item inter-order, masking the pixels that are not part of a spectral order.
+\end{itemize}
+
+Therefore, several recipes produce BPMs and there are recipes that can merge
+and separate them.
+
+Except for the detector linearity, calibrations are valid only for a
+single setting (band \& echelle) and there are a number of \textit{fixed
+standard settings} defined that cover the spectral range in all the bands,
+including the gaps between detectors. While DRS should in principle be able to
+handle non-standard settings just fine, this is not supported for the time
+being.
+
 
 \begin{figure}[!tb]
-  \begin{center}
-    \psfig{file=figures/calib_detailed.pdf,width=0.99\linewidth}
-  \end{center}
-  \caption{
-    \label{fig:calibflow_detailed}
-    .}
+    \begin{center}
+        \includegraphics[width=0.99\linewidth]{calib_simple.pdf}
+    \end{center}
+    \caption{
+        \label{fig:calibflow_simple}
+        Flow diagram for calibration reduction with the \textit{calibration
+        recipes}, assuming a populated CalibDB exists. Arrows and lines
+        indicate the inputs to the recipes (blue), in the form of raw data
+        (red), master calibrations from the CalibDB (green), or intermediate
+        products from previous steps (white). Dotted lines indicate when a
+        CalibDB or intermediate product can be chosen for later steps
+        further to the right. All line connections are optional (open
+        symbols), but generally recommended to be present. Also note that
+        open diamonds mark Tracewave (TW) inputs, of which at least one
+        needs to be present.
+        \newline
+        If a TW is provided to \texttt{cr2res\_cal\_flat}, it will use the
+        information therein; otherwise it performs the tracing of the spectral
+        orders to find their location. However, the slit tilt cannot be
+        determined from flat-field frames which means that the extraction of the
+        blaze function will be done assuming a vertical slit, yielding
+        sub-optimal results. Therefore providing the TW from the CalibDB is
+        recommended.
+    }
 \end{figure}
+
 
 \begin{figure}[!tb]
-  \begin{center}
-    \psfig{file=figures/calib_simple.pdf,width=0.99\linewidth}
-  \end{center}
-  \caption{
-    \label{fig:calibflow_simple}
-    .}
+    \begin{center}
+        \includegraphics[width=0.99\linewidth]{calib_detailed.pdf}
+    \end{center}
+    \caption{
+        \label{fig:calibflow_detailed}
+        Flow diagram for calibration reduction with the \textit{utility
+            recipes},
+        without relying on any input from the CalibDB. In other words, this is
+        how the products for the CalibDB (green) can be made from scratch.
+        Steps
+        are
+        numbered but execution order can be changed whenever data flow allows.
+        For
+        notes on individual steps see main text.
+    }
 \end{figure}
 
-
-
-The calibrations that are needed to characterize the instrument are
+Fig.~\ref{fig:calibflow_detailed} shows the calibration data flow cascade
+step-by-step, using the \emph{util} recipes that only perform a single task
+each:
 \begin{enumerate}
-    \item Detector linearity, "Detlin"
-    \item Dark
-    \item Bad Pixel Map, BPM
-    \item Find order locations, "tracing".
-    \item Slit tilt characterization
-    \item Flat-fielding
-    \item Wavelength calibration
-\end{enumerate} 
-
-The results of steps 1,2,3 and 6 are stored as separate master calibrations, respectively. Information about the orders 4,5,7 are stored together in a TW-table, as described in more detail %TODO ref.
-
-To fully reduce a science frame, the following steps are carried out:
-\begin{enumerate}
-    \item Combine frames
-    \item Apply master calibrations: Detlin, Dark, BPM and Flat-field
-    \item Extraction of spectra, using the TW-table.
-    \item (Splicing together spectra from different detectors and orders)
+    \item \texttt{cr2res\_util\_genlines} creates the catalogue files for each
+          setting,
+          based on the base catalogue and selection files that mark wavelength
+          regions
+          that are flagged as good for a certain setting.
+    \item \texttt{cr2res\_cal\_detlin} takes flat-field exposures from
+          different settings and with varying exposure times to measure the
+          linearity
+          behaviour of all pixels. Outliers get flagged as a bad-pixel-map
+          (BPM).
+    \item \texttt{cr2res\_cal\_dark} combines the input DARK frames into a
+          master dark for
+          each setting and combination of DIT and NDIT. Hot and dead pixels get
+          saved as BPM.
+    \item \texttt{cr2res\_util\_calib} combines the raw FLAT frames and applies
+          the	       previous master calibs.
+    \item \texttt{cr2res\_util\_trace} finds continuous regions on the
+          detectors that
+          have signal, and fits them with polynomials for the orders' mid-lines
+          and edges.
+          These polynomials we call a \emph{trace} and each order can have more
+          than one,
+          e.g. marking different heights along the slit.
+    \item \texttt{cr2res\_util\_slit\_curv} uses the TraceWave-table (TW) from
+          the previous
+          step to measure the lines a FP-Etalon WAVE frame and determine how
+          the
+          slit tilt
+          changes within each detector-order. The result is stored in an
+          updated
+          TW.
+    \item \texttt{cr2res\_util\_extract} can now use this TW to extract the
+          previously
+          calibrated flat-field frame, resulting in the blaze spectrum and a
+          model of
+          the frame.
+    \item This model contains all non-local features, meaning that
+          \texttt{cr2res\_util\_normflat} can calculate the normalized
+          flat-field
+          by
+          dividing the model by the the original frame. Outliers in sensitivity
+          get
+          flagged in another BPM.
+    \item \texttt{cr2res\_util\_bpm\_merge} merges the BPMs from the different
+          sources.
+    \item \texttt{cr2res\_util\_calib} merges WAVE frames and applies the
+          previous
+          calibrations.
+    \item \texttt{cr2res\_util\_extract} collapses the result from the last
+          step into
+          1D spectra.
+    \item \texttt{cr2res\_util\_wave} uses these spectra and the catalogue of
+          lines to
+          derive a wavelength solution, i.e.~a polynomial that translates
+          pixel-coordinates
+          into wavelength (nm). Available methods include cross-correlation and
+          line-fitting. This step can be repeated, for example to step-wise
+          increase the
+          polynomial degree.
+    \item[13-15.] Analogous to steps 10-12 but for a FP-Etalon frame this time.
+          The Etalon method of \texttt{cr2res\_util\_wave} will use the
+          zero-point
+          and dispersion from the incoming previous wavecal (in TW) and refine
+          the
+          higher degrees of the solution.
 \end{enumerate}
-

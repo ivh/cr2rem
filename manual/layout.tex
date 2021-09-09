@@ -1,7 +1,7 @@
 %%
 %% Layout definitions
 %%
-
+\usepackage[utf8]{inputenc} 
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[scaled=0.91]{helvet}
@@ -16,6 +16,7 @@
 \usepackage{supertabular}
 \usepackage{longtable}
 \usepackage{graphicx}
+\graphicspath{ {./figures/} }
 \usepackage{url}
 \usepackage[public]{eso-pdm}
 
@@ -30,7 +31,7 @@
             pdfpagelabels=true,
             linktocpage=true,
             pagebackref=true,
-            backref=true]{hyperref}
+            backref=page]{hyperref}
 
 \hypersetup{
     pdftitle={CR2RES Pipeline User Manual},

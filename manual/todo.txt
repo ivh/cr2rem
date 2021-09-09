@@ -1,0 +1,37 @@
+MANUAL:
+
+figures for
+    trace
+    tilt
+
+update flow diagrams
+    right UNE & FPET CATGs as input
+
+fine to use TW from calibdb in sci reduction
+
+expectation with calibs from calibdb. and own calibs.
+
+order numbering, zp_order
+
+wavecal, expectaions on absolute and relative performance.
+
+
+OTHER TODO: 
+
+    check bpm in L and M
+
+THIS WEEK:
+    workflow
+    manual (commit to svn?)
+    release
+
+
+
+ask Yves:
+    provide example dataset? same for manual & wkf ?
+    all chapters necessary? Overlap!
+    auto-gen manpages ok?
+    take PRO.TYPE & CATG from cr2res_dfs.h ?
+    what about table with DPR/DO keys for all raw/
+    parameters that are same for many recipes, document once or copy?
+    remove old tutorials?
