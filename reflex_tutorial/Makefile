@@ -28,7 +28,6 @@ TEX_SOURCES = \
 
 TEX_EXTRA_SOURCES = \
 	texmf/dmd-doc.sty \
-	texmf/sfmath.sty \
 	pipedoc/reflex/reflex_about_canvas.tex \
 	pipedoc/reflex/reflex_faq.tex \
 	pipedoc/reflex/reflex_intro_scope.tex \

@@ -1,4 +1,4 @@
-SUBDIRS = manual
+SUBDIRS = manual reflex_tutorial
 
 all:
 	@target=`echo $@`; \
