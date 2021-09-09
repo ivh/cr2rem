@@ -1,8 +1,0 @@
-CRIRES_SPEC_WAVE203_0005_calibrated_extr1D.fits	EXTRACT_1D
-CRIRES_SPEC_WAVE203_0006_calibrated_extr1D.fits	EXTRACT_1D
-CRIRES_SPEC_WAVE203_0007_calibrated_extr1D.fits	EXTRACT_1D
-CRIRES_SPEC_WAVE203_0008_calibrated_extr1D.fits	EXTRACT_1D
-CRIRES_SPEC_WAVE203_0009_calibrated_extr1D.fits	EXTRACT_1D
-cr2res_cal_flat_Y_1_2_tw_merged.fits        	CAL_FLAT_TW_MERGED
-$C2STATCALDIR/lines_urne.fits               	EMISSION_LINES
-
