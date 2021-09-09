@@ -15,6 +15,9 @@ order numbering, zp_order
 
 wavecal, expectaions on absolute and relative performance.
 
+RELEASE:
+    Who reviews manual?
+    How long before release?
 
 OTHER TODO: 
 

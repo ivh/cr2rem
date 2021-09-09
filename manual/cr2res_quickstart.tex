@@ -3,97 +3,10 @@
 
 \red{\textit{Cookbook-like description of pipeline recipes and their usage}}
 
-\subsection{Important Concepts}
-\subsubsection{The Trace-Wave Table}
-
-\subsubsection{Detectors and Extensions}
-Always use FITS extension names, not rely on the index/ordering.
-
-
-\subsubsection{Pixels, Indices and Spectral Bins}
-Pixel index starts at 1, not 0.
-
-Also true when evaluating polynomials like race or wavecal.
-
-Spectral bins correspond to detector columns at the mid-line of the extracted region (constant height).
-
-Orders are indexed from 1..9, not always starting at 1, depending on cut-off orders. Index set by headers, conversion
-to order number $m$ by XXX...
-
-\subsubsection{Recipe naming conventions}
-\begin{itemize}
-    \item Cal
-    \item Obs
-    \item Util
-\end{itemize}
-
-\subsection{The Pipeline Recipes}
-\label{sec:recipes-quick}
-
-\red{\textit{Overview and/or summary of available pipeline recipes, i.e. list
-    of available pipelines and a brief (one-liner) description of its purpose.}}
-
-The naming convention groups the recipes into
-\begin{itemize}
-    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}
-    \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}
-    \item \textit{Utility recipes}, named like \texttt{cr2res\_util\_*}
-\end{itemize}
-
-\subsection{Data Formats}
-\label{sec:data-fmt-quick}
-
-\begin{figure}[!tb]
-  \begin{center}
-    \includegraphics[width=0.99\linewidth]{fits_ext.pdf}
-  \end{center}
-  \caption{
-    \label{fig:fits_ext}
-    FITS extenstions in raw frames and data products.
-    }
-\end{figure}
-
-
-\begin{figure}[!tb]
-  \begin{center}
-    \includegraphics[width=0.99\linewidth]{J_2_3_03_cr2res_util_trace_out.png}
-  \end{center}
-  \caption{
-    \label{fig:flat_trace}
-    An example of a raw flat-field frame in J/2/3. Overplotted in white is 
-    the result of the order tracing, the polynomial fit to the mid-line
-    (dashed) and edges (dotted) for each detector-order.
-    }
-\end{figure}
-
-trace-wave
-image formats
-BPM integers
-
-
-The results of %TODO
-are each stored as separate master calibration maps. Information about the orders 4,5,7 are stored together in a TW-table, as described in more detail %TODO ref.
-
-\subsubsection{The Tracewave-Table}
-\label{sec:tracewave}
-
-table columns
-
-polynomials, eval from 1 to 2048
-
-meta-polynomials for slit curve.
 
 \subsection{Executing Recipes}
 \label{sec:exec-recipes-quick}
 
-
-\subsubsection{Getting Started with \gasgano{}}
-\label{sec:gasgano-quick}
-
-\red{\textit{{Basic description of Gasgano and its usage with the \instrument{} and
-  its recipes. Maybe omitted if Gasgano, for technical reasons cannot be
-  supported (MUSE memory requirements for instance). If present, major parts
-  will be provided by ESO.}}}
 
 \subsubsection{Getting Started with \esorex{}}
 \label{sec:esorex-quick}
@@ -160,9 +73,20 @@ recipe will be shown in section \ref{sec:dataorganization}
 Finally, if more than one \textit{set-of-frames} is given on the command-line \textit{\esorex{}}
 concatenates them into a single \textit{set-of-frames}.
 
+
+\subsubsection{Getting Started with \gasgano{}}
+\label{sec:gasgano-quick}
+
+\red{\textit{{Basic description of Gasgano and its usage with the \instrument{} and
+  its recipes. Maybe omitted if Gasgano, for technical reasons cannot be
+  supported (MUSE memory requirements for instance). If present, major parts
+  will be provided by ESO.}}}
+
+
 \subsection{Data Organization}
 \label{sec:dataorganization}
 
 \red{\textit{Outline of how to organize \instrument{} data, i.e. how to get to
     a correct SOF file, which classification tags are accepted by the recipes
     and how they are defined in terms of header keywords.}}
+

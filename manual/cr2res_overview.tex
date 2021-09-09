@@ -58,6 +58,72 @@ In general, data reduction is performed separately on each detector-order,
 that is a single spectral order in a single detector.
 Consequently, results are also stored this way in data products.
 
+
+
+\subsubsection{The Tracewave-Table}
+\label{sec:tracewave}
+
+table columns
+
+polynomials, eval from 1 to 2048
+
+meta-polynomials for slit curve.
+
+\subsubsection{Detectors and Extensions}
+\label{sec:extns}
+\begin{figure}[!tb]
+  \begin{center}
+    \includegraphics[width=0.99\linewidth]{fits_ext.pdf}
+  \end{center}
+  \caption{
+    \label{fig:fits_ext}
+    FITS extenstions in raw frames and data products.
+    }
+\end{figure}
+
+Always use FITS extension names, not rely on the index/ordering.
+
+
+\subsubsection{Pixels, Indices and Spectral Bins}
+Pixel index starts at 1, not 0.
+
+Also true when evaluating polynomials like race or wavecal.
+
+Spectral bins correspond to detector columns at the mid-line of the extracted region (constant height).
+
+Orders are indexed from 1..9, not always starting at 1, depending on cut-off orders. Index set by headers, conversion
+to order number $m$ by XXX...
+
+\subsection{The Pipeline Recipes}
+\label{sec:recipes-quick}
+
+\red{\textit{Overview and/or summary of available pipeline recipes, i.e. list
+    of available pipelines and a brief (one-liner) description of its purpose.}}
+
+The naming convention groups the recipes into
+\begin{itemize}
+    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}
+    \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}
+    \item \textit{Utility recipes}, named like \texttt{cr2res\_util\_*}
+\end{itemize}
+
+\subsection{Data Formats}
+\label{sec:data-fmt-quick}
+
+
+\begin{figure}[!tb]
+  \begin{center}
+    \includegraphics[width=0.99\linewidth]{J_2_3_03_cr2res_util_trace_out.png}
+  \end{center}
+  \caption{
+    \label{fig:flat_trace}
+    An example of a raw flat-field frame in J/2/3. Overplotted in white is 
+    the result of the order tracing, the polynomial fit to the mid-line
+    (dashed) and edges (dotted) for each detector-order.
+    }
+\end{figure}
+
+
 %%%
 %%%%%%%%%%%%%% SCIENCE ABOVE  %%%%% CALIBS BELOW
 %%%%
