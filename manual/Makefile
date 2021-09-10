@@ -41,7 +41,8 @@ TEX_SOURCES = \
     cr2res_manpages.tex
 
 TEX_EXTRA_SOURCES = \
-	texmf/eso-pdm.sty
+	texmf/eso-pdm.sty \
+	texmf/sfmath.sty
 
 TEX_FIGURES = $(wildcard figures/*.pdf figures/*.png figures/*.jpg)
 TEX_OUTPUT = $(addsuffix .pdf, $(TEX_MASTER))
