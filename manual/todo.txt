@@ -15,26 +15,13 @@ order numbering, zp_order
 
 wavecal, expectaions on absolute and relative performance.
 
-RELEASE:
-    Who reviews manual?
-    How long before release?
 
 OTHER TODO: 
-
     check bpm in L and M
 
-THIS WEEK:
-    workflow
-    manual (commit to svn?)
-    release
-
-
-
 ask Yves:
-    provide example dataset? same for manual & wkf ?
     all chapters necessary? Overlap!
-    auto-gen manpages ok?
     take PRO.TYPE & CATG from cr2res_dfs.h ?
     what about table with DPR/DO keys for all raw/
     parameters that are same for many recipes, document once or copy?
-    remove old tutorials?
+    
