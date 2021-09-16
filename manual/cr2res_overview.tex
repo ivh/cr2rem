@@ -80,44 +80,58 @@ detector. The latter are named like \texttt{CHIPn.INT1} where \texttt{n} is
 the detector number (1..3), in order from left to right with increasing
 wavelength in each spectral order.
 
-Data reduction products are either FITS tables or images. The separation
-of data from the detectors is kept, and most recipes treat them independently.
-For derived maps or images that have errors, three more extension are 
-present, named like \texttt{CHIPnERR.INT1}.
+Data reduction products are either FITS tables or images, depending on whether
+the product is an image/map or not. The separation into extensions of data from
+the three detectors is kept, and most recipes treat them independently. For
+derived maps or images that have errors, three more extension are present, named
+like \texttt{CHIPnERR.INT1}.
 
-Fig.~\ref{fig:fits_ext} illustrates this. The extensions are usually ordered, however we recommend to no rely on the index when opening files with custom
+Fig.~\ref{fig:fits_ext} illustrates this. The extensions are usually ordered,
+however we recommend to no rely on the index when opening files with custom
 scripts or tools. Instead, the FITS extension \emph{name} should be used.
 
 \subsubsection{The TraceWave-Table}
 \label{sec:tracewave}
 
-The most important FITS table within the \instrument\ DRS is the \emph{TraveWave}, abbreviated TW henceforth. It contains information about
-how spectral orders are located in the detectors' pixel grid, how the
-projection of the slit changes, and the wavelength solution.
+The most important FITS table within the \instrument\ DRS is the
+\emph{TraveWave}, abbreviated TW henceforth. It contains information about how
+spectral orders are located in the detectors' pixel grid, how the projection of
+the slit changes, and the wavelength solution.
 
-Each row in the table corresponds to a single \emph{trace}. Each trace
-belongs to a single spectral order; an order can have one or more traces,
-numbered starting with 1 within each order.
-The order number and trace number are two of the columns in the TW table, and together they uniquely identify a trace, i.e.~a table row.
+Each row in the table corresponds to a single \emph{trace}. Each trace belongs
+to a single spectral order; an order can have one or more traces, numbered
+starting with 1 within each order. The \emph{order number} and \emph{trace
+number} are two of the columns in the TW table, and together they uniquely
+identify a trace, i.e.~a table row.
 
-Each trace stores three polynomials: one for the mid-line, upper and lower edge, respectively. Polynomials are stored as coefficients, lowest power
-first, and evaluated for pixel columns starting with index 1.
+Each trace stores three polynomials: one for the mid-line, upper and lower edge,
+respectively. Polynomials are stored as coefficients, lowest power first, and
+evaluated for pixel columns starting with index 1.
 
-Analogously, the wavelength solution is stored as polynomial coefficients that represent the translation from pixel to wavelength space.
+Analogously, the wavelength solution is stored as polynomial coefficients that
+represent the translation from pixel to wavelength space. Because the slit is
+not vertical with respect to the pixel columns, the wavelength scales naturally
+shifts within each spectral order. This is taken into account when the spectra
+are extracted, so that the TW only needs to store the wavelength solution at the
+mid-line of the trace.
 
-meta-polynomials for slit curve.
+How the orientation and shape of the slit changes along each trace is saved as
+three "meta-polynomials" that are described in detail in TODO. Since this is handled automatically by the extraction methods, users normally should not need to get familiar with this aspect.
 
-
+Several recipes take a TW as input and produce a new one, with some information
+updated. Notably the wavecal recipe needs a TW as input to know how to extract
+the spectra of the calibration lamps, and to get a first-guess of the
+wavelength solution; it will then output a TW with the new wavelengths and
+the other information propagated from the input.
 
 \subsubsection{Pixels, Indices and Spectral Bins}
-Pixel index starts at 1, not 0.
+Pixel index starts at 1, not 0. Also and especially when evaluating polynomials like trace or wavecal.
 
-Also true when evaluating polynomials like race or wavecal.
+Spectral bins correspond to detector columns at the mid-line of the extracted
+region (constant height).
 
-Spectral bins correspond to detector columns at the mid-line of the extracted region (constant height).
-
-Orders are indexed from 1..9, not always starting at 1, depending on cut-off orders. Index set by headers, conversion
-to order number $m$ by XXX...
+Orders are indexed from 1..9, not always starting at 1, depending on cut-off
+orders. Index set by headers, conversion to order number $m$ by XXX...
 
 \subsection{The Pipeline Recipes}
 \label{sec:recipes-quick}
