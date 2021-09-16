@@ -136,16 +136,16 @@ orders. Index set by headers, conversion to order number $m$ by XXX...
 \subsection{The Pipeline Recipes}
 \label{sec:recipes-quick}
 
-\red{\textit{Overview and/or summary of available pipeline recipes, i.e. list
-    of available pipelines and a brief (one-liner) description of its purpose.}}
-
-The naming convention groups the recipes into
+Our naming convention groups the recipes into
 \begin{itemize}
-    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}
-    \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}
-    \item \textit{Utility recipes}, named like \texttt{cr2res\_util\_*}
+    \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}, which
+    receive raw science frames and pre-processed calibrations in order to
+    produce the main science data products.
+    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}. These are triggered online at Paranal and perform the steps necessary to produce the calibration products.
+    \item The \textit{utility recipes}, named like \texttt{cr2res\_util\_*}, are a more diverse set of recipes. Some offer more fine-grained control over a single of the steps within a \texttt{cal\_} recipe; others exist to prepare static calibrations or perform additional tasks that are not covered by other recipes.
 \end{itemize}
 
+The following is a list of all recipes with a single-sentence description of their purpose. Details can be found in the \emph{man-pages} (Ch.~\ref{sec:manpages}) and Ch.~\ref{sec:recipes-reference}.
 
 \begin{figure}[!tb]
   \begin{center}

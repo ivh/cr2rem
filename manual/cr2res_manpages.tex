@@ -1,4 +1,12 @@
 \section{Recipe man-pages}\label{sec:manpages}
+The following is auto-generated pages with the manual-pages
+of each recipe. These can be viewed any time on the command-line
+with
+\begin{verbatim}
+    esorex --man-page <recipe>
+\end{verbatim}
+where \texttt{<recipe>} stands for the recipe name.
+
 \subsection{cr2res\_util\_splice}
 \begin{verbatim}
 
@@ -564,7 +572,7 @@ OPTIONS
 
   --degree              : polynomial degree for the fit to the orders. [2]
   --min_cluster         : size in pixels of the smallest allowed cluster.
-                          [250000]
+                          [200000]
   --smooth_x            : Length of the smoothing kernel in x. [111]
   --smooth_y            : Length of the smoothing kernel in y. [401]
   --threshold           : Detection Threshold. [3.0]
@@ -1109,7 +1117,7 @@ DESCRIPTION
           Load the images and create the associate error for each of      
                  them using cr2res_detector_shotnoise_model(--gain)       
           Collapse the images with hdrl_imagelist_collapse(--collapse.*)  
-          Compute BPM form the collapsed master dark using                
+          Compute BPM from the collapsed master dark using                
                  cr2res_bpm_compute(--bpm_kappa, --bpm_lines_ratio)       
           Set the BPM in the master dark                                  
           Compute the QCs with statistics and                             
@@ -1497,7 +1505,7 @@ OPTIONS
   --bpm_lines_ratio     : Maximum ratio of bad pixels per line. [0.5]
   --trace_degree        : polynomial degree for the fit to the orders. [2]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster.
-                          [250000]
+                          [200000]
   --trace_smooth_x      : Length of the smoothing kernel in x. [111]
   --trace_smooth_y      : Length of the smoothing kernel in y. [401]
   --trace_threshold     : Detection Threshold. [3.0]
