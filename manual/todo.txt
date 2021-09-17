@@ -15,6 +15,9 @@ order numbering, zp_order
 
 wavecal, expectaions on absolute and relative performance.
 
+python-scripts
+
+how to make calibdb
 
 OTHER TODO: 
     check bpm in L and M

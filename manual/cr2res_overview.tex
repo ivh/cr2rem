@@ -93,6 +93,18 @@ scripts or tools. Instead, the FITS extension \emph{name} should be used.
 \subsubsection{The TraceWave-Table}
 \label{sec:tracewave}
 
+\begin{figure}[!tb]
+    \begin{center}
+      \includegraphics[width=0.99\linewidth]{J_2_3_03_cr2res_util_trace_out.png}
+    \end{center}
+    \caption{
+      \label{fig:flat_trace}
+      An example of a raw flat-field frame in J/2/3. Overplotted in white is 
+      the result of the order tracing, the polynomial fit to the mid-line
+      (dashed) and edges (dotted) for each detector-order.
+      }
+  \end{figure}
+
 The most important FITS table within the \instrument\ DRS is the
 \emph{TraveWave}, abbreviated TW henceforth. It contains information about how
 spectral orders are located in the detectors' pixel grid, how the projection of
@@ -124,6 +136,8 @@ the spectra of the calibration lamps, and to get a first-guess of the
 wavelength solution; it will then output a TW with the new wavelengths and
 the other information propagated from the input.
 
+
+
 \subsubsection{Pixels, Indices and Spectral Bins}
 Pixel index starts at 1, not 0. Also and especially when evaluating polynomials like trace or wavecal.
 
@@ -147,17 +161,6 @@ Our naming convention groups the recipes into
 
 The following is a list of all recipes with a single-sentence description of their purpose. Details can be found in the \emph{man-pages} (Ch.~\ref{sec:manpages}) and Ch.~\ref{sec:recipes-reference}.
 
-\begin{figure}[!tb]
-  \begin{center}
-    \includegraphics[width=0.99\linewidth]{J_2_3_03_cr2res_util_trace_out.png}
-  \end{center}
-  \caption{
-    \label{fig:flat_trace}
-    An example of a raw flat-field frame in J/2/3. Overplotted in white is 
-    the result of the order tracing, the polynomial fit to the mid-line
-    (dashed) and edges (dotted) for each detector-order.
-    }
-\end{figure}
 
 
 %%%
