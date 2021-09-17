@@ -13,6 +13,9 @@ with
 \end{verbatim}
 where \texttt{<recipe>} stands for the recipe name.
 
+\emph{Until the chapter with detailed recipe descriptions is written, this has been moved forward from the appendix to serve as a reference for inputs, outputs and parameters.
+}
+
 EOT
 
 echo foo
