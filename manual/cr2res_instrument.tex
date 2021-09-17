@@ -37,13 +37,17 @@ from the night, a metrology system is in place that iterates on the position
 of the echellogram, both in main dispersion and cross-dispersion direction, thereby
 improving repeatability.
 
-Therefore, and to minimize the calibration overhead,
-\instrument\ is operated with fixed \textbf{standard settings}. These are
-chosen such that the full wavelength range is covered in each band, as well as
-the detector gaps. In general, the DRS does not rely on these settings, as long
-as it receives a set of calibrations that match the data. However, only
-the standard settings are supported for the time being and the DRS uses
-header keys like \texttt{INS.WLEN.ID} for consistency checks, where appropriate.
+Therefore, and to minimize the calibration overhead, \instrument\ is operated
+with fixed \textbf{standard settings}. These are chosen such that the full
+wavelength range is covered in each band, as well as the detector gaps. In
+general, the DRS does not rely on these settings, as long as it receives a set
+of calibrations that match the data. However, only the standard settings are
+supported for the time being and the DRS uses header keys like
+\texttt{INS.WLEN.ID}\footnote{\texttt{INS.WLEN.ID} takes the form of a string
+that starts with a letter to indicate the band (YJHKLM), followed by four digits
+that represent the central wavelength, rounded.} for consistency checks, where
+appropriate.
+
 
 \begin{table}[htbp]
   \centering\begin{tabular}{cc}

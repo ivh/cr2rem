@@ -99,7 +99,7 @@ scripts or tools. Instead, the FITS extension \emph{name} should be used.
     \end{center}
     \caption{
       \label{fig:flat_trace}
-      An example of a raw flat-field frame in J/2/3. Overplotted in white is 
+      An example of a raw flat-field frame in J1228. Overplotted in white is 
       the result of the order tracing, the polynomial fit to the mid-line
       (dashed) and edges (dotted) for each detector-order.
       }
@@ -118,17 +118,20 @@ identify a trace, i.e.~a table row.
 
 Each trace stores three polynomials: one for the mid-line, upper and lower edge,
 respectively. Polynomials are stored as coefficients, lowest power first, and
-evaluated for pixel columns starting with index 1.
+evaluated for pixel columns starting with index 1. Fig.~\ref{fig:flat_trace}
+shows these polynomials plotted onto a flat-field frame.
 
-Analogously, the wavelength solution is stored as polynomial coefficients that
-represent the translation from pixel to wavelength space. Because the slit is
-not vertical with respect to the pixel columns, the wavelength scales naturally
-shifts within each spectral order. This is taken into account when the spectra
-are extracted, so that the TW only needs to store the wavelength solution at the
-mid-line of the trace.
+Analogously, the wavelength solution is stored as polynomial coefficients
+that represent the translation from pixel to wavelength space. Because the slit
+is not vertical with respect to the pixel columns, the wavelength scale
+naturally shifts within each spectral order. This is taken into account when the
+spectra are extracted, so that the TW only needs to store the wavelength
+solution at the mid-line of the trace.
 
 How the orientation and shape of the slit changes along each trace is saved as
-three "meta-polynomials" that are described in detail in TODO. Since this is handled automatically by the extraction methods, users normally should not need to get familiar with this aspect.
+three "meta-polynomials" that are described in detail in TODO. Since this is
+handled automatically by the extraction methods, users normally should not need
+to get familiar with this aspect.
 
 Several recipes take a TW as input and produce a new one, with some information
 updated. Notably the wavecal recipe needs a TW as input to know how to extract
@@ -136,7 +139,12 @@ the spectra of the calibration lamps, and to get a first-guess of the
 wavelength solution; it will then output a TW with the new wavelengths and
 the other information propagated from the input.
 
-
+Naturally, each TW is specific to a single standard setting of the spectrograph.
+The order tracing and slit tilt are expected to be stable enough to be re-used
+between nights, especially for observations taken with metrology turned on. The
+limiting factor is the repeatability of the echellogram (cf.~User Manual), but
+the DRS should not fail to reduce even with significantly mismatched order
+traces.
 
 \subsubsection{Pixels, Indices and Spectral Bins}
 Pixel index starts at 1, not 0. Also and especially when evaluating polynomials like trace or wavecal.
@@ -159,7 +167,33 @@ Our naming convention groups the recipes into
     \item The \textit{utility recipes}, named like \texttt{cr2res\_util\_*}, are a more diverse set of recipes. Some offer more fine-grained control over a single of the steps within a \texttt{cal\_} recipe; others exist to prepare static calibrations or perform additional tasks that are not covered by other recipes.
 \end{itemize}
 
-The following is a list of all recipes with a single-sentence description of their purpose. Details can be found in the \emph{man-pages} (Ch.~\ref{sec:manpages}) and Ch.~\ref{sec:recipes-reference}.
+The following is a list of all recipes with a single-sentence description of their purpose. Details can be found in the \emph{man-pages} (Ch.~\ref{sec:manpages}).
+% and Ch.~\ref{sec:recipes-reference}.
+% TODO write and re-include that chapter
+
+\begin{itemize}
+\item \texttt{cr2res\_util\_calib} applies reduced calibrations to raw science frames. It can also combine frames.
+\item \texttt{cr2res\_util\_normflat} makes the normalized flat-field by comparing the frame to the extraction model.
+\item \texttt{cr2res\_obs\_2d} applies calibrations and makes the 2D output, i.e.~no extraction but keeping the spatial resolution along the slit.
+\item \texttt{cr2res\_obs\_nodding} combines frames and subtracts positions A and B from each other, then extracts the spectra.
+\item \texttt{cr2res\_util\_trace} finds the locations of 
+\item \texttt{cr2res\_obs\_staring}
+\item \texttt{cr2res\_util\_trace\_map}
+\item \texttt{cr2res\_obs\_pol}
+\item \texttt{cr2res\_util\_wave}
+\item \texttt{cr2res\_util\_bpm\_merge}
+\item \texttt{cr2res\_util\_genstd}
+\item \texttt{cr2res\_util\_splice}
+\item \texttt{cr2res\_cal\_dark}
+\item \texttt{cr2res\_cal\_wave}
+\item \texttt{cr2res\_util\_slit\_curv}
+\item \texttt{cr2res\_util\_plot}
+\item \texttt{cr2res\_util\_extract}
+\item \texttt{cr2res\_util\_genlines}
+\item \texttt{cr2res\_util\_bpm\_split}
+\item \texttt{cr2res\_cal\_detlin}
+\item \texttt{cr2res\_cal\_flat}
+\end{itemize}
 
 
 
