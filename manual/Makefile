@@ -38,7 +38,8 @@ TEX_SOURCES = \
 	cr2res_recipes.tex \
 	cr2res_reduction.tex \
 	cr2res_troubleshooting.tex \
-    cr2res_manpages.tex
+    cr2res_manpages.tex \
+    cr2res_scripts.tex
 
 TEX_EXTRA_SOURCES = \
 	texmf/eso-pdm.sty \
