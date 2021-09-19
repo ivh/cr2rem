@@ -70,14 +70,14 @@ Finally, if more than one \textit{set-of-frames} is given on the command-line
 \textit{\esorex{}} concatenates them into a single \textit{set-of-frames}.
 
 
-\subsection{Calibration made easy}
+\subsubsection{Calibration, made easy}
 
 This example follows the data flow described in \ref{sec:simplecalib}. It makes
-use of a pre-existing TW-table, for example from the CalibDB, for order traces
-and slit-tilt. All data needs to match in spectrograph setting.
+use of a pre-existing TW-table, for example the one from the CalibDB, for order
+traces and slit-tilt. All data needs to match in spectrograph setting.
 
-\texttt{cr2res\_cal\_dark} only receives raw frames, so the SOF looks like 
-above and gets processed with
+\texttt{cr2res\_cal\_dark} only receives raw frames, so the SOF looks like the
+one just above and gets processed like
 \begin{shell}[fontsize=\small]
   %prompt esorex cr2res_cal_dark darks.sof
 \end{shell}  
@@ -85,12 +85,15 @@ The outputs are master darks and BPM. The recipe parameters influence how
 outliers are rejected and where to put the threshold for rejecting pixels as
 bad. The default values should give good results.
 
+Next are the FLATs.
 \begin{shell}[fontsize=\small]
   %prompt cat flat.sof
 $RAW/flat1.fits
 $RAW/flat2.fits
 $RAW/flat3.fits
-$CALIB/
+$CALIB/dark_bpm.fits CAL_DARK_BPM
+$CALIB/dark_master.fits CAL_DARK_MASTER
+$CALIB/tw.fits UTIL_WAVE_TW
 \end{shell}  
 
 \subsection{Examples of science reductions}
@@ -116,6 +119,22 @@ future iteration of this document.
 This was not offered during P108, so the example will be added in a
 future iteration of this document.
 
+
+\subsection{Optional Steps}
+
+combine BPMs
+
+util\_splice
+
+
+\subsection{Calibration, from scratch}
+Following the steps outlined in Ch.~\ref{sec:stepcalib}, we can reduce the
+calibrations without relying on pre-existing reduction products like the TW.
+
+
+
+
+%%%%%%%%%%%%%%
 
 %\subsubsection{Getting Started with \gasgano{}}
 %\label{sec:gasgano-quick}

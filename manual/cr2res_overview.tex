@@ -172,15 +172,16 @@ position A and the so background-subtracted spectra get extracted into 1D
 arrays, using the supplied TW-table for information on order trace, slit-tilt
 and wavelength calibration.
 
-The full list of observing recipes is:
+The other observing recipes accept very similarly looking SOFs, the full list
+is:
 \begin{itemize}
     \item \texttt{cr2res\_obs\_nodding} for nodding observations of
         point-sources. Also spectro-astrometry.
     \item \texttt{cr2res\_obs\_staring} for point-sources without nodding.
     \item \texttt{cr2res\_obs\_2d} for observations in which the spatial
-        resolution along the slit should be conserved, i.e. no extraction.
-    \item \texttt{cr2res\_obs\_pol} for observations with the spectro-polarimeter,
-        including the demodulation into Stokes parameters. 
+        resolution along the slit should be conserved, i.e. no spectrum extraction.
+    \item \texttt{cr2res\_obs\_pol} for observations with the
+        spectro-polarimeter, including the demodulation into Stokes parameters. 
 \end{itemize}
 
 
@@ -324,6 +325,7 @@ or one made via \texttt{cr2res\_util\_trace} and
 
 
 \subsubsection{The step-by-step way}
+\label{sec:stepcalib}
 
 \begin{figure}[!tb]
     \begin{center}
