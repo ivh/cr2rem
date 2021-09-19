@@ -1,63 +1,6 @@
 \section{Data Reduction Overview}
 \label{sec:overview}
 
-It makes sense to start from the end, that is to assume for a moment to
-have valid master calibrations already available and look at the reduction of
-the science frames first.
-
-\subsection{Science reduction}
-\label{sec:sci-reduc}
-
-The recipes that reduce the science frames all are named as
-\texttt{cr2res\_obs\_*}
-all have in common that they receive as \textit{input} a set of raw science
-frames, and the master calibrations, i.e. \textit{output} of calibration
-recipes. They then first combine raw frames that belong together, for example
-the frames from the same nodding position. Then the master calibrations are
-applied, after which the appropriate algorithms for the data at hand are applied
-to create the output data products.
-
-The SOF to reduce a nodding sequence (three frames  each in positions A and B)
-looks like:
-\begin{verbatim}
-$RAW/CRIRE.2021-08-16T23:22:50.334.fits OBS_NODDING_OTHER
-$RAW/CRIRE.2021-08-16T23:23:54.728.fits OBS_NODDING_OTHER
-$RAW/CRIRE.2021-08-16T23:24:58.960.fits OBS_NODDING_OTHER
-$RAW/CRIRE.2021-08-16T23:26:18.394.fits OBS_NODDING_OTHER
-$RAW/CRIRE.2021-08-16T23:27:22.616.fits OBS_NODDING_OTHER
-$RAW/CRIRE.2021-08-16T23:28:26.956.fits OBS_NODDING_OTHER
-$CALIB/K2192_masterflat.fits           CAL_MASTER_FLAT
-$CALIB/K2192_tw.fits                   UTIL_WAVE_TW
-$CALIB/cr2res_cal_dark_bpm.fits        CAL_DARK_BPM
-$CALIB/cr2res_detlin_coeffs.fits       CAL_DETLIN_COEFFS
-\end{verbatim}
-
-It is then given to the recipe like this:
-\begin{shell}
-    # esorex cr2res_obs_nodding <SOF>
-\end{shell}
-
-For nodding observations of point sources, what happens next is that
-position B is subtracted from position A and the so background-subtracted
-spectra gets extracted into 1D arrays, using the supplied TW-table
-for information on order trace, slit tilt and wavelength calibration.
-
-The full list of observing recipes is:
-\begin{itemize}
-    \item \texttt{cr2res\_obs\_nodding} for nodding observations of
-        point-sources. Also spectro-astrometry.
-    \item \texttt{cr2res\_obs\_staring} for point-sources without nodding.
-    \item \texttt{cr2res\_obs\_2d} for observations in which the spatial
-        resolution along the slit should be conserved, i.e. no extraction.
-    \item \texttt{cr2res\_obs\_pol} for observations with the spectro-polarimeter,
-        including the demodulation into Stokes parameters. 
-\end{itemize}
-
-
-In general, data reduction is performed separately on each detector-order,
-that is a single spectral order in a single detector.
-Consequently, results are also stored this way in data products.
-
 
 \subsection{Data Formats}
 \label{sec:data-fmt-quick}
@@ -147,13 +90,21 @@ the DRS should not fail to reduce even with significantly mismatched order
 traces.
 
 \subsubsection{Pixels, Indices and Spectral Bins}
-Pixel index starts at 1, not 0. Also and especially when evaluating polynomials like trace or wavecal.
+Pixel index starts at 1, not 0. This is especially when evaluating polynomials
+from the TW table outside the of the DRS.
 
-Spectral bins correspond to detector columns at the mid-line of the extracted
-region (constant height).
+The spectral bins after extraction correspond to detector columns at the
+mid-line of the extracted region.
 
 Orders are indexed from 1..9, not always starting at 1, depending on cut-off
-orders. Index set by headers, conversion to order number $m$ by XXX...
+orders. This index is set by headers in the raw frames that provide first-guesses
+for the location of spectral orders, and their wavelengths.
+
+To convert the order index to "real" order number $m$, the zero-point that
+simply needs to be added can be found in \texttt{INS.GRAT1.ZP_ORD}. The DRS
+usually sticks to the index, for example when numbering the spectra in data
+products. Therefore, unless stated otherwise, order number will refer to the
+index throughout this document.
 
 \subsection{The Pipeline Recipes}
 \label{sec:recipes-quick}
@@ -195,7 +146,63 @@ The following is a list of all recipes with a single-sentence description of the
 \item \texttt{cr2res\_cal\_flat}
 \end{itemize}
 
+%%%%%%%%%% General things above, SCIENCE below, then CALIBS
 
+
+\subsection{Science reduction}
+\label{sec:sci-reduc}
+Let's assume for a moment to
+have valid reduced calibrations already available and look at the reduction of science frames first.
+
+The recipes that reduce the science frames all are named as
+\texttt{cr2res\_obs\_*}
+all have in common that they receive as \textit{input} a set of raw science
+frames, and the master calibrations, i.e. \textit{output}
+of calibration recipes. They then first combine raw frames that belong together,
+for example the frames from the same nodding position. Then the master
+calibrations are applied, after which the appropriate algorithms for the data at
+hand are applied to create the output data products.
+
+For the most common use case, nodded observations of point sources,
+the SOF to reduce a nodding sequence (three frames  each in positions A and B)
+looks like:
+\begin{verbatim}
+$RAW/CRIRE.2021-08-16T23:22:50.334.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:23:54.728.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:24:58.960.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:26:18.394.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:27:22.616.fits OBS_NODDING_OTHER
+$RAW/CRIRE.2021-08-16T23:28:26.956.fits OBS_NODDING_OTHER
+$CALIB/K2192_masterflat.fits           CAL_MASTER_FLAT
+$CALIB/K2192_tw.fits                   UTIL_WAVE_TW
+$CALIB/cr2res_cal_dark_bpm.fits        CAL_DARK_BPM
+$CALIB/cr2res_detlin_coeffs.fits       CAL_DETLIN_COEFFS
+\end{verbatim}
+
+It is then handed to the recipe like this:
+\begin{shell}
+    # esorex cr2res_obs_nodding <SOF>
+\end{shell}
+
+Wwhat happens next is that position B is subtracted from position A and the so
+background-subtracted spectra gets extracted into 1D arrays, using the supplied
+TW-table for information on order trace, slit tilt and wavelength calibration.
+
+The full list of observing recipes is:
+\begin{itemize}
+    \item \texttt{cr2res\_obs\_nodding} for nodding observations of
+        point-sources. Also spectro-astrometry.
+    \item \texttt{cr2res\_obs\_staring} for point-sources without nodding.
+    \item \texttt{cr2res\_obs\_2d} for observations in which the spatial
+        resolution along the slit should be conserved, i.e. no extraction.
+    \item \texttt{cr2res\_obs\_pol} for observations with the spectro-polarimeter,
+        including the demodulation into Stokes parameters. 
+\end{itemize}
+
+
+In general, data reduction is performed separately on each detector-order,
+that is a single spectral order in a single detector.
+Consequently, results are also stored this way in data products.
 
 %%%
 %%%%%%%%%%%%%% SCIENCE ABOVE  %%%%% CALIBS BELOW
