@@ -1,4 +1,4 @@
-\section{Quick Start}
+\section{Data Reduction Cook-Book}
 \label{sec:cookbook}
 
 %\red{\textit{Cookbook-like description of pipeline recipes and their usage}}
@@ -55,20 +55,66 @@ commented out by putting the hash character (\texttt{\#}) in the first
 column. An example of a \textit{set-of-frames} is shown in the following:
 
 \begin{shell}[fontsize=\small]
-%prompt cat bias.sof
-/data/cr2res/raw/CR2RES.2019-03-29T09:48:53.153.fits BIAS
-$RAW_DATA/CR2RES.2019-03-29T09:50:36.645.fits BIAS
-$RAW_DATA/CR2RES.2019-03-29T09:52:16.513.fits BIAS
-$RAW_DATA/CR2RES.2019-03-29T09:53:47.996.fits BIAS
-#$RAW_DATA/CR2RES.2019-03-29T09:55:04.515.fits BIAS
+%prompt cat darks.sof
+/data/crires/CRIRES.2019-03-29T09:50:36.645.fits DARK
+$RAW_DATA/CRIRES.2019-03-29T09:52:16.513.fits DARK
+$RAW_DATA/CRIRES.2019-03-29T09:53:47.996.fits DARK
+#$RAW_DATA/CRIRES.2019-03-29T09:55:04.515.fits DARK
+#$RAW_DATA/dark5.fits DARK
 \end{shell}
 
 These \textit{set-of-frames} files will have to be created by the user using a
-text editor, for instance. Which classification has to be used with which
-recipe will be shown in section \ref{sec:dataorganization}
+text editor, for instance.
 
-Finally, if more than one \textit{set-of-frames} is given on the command-line \textit{\esorex{}}
-concatenates them into a single \textit{set-of-frames}.
+Finally, if more than one \textit{set-of-frames} is given on the command-line
+\textit{\esorex{}} concatenates them into a single \textit{set-of-frames}.
+
+
+\subsection{Calibration made easy}
+
+This example follows the data flow described in \ref{sec:simplecalib}. It makes
+use of a pre-existing TW-table, for example from the CalibDB, for order traces
+and slit-tilt. All data needs to match in spectrograph setting.
+
+\texttt{cr2res\_cal\_dark} only receives raw frames, so the SOF looks like 
+above and gets processed with
+\begin{shell}[fontsize=\small]
+  %prompt esorex cr2res_cal_dark darks.sof
+\end{shell}  
+The outputs are master darks and BPM. The recipe parameters influence how
+outliers are rejected and where to put the threshold for rejecting pixels as
+bad. The default values should give good results.
+
+\begin{shell}[fontsize=\small]
+  %prompt cat flat.sof
+$RAW/flat1.fits
+$RAW/flat2.fits
+$RAW/flat3.fits
+$CALIB/
+\end{shell}  
+
+\subsection{Examples of science reductions}
+
+\subsubsection{Nodding}
+
+\ldots
+
+\subsubsection{Staring}
+
+\subsubsection{Generic Offset}
+
+This was not offered during P108, so the example will be added in a
+future iteration of this document.
+
+\subsubsection{Polarimetry}
+
+This was not offered during P108, so the example will be added in a
+future iteration of this document.
+
+\subsubsection{Spectro-Astrometry}
+
+This was not offered during P108, so the example will be added in a
+future iteration of this document.
 
 
 %\subsubsection{Getting Started with \gasgano{}}

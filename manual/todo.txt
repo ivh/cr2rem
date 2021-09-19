@@ -23,8 +23,8 @@ OTHER TODO:
     check bpm in L and M
 
 ask Yves:
-    all chapters necessary? Overlap!
     take PRO.TYPE & CATG from cr2res_dfs.h ?
     what about table with DPR/DO keys for all raw/
     parameters that are same for many recipes, document once or copy?
     
+    util_plot works ?

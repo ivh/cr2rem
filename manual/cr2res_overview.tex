@@ -101,7 +101,7 @@ orders. This index is set by headers in the raw frames that provide first-guesse
 for the location of spectral orders, and their wavelengths.
 
 To convert the order index to "real" order number $m$, the zero-point that
-simply needs to be added can be found in \texttt{INS.GRAT1.ZP_ORD}. The DRS
+simply needs to be added can be found in \texttt{INS.GRAT1.ZP\_ORD}. The DRS
 usually sticks to the index, for example when numbering the spectra in data
 products. Therefore, unless stated otherwise, order number will refer to the
 index throughout this document.
@@ -114,59 +114,42 @@ Our naming convention groups the recipes into
     \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}, which
     receive raw science frames and pre-processed calibrations in order to
     produce the main science data products.
-    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}. These are triggered online at Paranal and perform the steps necessary to produce the calibration products.
-    \item The \textit{utility recipes}, named like \texttt{cr2res\_util\_*}, are a more diverse set of recipes. Some offer more fine-grained control over a single of the steps within a \texttt{cal\_} recipe; others exist to prepare static calibrations or perform additional tasks that are not covered by other recipes.
+    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}.
+    These are triggered online at Paranal and perform the steps necessary to
+    produce the calibration products.
+    \item The \textit{utility recipes}, named like \texttt{cr2res\_util\_*}, are
+    a more diverse set of recipes. Some offer more fine-grained control over one
+    of the steps within a \texttt{cal\_} recipe; others exist to prepare static
+    calibrations or perform additional tasks that are not covered by other
+    recipes.
 \end{itemize}
 
-The following is a list of all recipes with a single-sentence description of their purpose. Details can be found in the \emph{man-pages} (Ch.~\ref{sec:manpages}).
+Details about their inputs, outputs and parameters can be found in the
+\emph{man-pages} (Ch.~\ref{sec:manpages}).
 % and Ch.~\ref{sec:recipes-reference}.
 % TODO write and re-include that chapter
 
-\begin{itemize}
-\item \texttt{cr2res\_util\_calib} applies reduced calibrations to raw science frames. It can also combine frames.
-\item \texttt{cr2res\_util\_normflat} makes the normalized flat-field by comparing the frame to the extraction model.
-\item \texttt{cr2res\_obs\_2d} applies calibrations and makes the 2D output, i.e.~no extraction but keeping the spatial resolution along the slit.
-\item \texttt{cr2res\_obs\_nodding} combines frames and subtracts positions A and B from each other, then extracts the spectra.
-\item \texttt{cr2res\_util\_trace} finds the locations of 
-\item \texttt{cr2res\_obs\_staring}
-\item \texttt{cr2res\_util\_trace\_map}
-\item \texttt{cr2res\_obs\_pol}
-\item \texttt{cr2res\_util\_wave}
-\item \texttt{cr2res\_util\_bpm\_merge}
-\item \texttt{cr2res\_util\_genstd}
-\item \texttt{cr2res\_util\_splice}
-\item \texttt{cr2res\_cal\_dark}
-\item \texttt{cr2res\_cal\_wave}
-\item \texttt{cr2res\_util\_slit\_curv}
-\item \texttt{cr2res\_util\_plot}
-\item \texttt{cr2res\_util\_extract}
-\item \texttt{cr2res\_util\_genlines}
-\item \texttt{cr2res\_util\_bpm\_split}
-\item \texttt{cr2res\_cal\_detlin}
-\item \texttt{cr2res\_cal\_flat}
-\end{itemize}
 
 %%%%%%%%%% General things above, SCIENCE below, then CALIBS
 
 
 \subsection{Science reduction}
 \label{sec:sci-reduc}
-Let's assume for a moment to
-have valid reduced calibrations already available and look at the reduction of science frames first.
+Let's assume for a moment to have reduced calibrations already available
+and look at the reduction of science frames first.
 
-The recipes that reduce the science frames all are named as
-\texttt{cr2res\_obs\_*}
-all have in common that they receive as \textit{input} a set of raw science
-frames, and the master calibrations, i.e. \textit{output}
-of calibration recipes. They then first combine raw frames that belong together,
+The \texttt{cr2res\_obs\_*} recipes all have in common that they receive as
+input a set of raw science frames, and the master calibrations (i.e. output of
+calibration recipes). They then first combine raw frames that belong together,
 for example the frames from the same nodding position. Then the master
 calibrations are applied, after which the appropriate algorithms for the data at
 hand are applied to create the output data products.
 
 For the most common use case, nodded observations of point sources,
 the SOF to reduce a nodding sequence (three frames  each in positions A and B)
-looks like:
-\begin{verbatim}
+may look like this:
+\begin{shell}[fontsize=\small]
+%prompt cat nodd.sof
 $RAW/CRIRE.2021-08-16T23:22:50.334.fits OBS_NODDING_OTHER
 $RAW/CRIRE.2021-08-16T23:23:54.728.fits OBS_NODDING_OTHER
 $RAW/CRIRE.2021-08-16T23:24:58.960.fits OBS_NODDING_OTHER
@@ -177,16 +160,17 @@ $CALIB/K2192_masterflat.fits           CAL_MASTER_FLAT
 $CALIB/K2192_tw.fits                   UTIL_WAVE_TW
 $CALIB/cr2res_cal_dark_bpm.fits        CAL_DARK_BPM
 $CALIB/cr2res_detlin_coeffs.fits       CAL_DETLIN_COEFFS
-\end{verbatim}
-
-It is then handed to the recipe like this:
-\begin{shell}
-    # esorex cr2res_obs_nodding <SOF>
 \end{shell}
 
-Wwhat happens next is that position B is subtracted from position A and the so
-background-subtracted spectra gets extracted into 1D arrays, using the supplied
-TW-table for information on order trace, slit tilt and wavelength calibration.
+It is then handed to the recipe like this:
+\begin{shell}[fontsize=\small]
+    # esorex cr2res_obs_nodding nodd.sof
+\end{shell}
+
+What happens after frame-combination is that position B is subtracted from
+position A and the so background-subtracted spectra get extracted into 1D
+arrays, using the supplied TW-table for information on order trace, slit-tilt
+and wavelength calibration.
 
 The full list of observing recipes is:
 \begin{itemize}
@@ -216,9 +200,7 @@ The following instrument properties need to be characterized:
     \item Detector: non-linearity
     \item Detector: dark current
     \item Detector: bad pixel map
-    \item Flat-fielding\footnote{By \textit{flat-field} we always mean the
-              normalized pixel-to-pixel variations
-              in sensitivity, not the response at larger scales.}
+    \item Flat-fielding
     \item The location and shape of the spectral orders on each detector.
     \item The orientation (tilt) of the slit within each order.
     \item Wavelength calibration.
@@ -235,23 +217,24 @@ itself is negligible, but the detector readout-mode leaves a residual pattern
 that scales non-trivially with DIT, so that scaling dark by unmatched exposure
 time is not recommended.
 
-Darks exposures are not really "dark", but contain come background thermal emission,
-especially in the longer bands. Therefore, Darks are considered specific to
-each instrument setting.
+DARK exposures are not really "dark", but contain come background thermal
+emission, especially in the bands redward from K. Therefore, Darks are
+considered specific to each instrument setting.
 
-The \emph{master flat} is derived from a halogen lamp exposure; it is specific
-to each spectrograph setting, for obvious reasons. By \emph{flat-field} the DRS
-means the \emph{normalized flat-field}, that is the pixel-to-pixel sensitivity
-variations, alone. The wavelength-dependency within each spectral order is
-saved as the \emph{blaze} to a separate data product.
+The \emph{master flat} is derived from a halogen lamp exposure; it is also
+specific to each spectrograph setting, for obvious reasons. By \emph{flat-field}
+the DRS means the \emph{normalized flat-field}, that is the pixel-to-pixel
+sensitivity variations, alone. The wavelength-dependency of the sensitivity
+within each spectral order is saved as the \emph{blaze} to a separate data
+product.
 
 \emph{Bad pixel masks} can come from several steps
 \begin{itemize}
     \item darks, rejecting outliers like hot and dark pixels.
     \item flats, rejecting pixels outside a range of sensitivity.
-    \item detlin, rejecting pixels with deviating linearity behaviour.
-    \item edge pixels. Each detector has 4 colunms and rows at the edges that
-        are tnot sensitive to light.
+    \item detlin, rejecting pixels with deviating linearity behavior.
+    \item edge pixels. Each detector has 4 columns and rows at the edges that
+        are not sensitive to light.
     \item inter-order, masking the pixels that are not part of a spectral order.
 \end{itemize}
 
@@ -265,7 +248,47 @@ including the gaps between detectors. While DRS should in principle be able to
 handle non-standard settings just fine, this is not supported for the time
 being.
 
+Before we get into how the recipes interact, here is a
+Observing recipes were listed above, these are the remaining ones:
 
+\begin{itemize}
+    \item \texttt{cr2res\_cal\_dark} makes master darks and BPM for each DIT it
+    receives.
+    \item \texttt{cr2res\_cal\_flat} reduces flat-field frames. The normalized
+    flat is its main output.
+    \item \texttt{cr2res\_cal\_wave} calibrates the wavelength scale, using UNE
+    and FPET exposures.
+    \item \texttt{cr2res\_cal\_detlin} derives the detector linearity correction
+    from a series of flat-field exposures in different settings.
+    \item \texttt{cr2res\_util\_calib} applies reduced calibrations to raw
+    science frames. It can also combine frames.
+    \item \texttt{cr2res\_util\_trace} finds the locations of spectral orders
+    and saves them as a TW.
+    \item \texttt{cr2res\_util\_slit\_curv} uses an FPET frame to characterize
+    the slit tilt within each spectral order.
+    \item \texttt{cr2res\_util\_extract} extracts 1D-spectra from any input frame
+    along the traces in the given TW.
+    \item \texttt{cr2res\_util\_normflat} makes the normalized flat-field by
+    comparing the frame to the extraction model.
+    \item \texttt{cr2res\_util\_wave} executes a single wavecal method on
+    already extracted lamp spectra.
+    \item \texttt{cr2res\_util\_splice} uses the blaze function to normalize
+    spectra and resamples overlap-regions from different spectral orders or
+    settings into a continuous spectrum.
+    \item \texttt{cr2res\_util\_genstd} converts standard-star spectra from
+    plain-text into FITS tables.
+    \item \texttt{cr2res\_util\_genlines} converts line catalogs from plain-text
+    into FITS tables. Also makes sub-catalogs that only contain lines from
+    pre-selected wavelength regions.
+    \item \texttt{cr2res\_util\_trace\_map} evaluates a TW into maps of the
+    order number and wavelength, and a visualization of the slit-tilt.
+    \item \texttt{cr2res\_util\_bpm\_merge} merges BPMs.
+    \item \texttt{cr2res\_util\_bpm\_split} splits BPMs into the different
+    types.
+\end{itemize}
+
+\subsubsection{The simple way}
+\label{sec:simplecalib}
 \begin{figure}[!tb]
     \begin{center}
         \includegraphics[width=0.99\linewidth]{calib_simple.pdf}
@@ -273,26 +296,34 @@ being.
     \caption{
         \label{fig:calibflow_simple}
         Flow diagram for calibration reduction with the \textit{calibration
-        recipes}, assuming a populated CalibDB exists. Arrows and lines
-        indicate the inputs to the recipes (blue), in the form of raw data
-        (red), master calibrations from the CalibDB (green), or intermediate
-        products from previous steps (white). Dotted lines indicate when a
-        CalibDB or intermediate product can be chosen for later steps
-        further to the right. All line connections are optional (open
-        symbols), but generally recommended to be present. Also note that
-        open diamonds mark Tracewave (TW) inputs, of which at least one
-        needs to be present.
-        \newline
-        If a TW is provided to \texttt{cr2res\_cal\_flat}, it will use the
-        information therein; otherwise it performs the tracing of the spectral
-        orders to find their location. However, the slit tilt cannot be
-        determined from flat-field frames which means that the extraction of the
-        blaze function will be done assuming a vertical slit, yielding
-        sub-optimal results. Therefore providing the TW from the CalibDB is
-        recommended.
+        recipes}, assuming a populated CalibDB exists. Arrows and lines indicate
+        the inputs to the recipes (blue), in the form of raw data (red), master
+        calibrations from the CalibDB (green), or intermediate products from
+        previous steps (white). Dash-dotted lines indicate when a CalibDB or
+        intermediate product can be chosen for later steps further to the right.
+        All line connections are optional (open symbols), but generally
+        recommended being present. Also note that open diamonds mark TW inputs,
+        of which at least one needs to be present.
     }
 \end{figure}
 
+Fig.~\ref{fig:calibflow_simple} shows how calibrations can be reduced in a way
+that matches how the online (quick-look) calibrations are run at the telescope.
+For each type of calibration data there is a single recipe that processes them.
+Apart from the raw frames, the necessary inputs either come from the CalibDB 
+
+
+If a TW is provided to \texttt{cr2res\_cal\_flat}, it will use the information
+therein; otherwise it performs the tracing of the spectral orders to find their
+location. However, the slit tilt cannot be determined from flat-field frames
+which means that the extraction of the blaze function will be done assuming a
+vertical slit, yielding sub-optimal results in the bands Y-K. Therefore
+providing a TW is recommended in these bands, either the one from the CalibDB,
+or one made via \texttt{cr2res\_util\_trace} and
+\texttt{cr2res\_util\_slit\_curv}.
+
+
+\subsubsection{The step-by-step way}
 
 \begin{figure}[!tb]
     \begin{center}
@@ -313,72 +344,53 @@ being.
 \end{figure}
 
 Fig.~\ref{fig:calibflow_detailed} shows the calibration data flow cascade
-step-by-step, using the \emph{util} recipes that only perform a single task
-each:
+step-by-step, using the \emph{util} recipes that each only perform a single
+task. In addition, no files from the CalibDB are used in this case, and it is in
+fact the way the CalibDB is asspembled in the first place.
+
+
 \begin{enumerate}
     \item \texttt{cr2res\_util\_genlines} creates the catalogue files for each
-          setting,
-          based on the base catalogue and selection files that mark wavelength
-          regions
-          that are flagged as good for a certain setting.
-    \item \texttt{cr2res\_cal\_detlin} takes flat-field exposures from
-          different settings and with varying exposure times to measure the
-          linearity
+          setting, based on the base catalogue and selection files that mark
+          wavelength regions that are flagged as good for a certain setting.
+    \item \texttt{cr2res\_cal\_detlin} takes flat-field exposures from different
+          settings and with varying exposure times to measure the linearity
           behaviour of all pixels. Outliers get flagged as a bad-pixel-map
           (BPM).
     \item \texttt{cr2res\_cal\_dark} combines the input DARK frames into a
-          master dark for
-          each setting and combination of DIT and NDIT. Hot and dead pixels get
-          saved as BPM.
+          master dark for each setting and combination of DIT and NDIT. Hot and
+          dead pixels get saved as BPM.
     \item \texttt{cr2res\_util\_calib} combines the raw FLAT frames and applies
           the	       previous master calibs.
-    \item \texttt{cr2res\_util\_trace} finds continuous regions on the
-          detectors that
-          have signal, and fits them with polynomials for the orders' mid-lines
-          and edges.
-          These polynomials we call a \emph{trace} and each order can have more
-          than one,
-          e.g. marking different heights along the slit.
+    \item \texttt{cr2res\_util\_trace} finds continuous regions on the detectors
+          that have signal, and fits them with polynomials for the orders'
+          mid-lines and edges. These polynomials we call a \emph{trace} and each
+          order can have more than one, e.g. marking different heights along the
+          slit.
     \item \texttt{cr2res\_util\_slit\_curv} uses the TraceWave-table (TW) from
-          the previous
-          step to measure the lines a FP-Etalon WAVE frame and determine how
-          the
-          slit tilt
-          changes within each detector-order. The result is stored in an
-          updated
-          TW.
+          the previous step to measure the lines a FP-Etalon WAVE frame and
+          determine how the slit tilt changes within each detector-order. The
+          result is stored in an updated TW.
     \item \texttt{cr2res\_util\_extract} can now use this TW to extract the
-          previously
-          calibrated flat-field frame, resulting in the blaze spectrum and a
-          model of
-          the frame.
+          previously calibrated flat-field frame, resulting in the blaze
+          spectrum and a model of the frame.
     \item This model contains all non-local features, meaning that
           \texttt{cr2res\_util\_normflat} can calculate the normalized
-          flat-field
-          by
-          dividing the model by the the original frame. Outliers in sensitivity
-          get
-          flagged in another BPM.
+          flat-field by dividing the model by the the original frame. Outliers
+          in sensitivity get flagged in another BPM.
     \item \texttt{cr2res\_util\_bpm\_merge} merges the BPMs from the different
           sources.
     \item \texttt{cr2res\_util\_calib} merges WAVE frames and applies the
-          previous
-          calibrations.
-    \item \texttt{cr2res\_util\_extract} collapses the result from the last
-          step into
-          1D spectra.
+          previous calibrations.
+    \item \texttt{cr2res\_util\_extract} collapses the result from the last step
+          into 1D spectra.
     \item \texttt{cr2res\_util\_wave} uses these spectra and the catalogue of
-          lines to
-          derive a wavelength solution, i.e.~a polynomial that translates
-          pixel-coordinates
-          into wavelength (nm). Available methods include cross-correlation and
-          line-fitting. This step can be repeated, for example to step-wise
-          increase the
-          polynomial degree.
+          lines to derive a wavelength solution, i.e.~a polynomial that
+          translates pixel-coordinates into wavelength (nm). Available methods
+          include cross-correlation and line-fitting. This step can be repeated,
+          for example to step-wise increase the polynomial degree.
     \item[13-15.] Analogous to steps 10-12 but for a FP-Etalon frame this time.
           The Etalon method of \texttt{cr2res\_util\_wave} will use the
-          zero-point
-          and dispersion from the incoming previous wavecal (in TW) and refine
-          the
-          higher degrees of the solution.
+          zero-point and dispersion from the incoming previous wavecal (in TW)
+          and refine the higher degrees of the solution.
 \end{enumerate}
