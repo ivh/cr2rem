@@ -1,6 +1,11 @@
 \section{Known Issues}
 \label{sec:knownissues}
 
-\red{\textit{Know issues, problems and limitations related to the \textbf{current
-    release} of the pipeline (if possible with a work-around) go here.}}
+% \red{\textit{Know issues, problems and limitations related to the \textbf{current
+%     release} of the pipeline (if possible with a work-around) go here.}}
 
+\subsubsection{BPM in L and M}
+
+The strong thermal emission present in the DARKs in L and M band makes the detection of bad pixels more difficult than in the shorter bands. It makes sense therefore to compare the derived BPM with one from e.g.~Y-band and vary the parameter \texttt{--bpm\_kappa}.
+
+Simply using the BPM from another band has also been found to work well.

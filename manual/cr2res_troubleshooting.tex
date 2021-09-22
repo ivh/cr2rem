@@ -4,11 +4,47 @@
 %\red{\textit{Hints on diagnosing problems and possible work-arounds or debug settings.}}
 
 
-\subsection{Checking the TW table}
+\subsection{Checking the TW}
 
-plot trace
+In case the extracted spectra do not match the expectation from the raw frames,
+the first thing is to check the traces in TW, i.e.~if the correct region gets
+extracted.
 
-plot tilt
+This can be most easily done by plotting the traces on top of a
+frame, either a raw frame, or an intermediate product like the nodding-combined
+image with positive and negative target spectra from positions A and B,
+respectively. Note that \texttt{cr2res\_obs\_nodding} also saves the traces that it derived for positions A and B.
 
-\subsection{Debug settings}
+Such a plot can be made with \texttt{cr2res\_util\_trace\_map} or one of the
+scripts from App.~\ref{sec:scripts}.
 
+Similarly, the slit-tilt in the TW should be checked if the resolution of
+spectra is lower than it should be.
+
+
+\subsection{Imperfect Order Traces}
+
+The tracing of spectral orders can be less reliable when telluric absorption
+very strong, like in some orders in L and M-bands. The parameters of
+\texttt{cr2res\_util\_trace} allow to change the amount of smoothing in x and
+y-direction, and the threshold for signal-detection. Varying these is the first
+step to improve the traces.
+
+Recipes that extract spectra into 1D have the parameter
+\texttt{--extract\_height} which allows you to ignore the edge-detected upper
+and lower polynomials and instead use a fixed extraction height, in pixels,
+centered on the mid-line. This can be used as a work-around when the mid-line of
+a trace is fine, but the edges are not.
+
+If for some reason the traces cannot be derived from FLATs at all,
+\texttt{cr2res\_util\_trace} can be used on the science frame itself. This works
+well if the target has a reasonably strong continuum.
+
+\subsection{Debug Settings}
+
+The environment variable \texttt{ESOREX\_MSG\_LEVEL} controls how much logging
+output is produced, and can take the values \texttt{off}, \texttt{error},
+\texttt{warning}, \texttt{info} and \texttt{debug}. If it is set to
+\texttt{debug}, the DRS not only produces extra logging output, but also dumps
+some intermediate output into FITS files named as \texttt{debug\_*.fits}. These
+are not documented, but can be self-explanatory.
