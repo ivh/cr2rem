@@ -164,7 +164,7 @@ $CALIB/cr2res_detlin_coeffs.fits       CAL_DETLIN_COEFFS
 
 It is then handed to the recipe like this:
 \begin{shell}[fontsize=\small]
-    # esorex cr2res_obs_nodding nodd.sof
+    %prompt esorex cr2res_obs_nodding nodd.sof
 \end{shell}
 
 What happens after frame-combination is that position B is subtracted from
@@ -355,34 +355,32 @@ Ch.~\ref{sec:calibscratch}. Some aspects are worth pointing out first:
     master dark for each setting and combination of DIT and NDIT. Hot and dead
     pixels get saved as BPM.
     \item \texttt{cr2res\_util\_calib} combines the raw FLAT frames and applies
-    the	       previous master calibs.
+    the	master dark and BPM.
     \item \texttt{cr2res\_util\_trace} finds continuous regions on the detectors
     that have signal, and fits them with polynomials for the orders' mid-lines
     and edges. These polynomials we call a \emph{trace} and each order can have
-    more than one, e.g. marking different heights along the slit.
+    more than one trace, e.g. marking different heights along the slit.
     \item \texttt{cr2res\_util\_slit\_curv} uses the TraceWave-table (TW) from
-    the previous step to measure the lines a FP-Etalon WAVE frame and determine
+    the previous step to measure the lines in an FPET frame to determine
     how the slit tilt changes within each detector-order. The result is stored
     in an updated TW.
     \item \texttt{cr2res\_util\_extract} can now use this TW to extract the
-    previously calibrated flat-field frame, resulting in the blaze spectrum and
-    a model of the frame.
+    calibrated flat-field frame from step 2. This rgives us the the blaze
+    spectrum (1D) and a 2D model of the frame.
     \item This model contains all non-local features, meaning that
-    \texttt{cr2res\_util\_normflat} can calculate the normalized flat-field by
-    dividing the model by the the original frame. Outliers in sensitivity get
-    flagged in another BPM.
-    \item \texttt{cr2res\_util\_calib} merges WAVE frames and applies the
-    previous calibrations.
-    \item \texttt{cr2res\_util\_extract} collapses the result from the last step
-    into 1D spectra.
-    \item \texttt{cr2res\_util\_genlines} creates the catalogue files for each
+    \texttt{cr2res\_util\_normflat} can calculate the \emph{normalized
+    flat-field} through dividing the model by the original frame. Outliers in
+    sensitivity get flagged as a BPM again.
+    \item Next we use \texttt{cr2res\_util\_calib} once more, this time to merge the UNE frames and apply the calibrations from previous steps.
+    \item Now \texttt{cr2res\_util\_extract} can collapse the result from the last step into 1D spectra.
+    \item \texttt{cr2res\_util\_genlines} creates the catalog files for each
     setting, based on the base catalog and selection files that flag wavelength
     regions as usable for the setting at hand.
-    \item[11.] \texttt{cr2res\_util\_wave} uses these spectra and the catalogue
-    of lines to derive a wavelength solution, i.e.~a polynomial that translates
-    pixel-coordinates into wavelength (nm). Available methods include
-    cross-correlation and line-fitting. This step can be repeated, for example
-    to step-wise increase the polynomial degree.
+    \item[11.] \texttt{cr2res\_util\_wave} uses the spectra and catalog from the
+    last two steps to derive a wavelength solution, i.e.~a polynomial
+    that translates pixel-coordinates into wavelength (nm). Available methods
+    include cross-correlation and line-fitting. This step can be repeated, for
+    example to step-wise increase the polynomial degree.
     \item[13-15.] Analogous to steps 7-11 but for an FPET frame this time. The
     Etalon method of \texttt{cr2res\_util\_wave} will use the zero-point from
     the incoming TW and refine the higher degrees of the solution.
