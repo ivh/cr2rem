@@ -24,7 +24,12 @@
     \begin{center}
 \includegraphics[width=0.85\linewidth]{extr_model.png}
 \end{center}
-\caption{\it foo}
+\caption{An example of the optimal extraction. \emph{Top:} The flat-fielded,
+combined, and pair-wise subtracted frame, with the BPM applied and zoomed-in to
+part of a single spectral order. \emph{Panel 2:} The model of the same region,
+reconstructed from the extracted spectrum and slit-function. \emph{Panel 3:} The
+difference between the two above, showing the residuals. \emph{Bottom:} The extracted
+spectrum itself, on the same x-axis as the panels above.}
 \label{fig:extrmodel}
 \end{figure}
 
@@ -54,13 +59,17 @@ a \emph{trace} from the TW table, the following steps are carried out:
     \item Once all swaths are extracted, the spectra from each are merged into
     one, with linearly in-/decreasing weights, as in \figref{fig:swaths}
     (right).
-    \item The spectrum and slit-functions are saved, and used to reconstruct a 2D model of the frame, saved separately.
+    \item The spectrum and slit-functions are saved, and used to reconstruct a
+    2D model of the frame, saved separately.
     \item The errors are estimated from the residual between data and model.
 \end{itemize}
 
-A major advantage of this extraction algorithm is that it makes not assumption about the slit-function, except that it does not change within a swath.
+A major advantage of this extraction algorithm is that it makes not assumption
+about the slit-function, except that it does not change within a swath.
 
-In addition, the model by design cannot approximate features that are not present in all pixels that contribute to a certain bin in the spectrum or the slit-function. This makes spectra robust towards e.g.~cosmic rays.
+In addition, the model by design cannot approximate features that are not
+present in all pixels that contribute to a certain bin in the spectrum or the
+slit-function. This makes spectra robust towards e.g.~cosmic rays.
 
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
@@ -77,19 +86,21 @@ first combined, then calibs applied, then subtracted, then extraction
 \subsection{Order Tracing}
 \label{sec:ordertrace}
 
-smooth in x.
-smooth strongly in y and compare to unsmoothed, threshold.
-unify clusters.
-label them.
-threshold minimum number od pix in cluster.
-fit polynomial to all pix.
-fit edges.
+smooth in x. smooth strongly in y and compare to unsmoothed, threshold. unify
+clusters. label them. threshold minimum number od pix in cluster. fit polynomial
+to all pix. fit edges.
 
 \subsection{Wavelength calibration}
 
-There are several ways to calibrate the wavelength scale, and each corresponds to one of the values that the parameter \texttt{-{}-wl\_method} of \texttt{cr2res\_util\_wave} can take.
+There are several ways to calibrate the wavelength scale, and each corresponds
+to one of the values that the parameter \texttt{-{}-wl\_method} of
+\texttt{cr2res\_util\_wave} can take.
 
-With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines gets made into a synthetic spectrum that is cross-correlated with the extracted lamp spectrum. Each detector-order is calibrated separately.
+With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines gets made into
+a synthetic spectrum that is cross-correlated with the extracted lamp spectrum.
+Each detector-order is calibrated separately.
 
-The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe,
-one for the UNE lamp frames, and the one for the FPET. The result from the former gets passed on to the latter, if both lamp inputs are present. If not, then only the appropriate method is applied.
+The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe, one
+for the UNE lamp frames, and the one for the FPET. The result from the former
+gets passed on to the latter, if both lamp inputs are present. If not, then only
+the appropriate method is applied.

@@ -28,3 +28,17 @@ ask Yves:
     parameters that are same for many recipes, document once or copy?
     
     util_plot works ?
+
+algorithms
+    nodding
+    exztact
+    tracing
+    wavecal
+    slitcurv
+
+
+
+reflex-screenshot
+explain sample dataset
+
+"this version is first public, new in a few weeks"
