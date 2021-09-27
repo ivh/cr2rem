@@ -122,15 +122,156 @@ future iteration of this document.
 
 \subsection{Optional Steps}
 
-combine BPMs
+\subsubsection{Refining the BPM}
 
-util\_splice
+Using only the BPM that comes from \texttt{cr2res\_cal\_dark} usually gives
+satisfactory results. However, pixels can be marked as bad also by detecting
+them as being outliers in their non-linearity behavior, or in their overall
+sensitivity as seen in the normalized flat-field.
+
+The recipe \texttt{cr2res\_util\_bpm\_merge} allows you to merge these BPMs into
+a combined BPM, to be used for subsequent reduction steps.
+\texttt{cr2res\_util\_bpm\_split} does the inverse, that is splitting a BPM into
+its original components. A pixel can be marked as bad in more than one way and
+this is being kept track of.
+
+\subsubsection{Splicing and Continuum Normalization}
+
+Give the blaze function and spectra from several settings to
+\texttt{cr2res\_util\_splice} and it will divide by the blaze and then resample
+the overlap-regions between all spectra from individual detector-orders to be
+able to do a weighted average. The result is one continuous spectrum.
+
+Please note that this recipe has not been tested extensively to produce reliable
+results in all cases. For now its data products should therefore be considered
+experimental and quality not ensure to be "science-ready".
 
 
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
-Following the steps outlined in Ch.~\ref{sec:stepcalib}, we can reduce the
-calibrations without relying on pre-existing reduction products like the TW.
+Following the steps outlined in Ch.~\ref{sec:stepcalib} and accompanying text,
+we can reduce the calibrations without relying on pre-existing reduction
+products like the TW. This is also the way the CalibDB is being assembled. The following gives example SOFs and recipe calls to reduce a single setting.
+
+First the SOFs:
+\begin{shell}[fontsize=\footnotesize]
+%prompt cat 01_cr2res_cal_dark.sof
+CRIRE.2021-09-16T20:58:23.580.fits      DARK     
+CRIRE.2021-09-16T20:58:40.524.fits      DARK     
+CRIRE.2021-09-16T20:58:57.146.fits      DARK     
+CRIRE.2021-09-16T20:59:13.835.fits      DARK     
+CRIRE.2021-09-16T20:59:30.110.fits      DARK     
+CRIRE.2021-09-16T20:59:46.468.fits      DARK     
+CRIRE.2021-09-16T21:00:08.583.fits      DARK     
+CRIRE.2021-09-16T21:02:14.863.fits      DARK     
+CRIRE.2021-09-16T21:04:21.006.fits      DARK     
+CRIRE.2021-09-16T21:06:27.987.fits      DARK     
+CRIRE.2021-09-16T21:06:54.976.fits      DARK     
+CRIRE.2021-09-16T21:07:21.609.fits      DARK     
+CRIRE.2021-09-16T21:07:48.034.fits      DARK     
+CRIRE.2021-09-16T21:07:57.532.fits      DARK     
+CRIRE.2021-09-16T21:08:06.919.fits      DARK     
+
+%prompt cat 02_cr2res_util_calib.sof
+../cr2res_cal_detlin_coeffs.fits CAL_DETLIN_COEFFS
+CRIRE.2021-09-16T20:49:23.778.fits      FLAT     
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_3_bpm.fits CAL_DARK_BPM
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_3_master.fits CAL_DARK_MASTER
+
+%prompt cat 03_cr2res_util_trace.sof
+02_cr2res_util_calib_out/cr2res_util_calib_calibrated_collapsed.fits    UTIL_CALIB
+
+%prompt cat 04_cr2res_util_slit_curv.sof
+CRIRE.2021-09-16T20:54:28.992.fits      WAVE_FPET
+03_cr2res_util_trace_out/cr2res_util_calib_calibrated_collapsed_tw.fits  CAL_FLAT_TW
+
+%prompt cat 05_cr2res_util_extract.sof
+02_cr2res_util_calib_out/cr2res_util_calib_calibrated_collapsed.fits UTIL_CALIB
+04_cr2res_util_slit_curv_out/cr2res_util_calib_calibrated_collapsed_tw_tw.fits UTIL_SLIT_CURV_TW
+#03_cr2res_util_trace_out/cr2res_util_calib_calibrated_collapsed_tw.fits UTIL_TRACE_TW
+
+%prompt cat 06_cr2res_util_normflat.sof
+02_cr2res_util_calib_out/cr2res_util_calib_calibrated_collapsed.fits UTIL_CALIB
+05_cr2res_util_extract_out/cr2res_util_calib_calibrated_collapsed_extrModel.fits UTIL_SLIT_MODEL
+
+%prompt cat 07_cr2res_util_calib.sof
+../cr2res_cal_detlin_coeffs.fits CAL_DETLIN_COEFFS
+CRIRE.2021-09-16T20:50:11.966.fits      WAVE_UNE 
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_20_bpm.fits CAL_DARK_BPM
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_20_master.fits CAL_DARK_MASTER
+06_cr2res_util_normflat_out/cr2res_util_normflat_Open_master_flat.fits CAL_FLAT_MASTER
+
+%prompt cat 08_cr2res_util_extract.sof
+07_cr2res_util_calib_out/cr2res_util_calib_calibrated_collapsed.fits UTIL_CALIB
+04_cr2res_util_slit_curv_out/cr2res_util_calib_calibrated_collapsed_tw_tw.fits UTIL_SLIT_CURV_TW
+
+%prompt cat 09_cr2res_util_genlines.sof
+../lines_u_sarmiento.txt EMISSION_LINES_TXT
+une_sel.dat LINES_SELECTION_TXT
+
+%prompt
+%prompt cat 11_cr2res_util_wave.sof
+08_cr2res_util_extract_out/cr2res_util_calib_calibrated_collapsed_extr1D.fits UTIL_EXTRACT_1D
+04_cr2res_util_slit_curv_out/cr2res_util_calib_calibrated_collapsed_tw_tw.fits UTIL_SLIT_CURV_TW
+09_cr2res_util_genlines_out/lines_u_sarmiento_une_sel.fits EMISSION_LINES
+
+%prompt cat 12_cr2res_util_wave.sof
+08_cr2res_util_extract_out/cr2res_util_calib_calibrated_collapsed_extr1D.fits UTIL_EXTRACT_1D
+11_cr2res_util_wave_out/cr2res_util_calib_calibrated_collapsed_extr1D_tw.fits UTIL_SLIT_CURV_TW
+09_cr2res_util_genlines_out/lines_u_sarmiento_une_sel.fits EMISSION_LINES
+
+%prompt cat 13_cr2res_util_calib.sof
+../cr2res_cal_detlin_coeffs.fits CAL_DETLIN_COEFFS
+CRIRE.2021-09-16T20:54:28.992.fits      WAVE_FPET
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_120_bpm.fits CAL_DARK_BPM
+01_cr2res_cal_dark_out/cr2res_cal_dark_Y1028_120_master.fits CAL_DARK_MASTER
+06_cr2res_util_normflat_out/cr2res_util_normflat_Open_master_flat.fits CAL_FLAT_MASTER
+
+%prompt cat 14_cr2res_util_extract.sof
+13_cr2res_util_calib_out/cr2res_util_calib_calibrated_collapsed.fits UTIL_CALIB
+11_cr2res_util_wave_out/cr2res_util_calib_calibrated_collapsed_extr1D_tw.fits UTIL_SLIT_CURV_TW
+
+%prompt cat 15_cr2res_util_wave.sof
+14_cr2res_util_extract_out/cr2res_util_calib_calibrated_collapsed_extr1D.fits UTIL_EXTRACT_1D
+11_cr2res_util_wave_out/cr2res_util_calib_calibrated_collapsed_extr1D_tw.fits UTIL_WAVE_TW
+\end{shell}
+
+The commands to execute the steps are:
+\begin{shell}[fontsize=\footnotesize]
+esorex --log-file=01_cr2res_cal_dark.log --output-dir=01_cr2res_cal_dark_out cr2res_cal_dark 
+  01_cr2res_cal_dark.sof
+esorex --log-file=02_cr2res_util_calib.log --output-dir=02_cr2res_util_calib_out 
+  cr2res_util_calib --collapse="MEAN" 02_cr2res_util_calib.sof
+esorex --log-file=03_cr2res_util_trace.log --output-dir=03_cr2res_util_trace_out    
+  cr2res_util_trace 03_cr2res_util_trace.sof
+esorex --log-file=04_cr2res_util_slit_curv.log --output-dir=04_cr2res_util_slit_curv_out
+  cr2res_util_slit_curv 04_cr2res_util_slit_curv.sof
+esorex --log-file=05_cr2res_util_extract.log --output-dir=05_cr2res_util_extract_out
+  cr2res_util_extract --oversample=4 --swath_width=800 --smooth_slit=3 -smooth_spec=2.0E-7 
+  05_cr2res_util_extract.sof
+esorex --log-file=06_cr2res_util_normflat.log --output-dir=06_cr2res_util_normflat_out 
+  cr2res_util_normflat 06_cr2res_util_normflat.sof
+esorex --log-file=07_cr2res_util_calib.log --output-dir=07_cr2res_util_calib_out 
+  cr2res_util_calib --collapse="MEAN" --subtract_nolight_rows=TRUE 07_cr2res_util_calib.sof
+esorex --log-file=08_cr2res_util_extract.log --output-dir=08_cr2res_util_extract_out  
+  cr2res_util_extract --smooth_slit=3 --swath_width=800 --oversample=4 
+  08_cr2res_util_extract.sof
+esorex --log-file=09_cr2res_util_genlines.log  --output-dir=09_cr2res_util_genlines_out  
+  cr2res_util_genlines 09_cr2res_util_genlines.sof
+esorex --log-file=11_cr2res_util_wave.log --output-dir=11_cr2res_util_wave_out 
+  cr2res_util_wave --wl_method=XCORR --wl_degree=0 --keep --wl_err=0.1 --fallback 
+11_cr2res_util_wave.sof
+esorex --log-file=12_cr2res_util_wave.log --output-dir=12_cr2res_util_wave_out 
+  cr2res_util_wave --wl_method=XCORR --wl_degree=2 --wl_err=0.03 --fallback 
+  12_cr2res_util_wave.sof
+esorex --log-file=13_cr2res_util_calib.log --output-dir=13_cr2res_util_calib_out 
+  cr2res_util_calib --collapse="MEAN" 13_cr2res_util_calib.sof
+esorex --log-file=14_cr2res_util_extract.log --output-dir=14_cr2res_util_extract_out 
+  cr2res_util_extract --swath_width=800 --oversample=4 --smooth_slit=3 
+  14_cr2res_util_extract.sof
+esorex --log-file=15_cr2res_util_wave.log --output-dir=15_cr2res_util_wave_out 
+  cr2res_util_wave --wl_method=ETALON --wl_degree=4 --fallback 15_cr2res_util_wave.sof
+\end{shell}
 
 
 

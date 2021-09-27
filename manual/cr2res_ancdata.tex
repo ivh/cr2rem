@@ -33,3 +33,54 @@ Classification keywords: \texttt{PRO.CATG = LINE\_CATALOG} \\
 \end{table}
 
 An example is shown in \tabref{tab:line-catalog}.
+
+
+tom@neon:210914_calibs$ find ../21*calob -name \*fits | xargs dfits | fitsort DPR.TYPE DPR.CATG PRO.CATG | cut -f2- | sort -u
+                                                                   
+                                        CAL_DARK_BPM               
+                                        CAL_DARK_MASTER            
+                                        CAL_DETLIN_COEFFS          
+                                        EMISSION_LINES             
+                                        UTIL_CALIB                 
+                                        UTIL_EXTRACT_1D            
+                                        UTIL_MASTER_FLAT           
+                                        UTIL_NORM_BPM              
+                                        UTIL_SLIT_CURV_MAP         
+                                        UTIL_SLIT_CURV_TW          
+                                        UTIL_SLIT_FUNC             
+                                        UTIL_SLIT_MODEL            
+                                        UTIL_TRACE_TW              
+                                        UTIL_WAVE_EXTRACT_1D       
+                                        UTIL_WAVE_LINES_DIAGNOSTICS
+                                        UTIL_WAVE_MAP              
+                                        UTIL_WAVE_TW               
+DARK                    CALIB                                      
+DARK                    TEST                                       
+DPR.TYPE                DPR.CATG        PRO.CATG                   
+FLAT                    CALIB                                      
+LAMP,METROLOGY          CALIB                                      
+WAVE,ABSORPTION-CELL    CALIB                                      
+WAVE,ABSORPTION_N2O     CALIB                                      
+WAVE,ABSORPTION_SGC     CALIB                                      
+WAVE,FPET               CALIB                                      
+WAVE,LAMP               CALIB                                      
+WAVE,UNE                CALIB                                      
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+tom@neon:pCOMM$ find $(ls -d 210[7-9]* | grep -v calibs | grep -v calob) -name CR\*fits | xargs dfits | fitsort DPR.TYPE DPR.CATG PRO.CATG | cut -f2- | sort -u
+                                        UTIL_CALIB     
+                                        UTIL_EXTRACT_1D
+                                        UTIL_SLIT_FUNC 
+                                        UTIL_SLIT_MODEL
+DARK                    CALIB                          
+DARK                    TEST                           
+DPR.TYPE                DPR.CATG        PRO.CATG       
+FLAT                    CALIB                          
+OBJECT                  SCIENCE                        
+SKY                     SCIENCE                        
+WAVE,ABSORPTION_N2O     CALIB                          
+WAVE,FPET               CALIB                          
+WAVE,LAMP               CALIB                          
+WAVE,LAMP               TEST                           
+WAVE,UNE                CALIB                          
