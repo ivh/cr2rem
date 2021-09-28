@@ -1,12 +1,5 @@
 MANUAL:
 
-figures for
-    trace
-    tilt
-
-update flow diagrams
-    right UNE & FPET CATGs as input
-
 fine to use TW from calibdb in sci reduction
 
 expectation with calibs from calibdb. and own calibs.
@@ -23,10 +16,7 @@ OTHER TODO:
     check bpm in L and M
 
 ask Yves:
-    take PRO.TYPE & CATG from cr2res_dfs.h ?
     what about table with DPR/DO keys for all raw/
-    parameters that are same for many recipes, document once or copy?
-    
     util_plot works ?
 
 algorithms

@@ -66,7 +66,7 @@ Finally, if more than one \textit{set-of-frames} is given on the command-line
 
 
 \subsection{Calibration, made easy}
-
+\label{sec:simcalexpl}
 This example follows the data flow described in \ref{sec:simplecalib}. It makes
 use of a pre-existing TW-table, for example the one from the CalibDB, for order
 traces and slit-tilt. All data needs to match in spectrograph setting.
@@ -82,15 +82,38 @@ bad. The default values should give good results.
 
 Next are the FLATs.
 \begin{shell}[fontsize=\small]
-  %prompt cat flat.sof
+%prompt cat flats.sof
 $RAW/flat1.fits
 $RAW/flat2.fits
 $RAW/flat3.fits
-$CALIB/dark_bpm.fits CAL_DARK_BPM
+$CALIB/dark_bpm.fits    CAL_DARK_BPM
 $CALIB/dark_master.fits CAL_DARK_MASTER
-$CALIB/tw.fits UTIL_WAVE_TW
-\end{shell}  
+$CALIB/tw.fits          UTIL_WAVE_TW
+cr2res_detlin_coeffs.fits  CAL_DETLIN_COEFFS
 
+%prompt esorex cr2res_cal_flat flats.sof
+\end{shell}
+The main data product is the normalized flat-field (\verb!PRO.CATG=CAL_FLAT_MASTER!).
+
+
+For wavelength-calibration, both the UNE and FPET frames can be provided at once:
+\begin{shell}[fontsize=\small]
+%prompt cat wave.sof
+$RAW/une.fits
+$RAW/fpet.fits
+$CALIB/dark_bpm.fits    CAL_DARK_BPM
+$CALIB/dark_2s_master.fits CAL_DARK_MASTER
+$CALIB/tw.fits          UTIL_WAVE_TW
+$CALIB/cr2res_detlin_coeffs.fits  CAL_DETLIN_COEFFS
+
+%prompt esorex cr2res_cal_wave wave.sof
+\end{shell}
+This produces a new TW, with updated wavelength solutions and retaining information like the order traces from the input TW.
+
+In this simplified reduction, we rely on a pre-existing TW for traces and slit-tilt, and pre-made non-linearity correction. This normally should not negatively impact the quality of the data products, especially when metrology is used to increase the repeatability of the instrument.
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
 \subsection{Examples of science reductions}
 
 \subsubsection{Nodding}
@@ -141,7 +164,29 @@ above 10 are appropriate when the slit-illumination changes sharply.
 
 \subsubsection{Staring}
 
-\verb!cr2res_obs_staring! is very similar to \verb!cr2res_obs_nodding!, except the nodding part. Thus, a master-dark should be supplied in the SOF, in addition to t
+\verb!cr2res_obs_staring! is very similar to \verb!cr2res_obs_nodding!, except
+the nodding part. Thus, a master-dark should be supplied in the SOF, in addition
+to the other files:
+\begin{shell}[fontsize=\small]
+%prompt cat stare.sof
+$RAW/stare_exp1.fits        OBS_STARING_JITTER
+$RAW/stare_exp2.fits        OBS_STARING_JITTER
+$RAW/stare_exp3.fits        OBS_STARING_JITTER
+$RAW/stare_exp4.fits        OBS_STARING_JITTER
+$RAW/stare_exp5.fits        OBS_STARING_JITTER
+$CALIB/K2192_masterflat.fits                  CAL_MASTER_FLAT
+$CALIB/K2192_tw.fits                          UTIL_WAVE_TW
+$CALIB/cr2res_cal_dark_K2192_bpm.fits         CAL_DARK_BPM
+$CALIB/cr2res_cal_dark_K2192_30s_master.fits  CAL_DARK_MASTER
+$CALIB/cr2res_detlin_coeffs.fits              CAL_DETLIN_COEFFS
+\end{shell}  
+Ideally, the DARK frames used match the DIT of the science frames.
+
+If the target is always close to the center of the slit, one can decrease the extraction height for speedup.
+\begin{shell}[fontsize=\small]
+  %prompt esorex --extract_height=50 cr2res_obs_staring stare.sof
+\end{shell}  
+
 
 \subsubsection{Generic Offset}
 
@@ -287,15 +332,14 @@ esorex --log-file=03_cr2res_util_trace.log --output-dir=03_cr2res_util_trace_out
 esorex --log-file=04_cr2res_util_slit_curv.log --output-dir=04_cr2res_util_slit_curv_out
   cr2res_util_slit_curv 04_cr2res_util_slit_curv.sof
 esorex --log-file=05_cr2res_util_extract.log --output-dir=05_cr2res_util_extract_out
-  cr2res_util_extract --oversample=4 --swath_width=800 --smooth_slit=3 -smooth_spec=2.0E-7 
+  cr2res_util_extract --smooth_slit=3 -smooth_spec=2.0E-7 
   05_cr2res_util_extract.sof
 esorex --log-file=06_cr2res_util_normflat.log --output-dir=06_cr2res_util_normflat_out 
   cr2res_util_normflat 06_cr2res_util_normflat.sof
 esorex --log-file=07_cr2res_util_calib.log --output-dir=07_cr2res_util_calib_out 
   cr2res_util_calib --collapse="MEAN" --subtract_nolight_rows=TRUE 07_cr2res_util_calib.sof
 esorex --log-file=08_cr2res_util_extract.log --output-dir=08_cr2res_util_extract_out  
-  cr2res_util_extract --smooth_slit=3 --swath_width=800 --oversample=4 
-  08_cr2res_util_extract.sof
+  cr2res_util_extract --smooth_slit=3  08_cr2res_util_extract.sof
 esorex --log-file=09_cr2res_util_genlines.log  --output-dir=09_cr2res_util_genlines_out  
   cr2res_util_genlines 09_cr2res_util_genlines.sof
 esorex --log-file=11_cr2res_util_wave.log --output-dir=11_cr2res_util_wave_out 
@@ -307,15 +351,39 @@ esorex --log-file=12_cr2res_util_wave.log --output-dir=12_cr2res_util_wave_out
 esorex --log-file=13_cr2res_util_calib.log --output-dir=13_cr2res_util_calib_out 
   cr2res_util_calib --collapse="MEAN" 13_cr2res_util_calib.sof
 esorex --log-file=14_cr2res_util_extract.log --output-dir=14_cr2res_util_extract_out 
-  cr2res_util_extract --swath_width=800 --oversample=4 --smooth_slit=3 
-  14_cr2res_util_extract.sof
+  cr2res_util_extract --smooth_slit=3 14_cr2res_util_extract.sof
 esorex --log-file=15_cr2res_util_wave.log --output-dir=15_cr2res_util_wave_out 
   cr2res_util_wave --wl_method=ETALON --wl_degree=4 --fallback 15_cr2res_util_wave.sof
 \end{shell}
 
 
-
-
+A few notes on the recipe parameters used:
+\begin{enumerate}
+  \item[2.] Remember, without \verb!--collapse! the recipe would loop over the
+  flat-field frames, dark-subtracting each, instead of doing so on the combined
+  frame.
+  \item[5.] Extracting the flat-field frames, we know the slit is evenly
+  illuminated, so we can apply some extra smoothing along the slit. The slight
+  smoothing (regularization, actually) of the blaze spectrum is necessary
+  because there are column-by-column variations in the detectors that would
+  otherwise become part of the blaze, not part of the normalized flat-field, as
+  inteded.
+  \item[7.] For short exposures the detector background-level can vary
+  significantly, so we use \verb! --subtract_nolight_rows! to somewhat improve
+  on sub-optimal dark-subtraction.
+  \item[9.] The first pass of cross-correlation with a sufficiently large
+  search-radius (\verb!--wl_err!). \verb!--wl_degree=0! means that only a shift
+  in the zero-point is allowed, which means that we have to \verb!--keep! the
+  higher degrees of the input solution polynomial.
+  \item[11.] In the second pass we decrease the search radius and increase the
+  degree.
+  \item[15.] The numerous and regular lines of the FPET allow a polynomial with
+  even higher degree.
+  \item[9,11,15.] Without \verb!--fallback! the output would, in case of an
+  error in a detector-order, not contain a solution for this order, thus
+  precluding it from subsequent steps. With this option, the input solution gets
+  propagated into the output, in case calibration fails.
+\end{enumerate}
 %%%%%%%%%%%%%%
 
 %\subsubsection{Getting Started with \gasgano{}}

@@ -79,22 +79,34 @@ collapsed along the slit, i.e. summed-up ADU. Errors are absolute.
 \label{sec:algorithms-recipes}
 
 
-\subsection{Nodding}
-\label{sec:nodd}
+%\subsection{Nodding}
+%\label{sec:nodd}
+%Nodding sequence \texttt{SEQ.NABCYCLES} \texttt{SEQ.NODPOS}
+%first combined, then calibs applied, then subtracted, then extraction
 
-Nodding sequence \texttt{SEQ.NABCYCLES}
-\texttt{SEQ.NODPOS}
-
-first combined, then calibs applied, then subtracted, then extraction
-
-\subsection{Order Tracing}
+\subsubsection{Order Tracing}
 \label{sec:ordertrace}
 
-smooth in x. smooth strongly in y and compare to unsmoothed, threshold. unify
-clusters. label them. threshold minimum number od pix in cluster. fit polynomial
-to all pix. fit edges.
+As written above, by a \emph{trace}, we mean a polynomial, in pixel-coordinates of a single detector, that follows the mid-line of a spectral order. And two more polynomials for the upper and lower edges of the slit projection, as shown in Fig.~\ref{fig:flat_trace}.
 
-\subsection{Wavelength calibration}
+The way this is derived is by first determining which pixels in a FLAT frame contain signal, and which don't. To that end the image is smoothed first horizontally, then vertically, and then compared to the unsmoothed frame via thresholding.
+
+After that it is determined which spectral order the pixels belong to. For this purpose, the mean Y-coordinate for each order is present in the raw file headers.
+
+Lastly, the pixels from the same order are fitted with a polynomial.
+
+%smooth in x. smooth strongly in y and compare to unsmoothed, threshold. unify
+%clusters. label them. threshold minimum number od pix in cluster. fit
+%%polynomial to all pix. fit edges.
+
+\subsubsection{Measuring the slit-tilt}
+\label{sec:tilt}
+
+The recipe \verb!cr2res_util_slit_curv! takes as input a TW, for the order traces, and an FPET frame. The algorithm finds the etalon peaks, which give good coverage in each spectral order.
+
+More detail will be provided in a future iteration of this document.
+
+\subsubsection{Wavelength calibration}
 
 There are several ways to calibrate the wavelength scale, and each corresponds
 to one of the values that the parameter \texttt{-{}-wl\_method} of
