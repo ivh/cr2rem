@@ -3,12 +3,7 @@
 
 %\red{\textit{Cookbook-like description of pipeline recipes and their usage}}
 
-
-\subsection{Executing Recipes}
-\label{sec:exec-recipes-quick}
-
-
-\subsubsection{Getting Started with \esorex{}}
+\subsection{Getting Started with \esorex{}}
 \label{sec:esorex-quick}
 
 \textit{\esorex{}} is a command-line tool which can be used to execute the
@@ -70,7 +65,7 @@ Finally, if more than one \textit{set-of-frames} is given on the command-line
 \textit{\esorex{}} concatenates them into a single \textit{set-of-frames}.
 
 
-\subsubsection{Calibration, made easy}
+\subsection{Calibration, made easy}
 
 This example follows the data flow described in \ref{sec:simplecalib}. It makes
 use of a pre-existing TW-table, for example the one from the CalibDB, for order
@@ -100,9 +95,53 @@ $CALIB/tw.fits UTIL_WAVE_TW
 
 \subsubsection{Nodding}
 
-\ldots
+An example SOF and esorex-call for \verb!cr2res_obs_nodding! were already shown
+in Ch.~\ref{sec:sci-reduc} and there really is not much more to it. Note that
+there is no master-dark provided, and indeed it is not recommended doing so,
+because it likely worsens the results compared to relying on the subtraction of
+A and B frames from each other for removing detector features and background.
+
+An aspect to consider is how much of an observed nodding sequence is given to
+the recipe at a time. It will combine all the A-frames and all B-frames (saved
+as \verb!PRO.CATG=OBS_NODDING_COMBINED[AB]!), then do the pair-wise subtraction
+and spectrum extraction, resulting in a single set of spectra (from all
+detector-orders) for A, and one for B (\verb!OBS_NODDING_EXTRACT[AB]!).
+Therefore, if time-evolution plays a role in the science, a set of data might
+need to be split up and reduced individually. An equal number of frames for
+positions A and B always needs to be supplied.
+
+The recipe also produces spectra that are combined from A and B
+(\verb!OBS_NODDING_EXTRACT_COMB!). This naturally involves resampling and
+relying on the wavelength scale, because the tilted slit makes the spectral
+binning different between the top and bottom halves of the slit. This is why the
+spectra \emph{before} this combination are considered the primary data product.
+Note also that the combination is done as an average, which has to be taken into
+account as a factor of 2 when interpreting the level of ADU.
+
+The jitter around positions A and B does not need to be treated explicitly by
+the DRS. Instead it makes use of the fact that the extraction algorithm
+(cf.~\ref{sec:extract}) can handle arbitrary slit-illumination functions, in
+this case the combined frame simply looks like multiple "stars" along the slit.
+
+A few parameters can be tweaked to potentially improve results. If there remain
+detector features that correlate with the detector columns in the combined
+frames, as has sometimes been found to be the case,
+\verb!--subtract_nolight_rows! can be set to \verb!TRUE!. This makes use of the
+bottom 40 rows of the detectors which are intentionally baffled to not receive
+light. A vertical median over these rows is calculated and the result subtracted
+from the image row-by-row.
+
+The oversampling of the slit-function can be changed via
+\verb!--extract_oversample!. This affects linearly the calculation effort of the
+extraction, which in turn is the bulk of the total recipe runtime, so that
+increasing the oversampling from a factor of 5 to 10 means the reduction takes
+twice as long. In general, values below 5 give suboptimal results and values
+above 10 are appropriate when the slit-illumination changes sharply.
+
 
 \subsubsection{Staring}
+
+\verb!cr2res_obs_staring! is very similar to \verb!cr2res_obs_nodding!, except the nodding part. Thus, a master-dark should be supplied in the SOF, in addition to t
 
 \subsubsection{Generic Offset}
 
@@ -144,14 +183,15 @@ able to do a weighted average. The result is one continuous spectrum.
 
 Please note that this recipe has not been tested extensively to produce reliable
 results in all cases. For now its data products should therefore be considered
-experimental and quality not ensure to be "science-ready".
+experimental and quality not ensured to be "science-ready".
 
 
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
 Following the steps outlined in Ch.~\ref{sec:stepcalib} and accompanying text,
 we can reduce the calibrations without relying on pre-existing reduction
-products like the TW. This is also the way the CalibDB is being assembled. The following gives example SOFs and recipe calls to reduce a single setting.
+products like the TW. This is also the way the CalibDB is being assembled. The
+following gives example SOFs and recipe calls to reduce a single setting.
 
 First the SOFs:
 \begin{shell}[fontsize=\footnotesize]
@@ -209,7 +249,7 @@ CRIRE.2021-09-16T20:50:11.966.fits      WAVE_UNE
 ../lines_u_sarmiento.txt EMISSION_LINES_TXT
 une_sel.dat LINES_SELECTION_TXT
 
-%prompt
+%prompt # there is no step 10
 %prompt cat 11_cr2res_util_wave.sof
 08_cr2res_util_extract_out/cr2res_util_calib_calibrated_collapsed_extr1D.fits UTIL_EXTRACT_1D
 04_cr2res_util_slit_curv_out/cr2res_util_calib_calibrated_collapsed_tw_tw.fits UTIL_SLIT_CURV_TW
