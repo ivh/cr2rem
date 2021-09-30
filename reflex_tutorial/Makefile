@@ -2,7 +2,7 @@
 # Builds the CR2RES Reflex tutorial from latex sources
 #
 
-instrument = cr2res
+instrument = cr2re
 
 version = $(shell grep '\\dmdDocVersion' $(TEX_MASTER).tex | \
             head -n 1 | sed -e 's/.*{\(.*\)}/\1/' )

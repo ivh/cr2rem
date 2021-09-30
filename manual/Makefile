@@ -2,7 +2,7 @@
 # Builds the CR2RES pipeline manual from latex sources
 #
 
-instrument = cr2res
+instrument = cr2re
 
 version = $(shell grep '\\newcommand{\\release}' $(TEX_SOURCES) | \
             head -n 1 | sed -e 's/.*{\(.*\)}/\1/' )
