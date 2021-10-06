@@ -21,6 +21,7 @@ ask Yves:
     add smooth-spec to obs recipes and cal_flat, cal_wave?
     add extract_slit_frac to obs_staring?
     add --order to obs-recipes?
+    default --oversample increase? can quick-look use different than default?
 
 algorithms
     nodding

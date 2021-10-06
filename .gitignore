@@ -9,6 +9,6 @@
 *.blg
 *.brf
 *.idx
-cr2res-pipeline-manua*.pdf
-cr2res-reflex-tutoria*.pdf
+*-pipeline-manua*.pdf
+*-reflex-tutoria*.pdf
 reflex_tutorial/pipedoc/
