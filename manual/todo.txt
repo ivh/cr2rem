@@ -1,16 +1,16 @@
 MANUAL:
 
-fine to use TW from calibdb in sci reduction
+WL are vacuum!
+
+other extraction methods
 
 expectation with calibs from calibdb. and own calibs.
 
-order numbering, zp_order
-
 wavecal, expectaions on absolute and relative performance.
 
-python-scripts
+util_extract --slit_frac is very handy!
 
-how to make calibdb
+use detlin for flat as well, when using for science, because blaze!
 
 OTHER TODO: 
     check bpm in L and M
@@ -18,6 +18,9 @@ OTHER TODO:
 ask Yves:
     what about table with DPR/DO keys for all raw/
     util_plot works ?
+    add smooth-spec to obs recipes and cal_flat, cal_wave?
+    add extract_slit_frac to obs_staring?
+    add --order to obs-recipes?
 
 algorithms
     nodding
@@ -26,9 +29,14 @@ algorithms
     wavecal
     slitcurv
 
+Tasks for Alexis/Linn/Ansgar
+    compare normflat with and without detlin
+    does oversample depend on height?
 
+Florian:
+Comments for the pipeline manual draft.
+Output - we have flux, error and wavelength per order and detector.
 
-reflex-screenshot
-explain sample dataset
+(1) If I remember correctly, the flux is per DIT (averaged over all exposures and NDITs) in ADU. The gain factor is not included. What about the error vector?
 
-"this version is first public, new in a few weeks"
+(2) It would be very helpful to have a formula of how to calculate the S/N ratio of a single exposure (DITxNDIT) using flux and error, and a formula of how to calculate the S/N of the combined spectrum (NEXPO x NABCYCLES).

@@ -171,10 +171,11 @@ It is then handed to the recipe like this:
     %prompt esorex cr2res_obs_nodding nodd.sof
 \end{shell}
 
-What happens after frame-combination is that position B is subtracted from
-position A and the so background-subtracted spectra get extracted into 1D
-arrays, using the supplied TW-table for information on order trace, slit-tilt
-and wavelength calibration.
+What happens first is the combination of frames, A and B separately, and that
+the calibrations are applied. Then position B is subtracted from position A, and
+vice-versa. The so background-subtracted spectra get extracted into 1D arrays,
+using the supplied TW-table for information on order trace, slit-tilt and
+wavelength calibration.
 
 The other observing recipes accept very similarly looking SOFs, the full list
 is:
