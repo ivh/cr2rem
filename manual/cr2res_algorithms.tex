@@ -53,7 +53,7 @@ a \emph{trace} from the TW table, the following steps are carried out:
     \item Iteratively approximate the swath surface by two vectors: the spectrum
     along the mid-line and the slit-function along the slit projection, taking
     its changeing tilt into accont. The slit function is oversampled by a factor
-    \texttt{-{}-extract\_oversample}.
+    \verb!--extract_oversample!.
     \item Step by a half swath-width to the next one, and repeat. This way
     swaths overlap fully and the order effectively gets extracted twice.
     \item Once all swaths are extracted, the spectra from each are merged into
@@ -71,8 +71,18 @@ In addition, the model by design cannot approximate features that are not
 present in all pixels that contribute to a certain bin in the spectrum or the
 slit-function. This makes spectra robust towards e.g.~cosmic rays.
 
+Fig.~\ref{fig:varyovers} shows the effect of the \textbf{slit-function
+oversampling}, via  the parameter \verb!--extract_oversample!. As mentioned
+before, this factor linearly affects the computation time. The amount of
+oversampling necessary depends on how quickly the mid-line of a spectral order
+changes with respect to detector rows, and how sharply the slit-function
+changes. The default value of $5$ is enough in many situations, but clearly
+leaves artifacts in the example shown, which was chosen to be close to
+worst-case, requiring an oversampling $>12$ for optimal results.
+
 \putgraph{.8\linewidth}{varyoversample.pdf}{varyovers}{Example spectrum,
- extracted with varying oversampling. In this case, oversampling of 12 is needed to no longer see "spiky" artifacts.}
+ extracted with varying oversampling, and vertically offset for plotting.
+ In this case, oversampling of 12 is needed to no longer see "spiky" artifacts.}
 
 \subsection{Errors and Signal-to-Noise}
 \label{sec:errors}
