@@ -21,8 +21,8 @@ A look at the echellogram makes the most important aspects apparent:
 
 \begin{itemize}
   \item There are up to 9 spectral orders (depending on band).
-  \item The orders are spaced unevenly over the detectors,
-  \item and not perfectly horizontal.
+  \item The orders are spaced unevenly over the detectors.
+  \item The orders are not perfectly horizontal.
   \item The projection of the slit is tilted, i.e. not aligned with detector
     columns. And the tilt changes with wavelength.
 \end{itemize}
@@ -31,6 +31,11 @@ This in essence made necessary the development of a new DRS from scratch, around
 robust algorithms for tracing the spectral orders, characterizing the slit tilt
 and then making use of this information for optimally extracting the spectra
 into 1D-arrays \cite{2021A&A...646A..32P}.
+
+Within each order, wavelength increases from left to right over the three
+detectors. Spectral orders with shorter (longer) wavelengths are located further
+towards the top (bottom) of the pixel grid, i.e.~at higher (lower) Y pixel
+values.
 
 In order to increase the validity of daytime calibrations for observations from
 the night, a metrology system is in place that iterates on the position of the

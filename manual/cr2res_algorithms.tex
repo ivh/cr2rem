@@ -72,13 +72,14 @@ present in all pixels that contribute to a certain bin in the spectrum or the
 slit-function. This makes spectra robust towards e.g.~cosmic rays.
 
 Fig.~\ref{fig:varyovers} shows the effect of the \textbf{slit-function
-oversampling}, via  the parameter \verb!--extract_oversample!. As mentioned
-before, this factor linearly affects the computation time. The amount of
-oversampling necessary depends on how quickly the mid-line of a spectral order
-changes with respect to detector rows, and how sharply the slit-function
-changes. The default value of $5$ is enough in many situations, but clearly
-leaves artifacts in the example shown, which was chosen to be close to
-worst-case, requiring an oversampling $>12$ for optimal results.
+oversampling}, that can be changed via  the parameter
+\verb!--extract_oversample!. As mentioned before, this factor linearly affects
+the computation time. The amount of oversampling necessary depends on how
+quickly the mid-line of a spectral order changes with respect to detector rows,
+and how sharply the slit-function changes. The default value of $5$ is enough in
+many situations, but clearly leaves artifacts in the example shown, which was
+chosen to be close to worst-case, and requires an oversampling $>12$ for optimal
+results.
 
 \putgraph{.8\linewidth}{varyoversample.pdf}{varyovers}{Example spectrum,
  extracted with varying oversampling, and vertically offset for plotting.

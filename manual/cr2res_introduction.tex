@@ -3,18 +3,21 @@
 
 \subsection{Scope}
 \label{sec:scope}
-This document is the user manual to processing of \instrument{}
-observations using the CR2RES
+This document is the user manual used to process of \instrument{}
+observations with the CR2RES
 Pipeline Recipes, also known as the \instrument{} Data Reduction Software 
 (DRS).
 
 
 \subsection{Acknowledgements}
-%We are thankful for comments on this manual from Ulf Seemann,
+We are thankful for comments on this manual from Jonathan Smoker and Ulf
+Seemann.
 
 Special thanks also to Nikolai Piskunov and Ansgar
 Wehrhahn for their extensive contributions of code
 to the DRS.
+
+
 
 \subsection{Stylistic conventions}
 \label{sec:style}
@@ -40,7 +43,10 @@ words.
 \subsection{Notational Conventions}
 \label{sec:notation}
 
-The DRS for oCRIRES used the prefix \texttt{crires\_} for recipe names. In order to avoid confusion and because the pipeline for \instrument\ is written from scratch and cannot reduce data from oCRIRES, a new prefix was chosen: \texttt{cr2res\_}.
+The DRS for the original, pre-upgrade CRIRES (oCRIRES) used the prefix
+\texttt{crires\_} for recipe names (\cite{OCIRESCOOK}). In order to avoid
+confusion and because the pipeline for \instrument\ was rewritten from scratch
+and cannot reduce data from oCRIRES, a new prefix was chosen: \texttt{cr2res\_}.
 
 Hierarchical FITS keyword names, appearing in the document, are given using the
 dot--notation to improve readability. This means, that the prefix ``HIERARCH
@@ -53,10 +59,10 @@ the actual FITS header are replaced by a single dot.
 \subsection{Applicable Documents}
 \label{sec:doc-applicable}
 
-% \begin{tabularx}{\linewidth}{lllX}
-%    {[}AD01{]} & ESO-XXXXXX & 1.0
-%               & TBD \\
-% \end{tabularx}
+\begin{tabularx}{\linewidth}{lllX}
+    {[}AD01{]} & VLT-MAN-ESO-19500-1619  & \cite{VLT1619}
+               & DFS Pipeline \& Quality Control -- User Manual \\
+\end{tabularx}
 
 \subsection{Reference Documents}
 \label{sec:doc-reference}
@@ -65,7 +71,8 @@ the actual FITS header are replaced by a single dot.
   {[}RD01{]} & ESO-254264 \cite{CIRESMAN}
              & CRIRES+ User Manual \\
   {[}RD02{]} & 2021A\&A...646A..32P \cite{2021A&A...646A..32P} 
-             & Optimal extraction of echelle spectra
-
+             & Optimal extraction of echelle spectra \\
+  {[}RD03{]} & VLT-MAN-ESO-14200-4032 \cite{OCIRESCOOK}
+             & oCRIRES Data Reduction Cookbook
 \end{tabularx}
 
