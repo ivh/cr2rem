@@ -61,7 +61,12 @@ identify a trace, i.e.~a table row.
 Each trace stores three polynomials: one for the mid-line, upper and lower edge,
 respectively. Polynomials are stored as coefficients, lowest power first, and
 evaluated for pixel columns starting with index 1. Fig.~\ref{fig:flat_trace}
-shows these polynomials plotted onto a flat-field frame. Associated with each trace is also its \emph{slit fraction}, that is a number $[0.0\ldots 1.0]$ that indicates the height along the slit $[ 0.0, 0.5, 1.0 ]$
+shows these polynomials plotted onto a flat-field frame. Associated with each
+trace is also its \emph{slit fraction}, that is a number $[0.0\ldots 1.0]$ which
+indicates the height along the slit, ranging from $0.0$ at the bottom to $1.0$
+at the top. Three values are provided, one each for lower edge, mid-line and
+upper edge of the trace, so that a trace the full slit has 
+\verb!SlitFraction=[0.0,0.5,1.0]!
 
 Analogous to traces, the wavelength solution is stored as polynomial coefficients
 that represent the translation from pixel to wavelength space. Because the slit
@@ -89,8 +94,8 @@ the DRS should not fail to reduce even with significantly mismatched order
 traces.
 
 \subsubsection{Pixels, Indices and Spectral Bins}
-Pixel index starts at 1, not 0. This is especially when evaluating polynomials
-from the TW table outside the of the DRS.
+Pixel index starts at 1, not 0. This is especially relevant when evaluating
+polynomials from the TW table outside the of the DRS.
 
 The spectral bins after extraction correspond to detector columns at the
 mid-line of the extracted region.
@@ -113,9 +118,9 @@ Our naming convention groups the recipes into
     \item \textit{Observing recipes}, named like \texttt{cr2res\_obs\_*}, which
     receive raw science frames and pre-processed calibrations in order to
     produce the main science data products.
-    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*}.
-    These are triggered online at Paranal and perform the steps necessary to
-    produce the calibration products.
+    \item \textit{Calibration recipes}, named like \texttt{cr2res\_cal\_*},
+    carry out the main steps necessary to produce the calibration products. They
+    are also triggered online at Paranal.
     \item The \textit{utility recipes}, named like \texttt{cr2res\_util\_*}, are
     a more diverse set of recipes. Some offer more fine-grained control over one
     of the steps within a \texttt{cal\_} recipe; others exist to prepare static
@@ -131,7 +136,7 @@ Details about their inputs, outputs and parameters can be found in the
 In general, calibration and observing recipes will collapse/combine raw frames,
 when several are supplied. Utility recipes will loop over the given raw frames
 and produce separate outputs for each of them, unless \verb!--collapse! is
-given.
+set to one of \verb!SUM!, \verb!MEAN! or \verb!MEDIAN!.
 
 %%%%%%%%%% General things above, SCIENCE below, then CALIBS
 
@@ -142,15 +147,15 @@ Let's assume for a moment to have reduced calibrations already available
 and look at the reduction of science frames first.
 
 The \texttt{cr2res\_obs\_*} recipes all have in common that they receive as
-input a set of raw science frames, and the master calibrations (i.e. output of
+input a set of raw science frames, and the master calibrations (i.e.~output of
 calibration recipes). They then first combine raw frames that belong together,
 for example the frames from the same nodding position. Then the master
 calibrations are applied, after which the appropriate algorithms for the data at
-hand are applied to create the output data products.
+hand are run to create the output data products.
 
-For the most common use case, nodded observations of point sources,
-the SOF to reduce a nodding sequence (three frames  each in positions A and B)
-may look like this:
+For the most common use case, nodded observations of point sources, the
+set-of-files (SOF) to reduce a nodding sequence (three frames each in positions
+A and B in this example) may look like this:
 \begin{shell}[fontsize=\small]
 %prompt cat nodd.sof
 $RAW/CRIRE.2021-08-16T23:22:50.334.fits OBS_NODDING_OTHER
@@ -172,7 +177,7 @@ It is then handed to the recipe like this:
 
 What happens first is the combination of frames, A and B separately, and that
 the calibrations are applied. Then position B is subtracted from position A, and
-vice-versa. The so background-subtracted spectra get extracted into 1D arrays,
+vice-versa. The background-subtracted spectra get extracted into 1D arrays,
 using the supplied TW-table for information on order trace, slit-tilt and
 wavelength calibration.
 
@@ -183,7 +188,9 @@ is:
         point-sources. Also spectro-astrometry.
     \item \texttt{cr2res\_obs\_staring} for point-sources without nodding.
     \item \texttt{cr2res\_obs\_2d} for observations in which the spatial
-        resolution along the slit should be conserved, i.e. no spectrum extraction.
+        resolution along the slit should be conserved, i.e. no spectrum
+        extraction. This is primarily meant for observations taken with the
+        "generic offset" template.
     \item \texttt{cr2res\_obs\_pol} for observations with the
         spectro-polarimeter, including the demodulation into Stokes parameters. 
 \end{itemize}
@@ -202,10 +209,10 @@ Consequently, results are also stored this way in data products.
 
 The following instrument properties need to be characterized:
 \begin{itemize}
-    \item Detector: non-linearity
+    \item Detector: non-linearity (detlin)
     \item Detector: dark current
     \item Detector: bad pixel map
-    \item Flat-fielding
+    \item Detector: pixel-to-pixel sensitivity (flat-fielding)
     \item The location and shape of the spectral orders on each detector.
     \item The orientation (tilt) of the slit within each order.
     \item Wavelength calibration.
@@ -213,17 +220,17 @@ The following instrument properties need to be characterized:
 
 The \emph{detector non-linearity} is derived from a long series of flat-field
 frames. These are not taken on a frequent basis and are valid for a long time.
-Users will almost always be able to use the provided master calibration and not
-need to run this step.
+Users will almost always be able to use the provided master calibration and do
+not need to run this step.
 
-The \emph{master dark} is ideally derived from dark exposures with the
-same DIT, and as high NDIT as possible. For short exposures the dark current
-itself is negligible, but the detector readout-mode leaves a residual pattern
-that scales non-trivially with DIT, so that scaling dark by unmatched exposure
-time is not recommended.
+The \emph{master dark} is ideally derived from dark exposures with the same DIT
+as science exposures, and as high NDIT as possible. For short exposures the dark
+current itself is negligible, but the detector readout-mode leaves a residual
+pattern that scales non-trivially with DIT, so that scaling dark by unmatched
+exposure time is not recommended.
 
-DARK exposures are not really "dark", but contain come background thermal
-emission, especially in the bands redward from K. Therefore, Darks are
+DARK exposures are not really "dark", but contain some background thermal
+emission, especially in the bands redward from K. Therefore, darks are
 considered specific to each instrument setting.
 
 The \emph{master flat} is derived from a halogen lamp exposure; it is also
@@ -247,14 +254,14 @@ Therefore, several recipes produce BPMs and there are recipes that can merge
 and separate them.
 
 Except for the detector linearity, calibrations are valid only for a
-single \textit{standard setting}. While DRS should in principle be able to
+single \textit{standard setting}. While the DRS should in principle be able to
 handle non-standard settings just fine, this is not supported for the time
 being.
 
 Apart from the observing recipes, listed above, there are the following recipes:
 
 \begin{itemize}
-    \item \texttt{cr2res\_cal\_dark} makes master darks and BPM for each DIT it
+    \item \texttt{cr2res\_cal\_dark} makes master darks and BPMs for each DIT it
     receives.
     \item \texttt{cr2res\_cal\_flat} reduces flat-field frames. The normalized
     flat is its main output.
@@ -310,7 +317,7 @@ Apart from the observing recipes, listed above, there are the following recipes:
 \end{figure}
 
 Fig.~\ref{fig:calibflow_simple} shows how calibrations can be reduced in a way
-that matches how the online (quick-look) calibrations are run at the telescope.
+that matches how the online (quick-look) reductions are run at the telescope.
 For each type of calibration data there is a single recipe that processes them.
 Apart from the raw frames, the necessary inputs can either come from the CalibDB
 or from a previous step.
@@ -325,7 +332,12 @@ providing a TW is recommended in these bands, either the one from the CalibDB,
 or one made via \texttt{cr2res\_util\_trace} and
 \texttt{cr2res\_util\_slit\_curv}.
 
-Daily calibrations are taken with metrology turned on. This means that 
+Daily calibrations are taken with metrology turned on, and both the static
+calibrations and the CalibDB at the telescope are derived from data with
+metrology. This means that this way of reducing calibrations, relying on the
+pre-existing TW for order locations and slit-tilt, is not expected to have
+negative impact on the quality of data products, as long as the night-time
+observations were also taken \emph{with} metrology.
 
 Example SOFs and commands can be found in Ch.~\ref{sec:simcalexpl}.
 
@@ -361,8 +373,8 @@ Ch.~\ref{sec:calibscratch}. Some aspects are worth pointing out first:
     \item \texttt{cr2res\_cal\_dark} combines the input DARK frames into a
     master dark for each setting and combination of DIT and NDIT. Hot and dead
     pixels get saved as BPM.
-    \item \texttt{cr2res\_util\_calib} combines the raw FLAT frames and applies
-    the	master dark and BPM.
+    \item \texttt{cr2res\_util\_calib} combines (\verb!--collapse=MEAN!)
+    the raw FLAT frames and applies the	master dark and BPM.
     \item \texttt{cr2res\_util\_trace} finds continuous regions on the detectors
     that have signal, and fits them with polynomials for the orders' mid-lines
     and edges. These polynomials we call a \emph{trace} and each order can have
@@ -372,7 +384,7 @@ Ch.~\ref{sec:calibscratch}. Some aspects are worth pointing out first:
     how the slit tilt changes within each detector-order. The result is stored
     in an updated TW.
     \item \texttt{cr2res\_util\_extract} can now use this TW to extract the
-    calibrated flat-field frame from step 2. This rgives us the the blaze
+    calibrated flat-field frame from step 2. This gives us the blaze
     spectrum (1D) and a 2D model of the frame.
     \item This model contains all non-local features, meaning that
     \texttt{cr2res\_util\_normflat} can calculate the \emph{normalized

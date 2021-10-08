@@ -96,7 +96,8 @@ cr2res_detlin_coeffs.fits  CAL_DETLIN_COEFFS
 The main data product is the normalized flat-field (\verb!PRO.CATG=CAL_FLAT_MASTER!).
 
 
-For wavelength-calibration, both the UNE and FPET frames can be provided at once:
+For wavelength-calibration, both the UNE and FPET frames should best be provided
+at once:
 \begin{shell}[fontsize=\small]
 %prompt cat wave.sof
 $RAW/une.fits
@@ -151,7 +152,7 @@ detector features that correlate with the detector columns in the combined
 frames, as has sometimes been found to be the case,
 \verb!--subtract_nolight_rows! can be set to \verb!TRUE!. This makes use of the
 bottom 40 rows of the detectors which are intentionally baffled to not receive
-light. A vertical median over these rows is calculated and the result subtracted
+light. A vertical median over these rows is calculated, and the result subtracted
 from the image row-by-row.
 
 The oversampling of the slit-function can be changed via
@@ -159,7 +160,8 @@ The oversampling of the slit-function can be changed via
 extraction, which in turn is the bulk of the total recipe runtime, so that
 increasing the oversampling from a factor of 5 to 10 means the reduction takes
 twice as long. In general, values below 5 give suboptimal results and values
-above 10 are appropriate when the slit-illumination changes sharply.
+above 10 are appropriate when the slit-illumination changes sharply. See
+Ch.~\ref{sec:extract} for more details.
 
 
 \subsubsection{Staring}

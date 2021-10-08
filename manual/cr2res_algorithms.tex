@@ -65,7 +65,9 @@ a \emph{trace} from the TW table, the following steps are carried out:
 \end{itemize}
 
 A major advantage of this extraction algorithm is that it makes not assumption
-about the slit-function, except that it does not change within a swath.
+about the slit-function, except that it does not change within a swath. This
+allows, for example, to combine jittered nodding frames into one, and extract it
+together.
 
 In addition, the model by design cannot approximate features that are not
 present in all pixels that contribute to a certain bin in the spectrum or the
@@ -83,11 +85,56 @@ results.
 
 \putgraph{.8\linewidth}{varyoversample.pdf}{varyovers}{Example spectrum,
  extracted with varying oversampling, and vertically offset for plotting.
- In this case, oversampling of 12 is needed to no longer see "spiky" artifacts.}
+ In this case, oversampling of $12$ is needed to no longer see "spiky" artifacts.}
+
+There are a few more parameters that influence the extraction:
+\begin{itemize}
+    \item \verb!--extract_swath_width! sets the width of the swath, in pixels,
+    i.e.~how large a piece of a spectral order should be processed at a time.
+    Meaningful values range from $~50$ (high S/N necessary) to the full detector
+    width. The default is $800$ and works in most cases, because the
+    slit-illumination rarely varies on that scale.
+    \item \verb!--extract_height! sets the height in pixels of the extracted
+    region, symmetrical around the mid-line of the trace. By default, this is
+    not set and the upper and lower edge polynomials of the trace are used to
+    set the height. Setting this parameter therefore overrides the role of the
+    edge polynomials in the extraction.
+    \item \verb!--extract_smooth! is a regularization parameter for the
+    slit-illumination vector, as it is approximated during the extraction. The
+    value is roughly the size of the smoothing kernel in pixels, and should not
+    be set be set below $1.0$ to avoid ringing. Default is $2.0$.
+\end{itemize}
+
+For the utility recipe \verb!cr2res_util_extract! these parameters are named
+without the prefix \verb!extract_!, and \verb!--extract_smooth! is called
+\verb!--smooth_slit! instead, because there also is \verb!--smooth_spec! which
+is the same, but for the spectrum instead of the slit-function. Its value has a
+different scaling, so that $1E-7$ already imparts noticeable smoothing of the
+output spectrum.
+
+\subsection{Other extraction methods}
+\label{sec:otherextr}
+
+\verb!cr2res_util_extract! does have another trick up its sleeve: the parameter
+\verb!--method! which allows using different algorithms to extract spectra from
+the 2D frame. It can take the following values.
+\begin{itemize}
+    \item \verb!SUM!, a simple vertical sum of the spectral order. Because of
+    the non-vertical slit, spectral features will be broadened.
+    \item \verb!MEDIAN!, same as previous, but calculating the median instead of
+    the sum. The value is multiplied by the extraction height, so that the
+    normalization is the same as the other methods.
+    \item \verb!TILTSUM! is like \verb!SUM!, but first shifts the detector rows
+    according to the slit tilt. Only integer shifts, so there is still smoothing
+    from sub-pixel tilt.
+    \item \verb!OPT_VERT! should not be used! It runs the optimal extraction
+    along a vertical slit, but is not optimized for speed and therefore slower
+    than
+    \item \verb!OPT_CURV!, the default optimal extraction, as described above.
+\end{itemize}
 
 \subsection{Errors and Signal-to-Noise}
 \label{sec:errors}
-
 
 The normalization of the output-spectra is like that of a sum of pixel values,
 collapsed along the slit, i.e. summed-up ADU. Errors are absolute.
@@ -95,6 +142,7 @@ collapsed along the slit, i.e. summed-up ADU. Errors are absolute.
 If \verb!NDIT >1!, then a factor of $\sqrt{NDIT}$ needs to be taken into account,
 because the sub-exposured were averaged in the detector software, not affecting
 the ADU level.
+
 
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
@@ -123,7 +171,16 @@ Lastly, the pixels from the same order are fitted with a polynomial.
 \subsubsection{Measuring the slit-tilt}
 \label{sec:tilt}
 
-The recipe \verb!cr2res_util_slit_curv! takes as input a TW, for the order traces, and an FPET frame. The algorithm finds the etalon peaks, which give good coverage in each spectral order.
+The recipe \verb!cr2res_util_slit_curv! takes as input a TW, for the order
+traces, and an FPET frame. The algorithm finds the etalon peaks, which give good
+coverage in each spectral order. It then fits the shape of each peak with a
+polynomial P(y), because in principle a curved slit could cross the same
+x-coordinate more than once.
+
+The coefficients of these polynomials are then fitted with a P(x) for each
+degree. This ensures a smooth change of the slit tilt with wavelength, removes
+outliers, and allows to store the information in the TW in an analogous way to
+the polynomials for trace and wavelength solution. The TW-columns are named \verb!SlitCurveA!, \verb!SlitCurveB! and \verb!SlitCurveC! and 
 
 More detail will be provided in a future iteration of this document.
 
@@ -141,3 +198,5 @@ The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied.
+
+Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}
