@@ -26,8 +26,10 @@ EOT
 esorex --recipes | grep cr2re | cut -b3-23 | sort -u | while read rec; do
     resc=$(echo $rec | sed s/_/\\\\_/g)
     printf "\subsection{${resc}}\n" >> $FNAME
+    printf "\small\n" >> $FNAME
     printf "%sbegin{verbatim}\n" "\\" >> $FNAME
     esorex --man-page $rec | tail -n+4 | head -n-31  >> $FNAME
     printf "%send{verbatim}\n" "\\" >> $FNAME
+    printf "%snormalsize\n" "\\" >> $FNAME
 
 done
