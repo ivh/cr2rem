@@ -351,25 +351,22 @@ Example SOFs and commands can be found in Ch.~\ref{sec:simcalexpl}.
     \caption{
         \label{fig:calibflow_detailed}
         Flow diagram for calibration reduction with the \textit{utility
-            recipes}, without relying on any input from the CalibDB. In other
+            recipes}, without relying on static calibrations. In other
             words, this is how the products for the CalibDB (green) can be made
-            from scratch. Steps are numbered but execution order can be changed
+            from scratch. Steps are numbered, but execution order can be changed
             whenever data flow allows. For notes on individual steps see main
             text.}
 \end{figure}
 
 Fig.~\ref{fig:calibflow_detailed} shows the calibration data flow step-by-step,
 using the \emph{util} recipes that each only perform a single task. In addition,
-no files from the CalibDB are used in this case, and it is in fact the way the
-CalibDB is assembled in the first place.
+no pre-existing calibrations are used, and it is in fact the way the
+set of static calibrations is assembled in the first place.
 
 A concrete example, using the same numbering of steps, is shown in
 Ch.~\ref{sec:calibscratch}. Some aspects are worth pointing out first:
 
 \begin{enumerate}
-    \item[] \texttt{cr2res\_cal\_detlin} takes flat-field exposures from
-    different settings and with varying exposure times to measure the linearity
-    behaviour of all pixels. Outliers get flagged as a bad-pixel-map (BPM).
     \item \texttt{cr2res\_cal\_dark} combines the input DARK frames into a
     master dark for each setting and combination of DIT and NDIT. Hot and dead
     pixels get saved as BPM.
