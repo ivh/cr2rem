@@ -16,7 +16,8 @@
 \includegraphics[width=0.45\linewidth]{rectification.pdf}
 \includegraphics[width=0.45\linewidth]{swath_weights.pdf}
 \end{center}
-\caption{\it Left: Illustration of swath rectification. Right: The weights for combining the spectra from overlapping swaths.}
+\caption{\it Left: Illustration of swath rectification. Right: The weights 
+    for combining the spectra from overlapping swaths.}
 \label{fig:swaths}
 \end{figure}
 
@@ -28,8 +29,8 @@
 combined, and pair-wise subtracted frame, with the BPM applied and zoomed-in to
 part of a single spectral order. \emph{Panel 2:} The model of the same region,
 reconstructed from the extracted spectrum and slit-function. \emph{Panel 3:} The
-difference between the two above, showing the residuals. \emph{Bottom:} The extracted
-spectrum itself, on the same x-axis as the panels above.}
+difference between the two above, showing the residuals. \emph{Bottom:} The
+extracted spectrum itself, on the same x-axis as the panels above.}
 \label{fig:extrmodel}
 \end{figure}
 
@@ -139,10 +140,12 @@ the 2D frame. It can take the following values.
 The normalization of the output-spectra is like that of a sum of pixel values,
 collapsed along the slit, i.e. summed-up ADU. Errors are absolute.
 
-If \verb!NDIT >1!, then a factor of $\sqrt{NDIT}$ needs to be taken into account,
-because the sub-exposured were averaged in the detector software, not affecting
-the ADU level.
 
+If \verb!NDIT >1!, then a factor of $\sqrt{\verb!NDIT!}$ needs to be taken into
+account manually, because the sub-exposures were averaged in the detector
+software, which does not affect the ADU level.
+
+This section will be expanded in the next release of this document.
 
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
@@ -190,13 +193,13 @@ There are several ways to calibrate the wavelength scale, and each corresponds
 to one of the values that the parameter \texttt{-{}-wl\_method} of
 \texttt{cr2res\_util\_wave} can take.
 
-With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines gets made into
-a synthetic spectrum that is cross-correlated with the extracted lamp spectrum.
-Each detector-order is calibrated separately.
+With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines is converted
+into a synthetic spectrum that is cross-correlated with the extracted lamp
+spectrum. Each detector-order is calibrated separately.
 
 The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied.
 
-Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}
+Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}.
