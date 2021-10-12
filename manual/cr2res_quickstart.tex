@@ -139,8 +139,7 @@ The recipe also produces spectra that are combined from A and B
 relying on the wavelength scale, because the tilted slit makes the spectral
 binning different between the top and bottom halves of the slit. This is why the
 spectra \emph{before} this combination are considered the primary data product.
-Note also that the combination is done as an average, which has to be taken into
-account as a factor of 2 when interpreting the level of ADU.
+The combined spectrum contains the summed ADUs from A and B.
 
 The jitter around positions A and B does not need to be treated explicitly by
 the DRS. Instead it makes use of the fact that the extraction algorithm
@@ -226,7 +225,8 @@ this is being kept track of.
 Give the blaze function and spectra from several settings to
 \texttt{cr2res\_util\_splice} and it will divide by the blaze and then resample
 the overlap-regions between all spectra from individual detector-orders to be
-able to do a weighted average. The result is one continuous spectrum.
+able to do a weighted average. The result is a single spectrum, continuous over
+the regions covered by the inputs.
 
 Please note that this recipe has not been tested extensively to produce reliable
 results in all cases. For now its data products should therefore be considered
@@ -237,8 +237,9 @@ experimental and quality not ensured to be "science-ready".
 \label{sec:calibscratch}
 Following the steps outlined in Ch.~\ref{sec:stepcalib} and accompanying text,
 we can reduce the calibrations without relying on pre-existing reduction
-products like the TW. This is also the way the CalibDB is being assembled. The
-following gives example SOFs and recipe calls to reduce a single setting.
+products like the TW. This is also the way the static calibrations are
+assembled. The following gives example SOFs and recipe calls to reduce a single
+setting.
 
 First the SOFs:
 \begin{shell}[fontsize=\footnotesize]
@@ -371,7 +372,7 @@ A few notes on the recipe parameters used:
   otherwise become part of the blaze, not part of the normalized flat-field, as
   inteded.
   \item[7.] For short exposures the detector background-level can vary
-  significantly, so we use \verb! --subtract_nolight_rows! to somewhat improve
+  significantly, so we use \linebreak \verb! --subtract_nolight_rows! to somewhat improve
   on sub-optimal dark-subtraction.
   \item[9.] The first pass of cross-correlation with a sufficiently large
   search-radius (\verb!--wl_err!). \verb!--wl_degree=0! means that only a shift
