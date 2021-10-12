@@ -48,3 +48,9 @@ output is produced, and can take the values \texttt{off}, \texttt{error},
 \texttt{debug}, the DRS not only produces extra logging output, but also dumps
 some intermediate output into FITS files named as \texttt{debug\_*.fits}. These
 are not documented, but can be self-explanatory.
+
+Instead of the environment variable, the message level can also be set as
+command option:
+\begin{shell}
+    %prompt esorex --msg-level=debug ... 
+\end{shell}

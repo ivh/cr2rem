@@ -6,11 +6,14 @@ actions and are not officially supported. Most are for visualization purposes
 only. Nevertheless, they can serve as a starting point, for example for how to
 open data products for further custom processing and analysis.
 
-For the Python scripts, the only dependencies are \texttt{numpy}, \texttt{matplotlib} and \texttt{astropy.io.fits}. Shell scripts use bash-isms and might
-or might not run in other shells.\footnote{Note that \texttt{/bin/sh} is not linked to \texttt{bash} on many modern linux-systems.}
+For the Python scripts, the only dependencies are \texttt{numpy},
+\texttt{matplotlib} and \texttt{astropy.io.fits}. Shell scripts use bash-isms
+and might or might not run in other shells.\footnote{Note that \texttt{/bin/sh}
+is not linked to \texttt{bash} on many modern linux-systems.}
 
-A short description of the purpose and usage of each script will be Included
-in a future version of this document. In the meantime taking a look at the source code needs to suffice.
+A short description of the purpose and usage of each script will be included in
+a future version of this document. In the meantime taking a look at the source
+code should to suffice, since they 
 
 % in cr2rep/tools/
 % ls *py | sed s/_/\\\\_/g | awk '//{printf "\\subsection{%s}\n",$1}'
@@ -26,7 +29,8 @@ Make a plot like Fig.~\ref{fig:flat_trace} by plotting the traces on top of any
 frame, raw or otherwise.
 
 \subsection{cr2res\_show\_trace\_curv.py}
-Similar to previous, but also plots the slit-tilt in regular intervals. Examples can be seen in App.~\ref{sec:extrafigs}.
+Similar to previous, but also plots the slit-tilt in regular intervals. Examples
+can be seen in App.~\ref{sec:extrafigs}.
 
 \subsection{cr2res\_update\_wl.py}
 Update the wavelength columns in extracted spectra from a TW table.
@@ -36,9 +40,17 @@ Plot extracted spectra against a catalog of lines. Also has some key-bindings
 to select regions from cursor and re-fit a wavelength solution.
 
 \subsection{cr2res\_plotresiduals.py}
-
+Plot the residuals from line-diagnostics output.
 
 \subsection{cr2res\_run\_setting.sh}
+Reduce calibrations from a single setting from scratch, as in
+Ch.~\ref{sec:calibscratch}. I has hardcoded paths, assumes data is organized in
+a certain way and that plotting-scripts are in \verb!$PATH!, so this will not
+run for users, but can serve as inspiration.
+
+\subsection{cr2res\_makeSOFS.sh}
+Companion script to the previous one, to set up directory structure and SOFs.
+
 \subsection{cr2res\_measure\_lines.py}
 \subsection{cr2res\_plot\_obs2d.py}
 \subsection{cr2res\_plotfpet.py}
@@ -47,4 +59,3 @@ to select regions from cursor and re-fit a wavelength solution.
 \subsection{cr2res\_show\_wavecal.py}
 \subsection{cr2res\_turbo\_colormap.py}
 \subsection{cr2res\_wlen\_table.py}
-\subsection{cr2res\_makeSOFS.sh}
