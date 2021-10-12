@@ -1,0 +1,51 @@
+\section{Processing reduced CRIRES data with MOLECFIT}
+\label{sec:molecfit}
+
+
+\subsection{Introduction}
+
+Telluric lines - absorption from species in the Earth atmosphere - are strongly 
+contaminating astronomical spectroscopic observation in the near-infrared, being
+superimposed to the spectrum of the science target. The removal
+of telluric lines from observations is therefore an important step in the reduction
+and analysis of near-infrared spectra .
+
+The removal of telluric lines is usually done either by observing a telluric standard star
+close in time from the science target, or through the modelling of the telluric spectrum.
+The latter method has the advantage of using no observing time. One tool of interest for 
+ESO instruments which can model telluric spectrum and correct it in science spectra is {\tt MOLECFIT}
+\footnote{{\tt MOLECFIT} can be downloaded at \url{https://www.eso.org/sci/software/pipelines/}} 
+ \cite{smette-molecfit}.
+
+The processing of CRIRES extracted spectra with {\tt MOLECFIT} is, at this point, neither
+a part of the DRS nor supported by ESO. However, we provide here basic instructions and a custom script to convert
+CRIRES reduced spectra into data which are ready to be processed with {\tt MOLECFIT}. This appendix
+is not a tutorial, we assume that the user is familiar with {\tt MOLECFIT}. 
+
+\subsection{Instructions}
+
+We assume that the user has an extracted spectrum from the DRS, hereafter called input spectrum. It can be a spectrum:
+\begin{itemize}
+  \item acquired in staring or nodding mode
+  \item  if from nodding: either from A or B position, or combined
+\end{itemize}
+
+The python script \verb!cr2res_drs2molecfit! will change the format of the input spectrum so that it can be processed with
+{\tt MOLECFIT}. The primary extension of the output spectrum will be identical to the input spectrum. However,
+every subsequent FITS extention will contain a spectral order projected on a single detector in table format with
+threw columns: WAVE, SPEC, and ERR containing respectively the wavelength in microns, the spectrum, and the error spectrum.
+
+The script \verb!cr2res_drs2molecfit! also creates a corresponding 
+\begin{itemize}
+  \item a \verb!WAVE_INCLUDE.fits! file, indicating the wavelength
+region to be included in the fit. By default, all the spectrum is included, the user can modify the file if they wish.
+  \item a  \verb!ATM_PARAMETERS_EXT.fits! file
+\end{itemize}
+
+Make sure to edit the configuration file for the \verb!molecfit_model! recipe with:
+\begin{itemize}
+ \item \verb!COLUMN_LAMBDA=WAVE!
+ \item \verb!COLUMN_FLUX=SPEC!
+ \item \verb!COLUMN_DFLUX=ERR!
+\end{itemize}
+so that {\tt MOLECFIT} can map the columns from the SCIENCE.fits file to wavelength, flux, and error arrays.
