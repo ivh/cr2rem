@@ -74,8 +74,8 @@ In addition, the model by design cannot approximate features that are not
 present in all pixels that contribute to a certain bin in the spectrum or the
 slit-function. This makes spectra robust towards e.g.~cosmic rays.
 
-Fig.~\ref{fig:varyovers} shows the effect of the \textbf{slit-function
-oversampling}, that can be changed via  the parameter
+Fig.~\ref{fig:varyovers} shows the effect of the \emph{slit-function
+oversampling}, that can be changed via  the parameter \linebreak
 \verb!--extract_oversample!. As mentioned before, this factor linearly affects
 the computation time. The amount of oversampling necessary depends on how
 quickly the mid-line of a spectral order changes with respect to detector rows,
@@ -138,46 +138,64 @@ the 2D frame. It can take the following values.
 \label{sec:errors}
 
 Raw frames contain pixel values in ADU. All data products are in ADU also,
-i.e.~no conversion to electrons is made, and no normalization to $1s$ but
-dividing with \verb!DIT!. There are however several steps along the way to the
+i.e.~no conversion to electrons is made, and no normalization to $1s$-exposure by
+dividing by \verb!DIT!. There are however several steps along the way to the
 final spectra that affect the absolute values of pixels and spectral bins, which
-is why it makes sense to outline them here.
+is why it makes sense to summarize them here.
 
-For data with \verb!NDIT >1!, each sub-exposure gets averaged in the
-detector software. In a nodding sequence the pair-wise subtracted frames are
-also averaged. The normalization of the output-spectra is like that
-of a sum of pixel values, collapsed along the slit, i.e. summed-up ADU.
-
-
-Errors, both in maps and spectra are absolute. Calibrations are applied in this
-order, at each step propagating the error into the output
+Some things to keep in mind about ADU values
 \begin{itemize}
-    \item Bad pixel map\footnote{BPMs have no errors, therefore no error-propagation at this step.}
-    \item Detector non-linearity
+    \item For data with \verb!NDIT >1!, each sub-exposure gets averaged in the
+    detector software.
+    \item In a nodding sequence the pair-wise subtracted frames are also
+    averaged.
+    \item The normalization of the output-spectra is like that of a sum of pixel
+    values, collapsed along the slit, i.e. summed-up ADU.
+\end{itemize}
+
+
+Errors, both in maps and spectra are absolute. Calibrations are applied to raw
+frames in the following order, at each step propagating the error into the
+output
+\begin{itemize}
+    \item Bad pixel map\footnote{BPMs have no errors, therefore no
+    error-propagation at this step.}
+    \item Detector non-linearity.
     \item Shot-noise gets added to each pixel's error, based on $\sqrt{\verb!ADU!}$
     divided by $\sqrt{\verb!NDIT!}$ and $\sqrt{\verb!GAIN!}$.
-    \item Dark-subtraction. The master darks are DETLIN-corrected, because they are not "dark" but contain thermal emission.
-    \item Optional subtraction of median from bottom rows.
-    \item Division by normalized flat-field.
-    \item Optional correction for cosmic rays, usually not necessary.
+    \item Dark-subtraction. The master darks are DETLIN-corrected, because they
+    are not "dark" but contain thermal emission.
+    \item Optional subtraction of all detector rows with a row, that is derived
+    by taking the vertical median over the 40 bottom rows which receive no
+    light.
+    \item Division by the normalized flat-field.
+    \item Optional correction for cosmic rays (usually not necessary).
 \end{itemize}
 
 
 The errors of each pixel are used in the optimal extraction, and once that is
 done, a \emph{model} gets reconstructed from the spectrum and the slit-function.
 The residual between data and model gets quadratically added to the pixel
-uncertainties, which get divided by the slit function to become the error of the
-spectral bin.
+uncertainties, which in turn get divided by the slit function to become the
+error of the spectral bin.
 
 This means that the spectrum can be directly divided by the error-spectrum to
-obtain the S/N. No conversions are necessary.
+obtain the signal-to-noise ratio (S/N). No further conversions are necessary.
 
 However, in order to compare this S/N with the theoretical expectation from
 Poissonian statistics, users will have to scale the ADU-values of the spectrum
 by the gain and the number of averaged frames (NDIT or combined frames), before
-taking the square-root. In general, the measured S/N after extraction is
+taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after extraction is
 somewhat lower than the theoretical value.
 
+\begin{equation}
+    \label{eq:snr}
+    S/N = \sqrt{(ADU_A+ADU_B)*NDIT*NEXP*NABCYCLES*GAIN}\quad ,
+\end{equation}
+where $ADU_{A,B}$ are the spectra from nodding positions A and B, respectively.
+For other types of observations replace accordingly. Polarimetric observations
+always take four exposures at different SPU-angles; the demodulated intensity
+spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
