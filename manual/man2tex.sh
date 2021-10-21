@@ -16,10 +16,10 @@ with
 \end{verbatim}
 where \texttt{<recipe>} stands for the recipe name.
 
-\emph{Until the chapter with detailed recipe descriptions is written,
- this has been moved forward from the appendix to serve as a reference
- for inputs, outputs and parameters.
-}
+In order to avoid duplication of information, this serves as reference for
+for inputs, outputs and parameters of each recipe.
+Explanations and context for algorithms and non-obvious parameters are provided
+in the appropriate chapters.
 
 EOT
 
