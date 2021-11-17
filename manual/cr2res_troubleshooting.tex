@@ -31,7 +31,7 @@ y-direction, and the threshold for signal-detection. Varying these is the first
 step to improve the traces.
 
 Recipes that extract spectra into 1D have the parameter
-\texttt{--extract\_height} which allows you to ignore the edge-detected upper
+\verb!--extract_height! which allows you to ignore the edge-detected upper
 and lower polynomials and instead use a fixed extraction height, in pixels,
 centered on the mid-line. This can be used as a work-around when the mid-line of
 a trace is fine, but the edges are not.
@@ -48,3 +48,9 @@ output is produced, and can take the values \texttt{off}, \texttt{error},
 \texttt{debug}, the DRS not only produces extra logging output, but also dumps
 some intermediate output into FITS files named as \texttt{debug\_*.fits}. These
 are not documented, but can be self-explanatory.
+
+Instead of the environment variable, the message level can also be set as
+command option:
+\begin{shell}
+    %prompt esorex --msg-level=debug ... 
+\end{shell}

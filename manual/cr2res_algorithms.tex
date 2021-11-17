@@ -16,7 +16,8 @@
 \includegraphics[width=0.45\linewidth]{rectification.pdf}
 \includegraphics[width=0.45\linewidth]{swath_weights.pdf}
 \end{center}
-\caption{\it Left: Illustration of swath rectification. Right: The weights for combining the spectra from overlapping swaths.}
+\caption{\it Left: Illustration of swath rectification. Right: The weights 
+    for combining the spectra from overlapping swaths.}
 \label{fig:swaths}
 \end{figure}
 
@@ -28,8 +29,8 @@
 combined, and pair-wise subtracted frame, with the BPM applied and zoomed-in to
 part of a single spectral order. \emph{Panel 2:} The model of the same region,
 reconstructed from the extracted spectrum and slit-function. \emph{Panel 3:} The
-difference between the two above, showing the residuals. \emph{Bottom:} The extracted
-spectrum itself, on the same x-axis as the panels above.}
+difference between the two above, showing the residuals. \emph{Bottom:} The
+extracted spectrum itself, on the same x-axis as the panels above.}
 \label{fig:extrmodel}
 \end{figure}
 
@@ -52,7 +53,7 @@ a \emph{trace} from the TW table, the following steps are carried out:
     \figref{fig:swaths} (left).
     \item Iteratively approximate the swath surface by two vectors: the spectrum
     along the mid-line and the slit-function along the slit projection, taking
-    its changeing tilt into accont. The slit function is oversampled by a factor
+    its changing tilt into account. The slit function is oversampled by a factor
     \verb!--extract_oversample!.
     \item Step by a half swath-width to the next one, and repeat. This way
     swaths overlap fully and the order effectively gets extracted twice.
@@ -73,8 +74,8 @@ In addition, the model by design cannot approximate features that are not
 present in all pixels that contribute to a certain bin in the spectrum or the
 slit-function. This makes spectra robust towards e.g.~cosmic rays.
 
-Fig.~\ref{fig:varyovers} shows the effect of the \textbf{slit-function
-oversampling}, that can be changed via  the parameter
+Fig.~\ref{fig:varyovers} shows the effect of the \emph{slit-function
+oversampling}, that can be changed via  the parameter \linebreak
 \verb!--extract_oversample!. As mentioned before, this factor linearly affects
 the computation time. The amount of oversampling necessary depends on how
 quickly the mid-line of a spectral order changes with respect to detector rows,
@@ -136,17 +137,68 @@ the 2D frame. It can take the following values.
 \subsection{Errors and Signal-to-Noise}
 \label{sec:errors}
 
-The normalization of the output-spectra is like that of a sum of pixel values,
-collapsed along the slit, i.e. summed-up ADU. Errors are absolute.
+Raw frames contain pixel values in ADU. All data products are in ADU also,
+i.e.~no conversion to electrons is made, and no normalization to $1s$-exposure by
+dividing by \verb!DIT!. There are however several steps along the way to the
+final spectra that affect the absolute values of pixels and spectral bins, which
+is why it makes sense to summarize them here.
 
-If \verb!NDIT >1!, then a factor of $\sqrt{NDIT}$ needs to be taken into account,
-because the sub-exposured were averaged in the detector software, not affecting
-the ADU level.
+Some things to keep in mind about ADU values
+\begin{itemize}
+    \item For data with \verb!NDIT >1!, each sub-exposure gets averaged in the
+    detector software.
+    \item In a nodding sequence the pair-wise subtracted frames are also
+    averaged.
+    \item The normalization of the output-spectra is like that of a sum of pixel
+    values, collapsed along the slit, i.e. summed-up ADU.
+\end{itemize}
 
+
+Errors, both in maps and spectra are absolute. Calibrations are applied to raw
+frames in the following order, at each step propagating the error into the
+output
+\begin{itemize}
+    \item Bad pixel map\footnote{BPMs have no errors, therefore no
+    error-propagation at this step.}
+    \item Detector non-linearity.
+    \item Shot-noise gets added to each pixel's error, based on $\sqrt{\verb!ADU!}$
+    divided by $\sqrt{\verb!NDIT!}$ and $\sqrt{\verb!GAIN!}$.
+    \item Dark-subtraction. The master darks are DETLIN-corrected, because they
+    are not "dark" but contain thermal emission.
+    \item Optional subtraction of all detector rows with a row, that is derived
+    by taking the vertical median over the 40 bottom rows which receive no
+    light.
+    \item Division by the normalized flat-field.
+    \item Optional correction for cosmic rays (usually not necessary).
+\end{itemize}
+
+
+The errors of each pixel are used in the optimal extraction, and once that is
+done, a \emph{model} gets reconstructed from the spectrum and the slit-function.
+The residual between data and model gets quadratically added to the pixel
+uncertainties, which in turn get divided by the slit function to become the
+error of the spectral bin.
+
+This means that the spectrum can be directly divided by the error-spectrum to
+obtain the signal-to-noise ratio (S/N). No further conversions are necessary.
+
+However, in order to compare this S/N with the theoretical expectation from
+Poissonian statistics, users will have to scale the ADU-values of the spectrum
+by the gain and the number of averaged frames (NDIT or combined frames), before
+taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after extraction is
+somewhat lower than the theoretical value.
+
+\begin{equation}
+    \label{eq:snr}
+    S/N = \sqrt{(ADU_A+ADU_B)*NDIT*NEXP*NABCYCLES*GAIN}\quad ,
+\end{equation}
+where $ADU_{A,B}$ are the spectra from nodding positions A and B, respectively.
+For other types of observations replace accordingly. Polarimetric observations
+always take four exposures at different SPU-angles; the demodulated intensity
+spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
-
 
 %\subsection{Nodding}
 %\label{sec:nodd}
@@ -190,13 +242,13 @@ There are several ways to calibrate the wavelength scale, and each corresponds
 to one of the values that the parameter \texttt{-{}-wl\_method} of
 \texttt{cr2res\_util\_wave} can take.
 
-With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines gets made into
-a synthetic spectrum that is cross-correlated with the extracted lamp spectrum.
-Each detector-order is calibrated separately.
+With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines is converted
+into a synthetic spectrum that is cross-correlated with the extracted lamp
+spectrum. Each detector-order is calibrated separately.
 
 The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied.
 
-Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}
+Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}.
