@@ -10,10 +10,10 @@ with
 \end{verbatim}
 where \texttt{<recipe>} stands for the recipe name.
 
-\emph{Until the chapter with detailed recipe descriptions is written,
- this has been moved forward from the appendix to serve as a reference
- for inputs, outputs and parameters.
-}
+In order to avoid duplication of information, this serves as reference for
+for inputs, outputs and parameters of each recipe.
+Explanations and context for algorithms and non-obvious parameters are provided
+in the appropriate chapters.
 
 \subsection{cr2res\_cal\_dark}
 \small
@@ -235,7 +235,7 @@ DESCRIPTION
         loop on the traces t:                                             
           cr2res_extract_slitdec_curved(--extract_oversample,             
                    --extract_swath_width, --extract_height,               
-                   --extract_smooth_slit)                                      
+                   --extract_smooth_slit, --extract_smooth_spec)          
             -> slit_func(t), extract_1d(t), slit_model(t)                 
         Compute the master flat with cr2res_master_flat(avg, slit_model,  
                    --bpm_low, --bpm_high, --bpm_lines_ratio)              
@@ -285,6 +285,7 @@ OPTIONS
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
   --extract_smooth_slit : Smoothing along the slit. [3.0]
+  --extract_smooth_spec : Smoothing along the spectrum. [2e-07]
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
@@ -401,10 +402,11 @@ OPTIONS
   --trace_nb            : Only reduce the specified trace number. [-1]
   --keep                : Subtract the no-light rows. [FALSE]
   --collapse_method     : Collapse the input images (MEAN or MEDIAN). [MEDIAN]
-  --ext_oversample      : factor by which to oversample the extraction. [5]
-  --ext_swath_width     : The swath width. [800]
-  --ext_height          : Extraction height. [120]
-  --ext_smooth_slit     : Smoothing along the slit. [3.0]
+  --extract_oversample  : factor by which to oversample the extraction. [5]
+  --extract_swath_width : The swath width. [800]
+  --extract_height      : Extraction height. [120]
+  --extract_smooth_slit : Smoothing along the slit. [3.0]
+  --extract_smooth_spec : Smoothing along the spectrum. [2e-07]
   --wl_method           : Wavelength Method (XCORR / LINE1D / LINE2D). [XCORR]
   --wl_shift            : Wavelength shift (nm) to apply to the guess. [0.0]
   --wl_est              : Estimated wavelength start and end. [-1.0, -1.0]
@@ -611,10 +613,10 @@ OPTIONS
 
   --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
   --nodding_invert      : Flag to use when A is above B. [FALSE]
-  --extract_oversample  : factor by which to oversample the extraction. [5]
+  --extract_oversample  : factor by which to oversample the extraction. [7]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
-  --extract_smooth_slit : Smoothing along the slit. [2.0]
+  --extract_smooth_slit : Smoothing along the slit. [1.0]
   --extract_smooth_spec : Smoothing along spectrum. [8e-08]
   --detector            : Only reduce the specified detector. [0]
   --idp                 : Flag to produce  IDP files. [FALSE]
@@ -740,7 +742,8 @@ OPTIONS
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
-  --extract_smooth      : Smoothing along the slit. [2.0]
+  --extract_smooth_spec : Smoothing along the spectrum. [0.0]
+  --extract_smooth_slit : Smoothing along the slit. [2.0]
   --detector            : Only reduce the specified detector. [0]
 
 \end{verbatim}
@@ -797,6 +800,8 @@ DESCRIPTION
         Apply the calibrations to the image list                          
         Collapse the image list                                           
         Load the input trace wave                                         
+        Recompute a new trace wave with the specified slit fraction       
+               (--slit_frac) if needed                                    
         Extract the spectra from the collapsed image                      
           -> extracted                                                    
           -> slit_func                                                    
@@ -821,11 +826,13 @@ OPTIONS
   The following options are provided by this recipe.
 
   --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --slit_frac           : Wished slit fraction. [-1.0, -1.0]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
-  --extract_smooth      : Smoothing along the slit (1 for high S/N, 5 for low).
+  --extract_smooth_slit : Smoothing along the slit (1 for high S/N, 5 for low).
                           [2.0]
+  --extract_smooth_spec : Smoothing along the spectrum. [0.0]
   --detector            : Only reduce the specified detector. [0]
   --display_order       : Apply the display for the specified order. [0]
   --display_trace       : Apply the display for the specified trace. [0]

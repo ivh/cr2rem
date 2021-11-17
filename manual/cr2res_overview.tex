@@ -148,10 +148,10 @@ and look at the reduction of science frames first.
 
 The \texttt{cr2res\_obs\_*} recipes all have in common that they receive as
 input a set of raw science frames, and the master calibrations (i.e.~output of
-calibration recipes). They then first combine raw frames that belong together,
-for example the frames from the same nodding position. Then the master
-calibrations are applied, after which the appropriate algorithms for the data at
-hand are run to create the output data products.
+calibration recipes). They then first apply the calibrations to the raw frames,
+then combine the ones that belong together, for example the frames from the same
+nodding position. After that the appropriate algorithms for the data at hand are
+run to create the output data products.
 
 For the most common use case, nodded observations of point sources, the
 set-of-files (SOF) to reduce a nodding sequence (three frames each in positions
@@ -175,8 +175,8 @@ It is then handed to the recipe like this:
     %prompt esorex cr2res_obs_nodding nodd.sof
 \end{shell}
 
-What happens first is the combination of frames, A and B separately, and that
-the calibrations are applied. Then position B is subtracted from position A, and
+What happens first is that the calibrations are applied, then the frames are
+combined, A and B separately. Then position B is subtracted from position A, and
 vice-versa. The background-subtracted spectra get extracted into 1D arrays,
 using the supplied TW-table for information on order trace, slit-tilt and
 wavelength calibration.

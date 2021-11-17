@@ -27,14 +27,13 @@ TEX_SOURCES = \
 	shortcut.tex \
 	cr2res_abbreviations.tex \
 	cr2res_algorithms.tex \
-	cr2res_ancdata.tex \
+	cr2res_data.tex \
 	cr2res_installation.tex \
 	cr2res_instrument.tex \
 	cr2res_introduction.tex \
 	cr2res_overview.tex \
 	cr2res_knownissues.tex \
 	cr2res_quickstart.tex \
-	cr2res_rawdata.tex \
 	cr2res_recipes.tex \
 	cr2res_reduction.tex \
 	cr2res_troubleshooting.tex \
