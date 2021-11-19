@@ -205,6 +205,7 @@ spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 %Nodding sequence \texttt{SEQ.NABCYCLES} \texttt{SEQ.NODPOS}
 %first combined, then calibs applied, then subtracted, then extraction
 
+
 \subsubsection{Order Tracing}
 \label{sec:ordertrace}
 
@@ -252,3 +253,85 @@ gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied.
 
 Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}.
+
+\subsubsection{Detector non-linearity}
+\label{sec:detlin}
+
+\putgraph{.8\linewidth}{detlin_1133_1564.png}{detlincorr}{Before and after
+ non-linearity correction for a randomly picked pixel in each detector. Red
+ circles: Raw ADU/s vs.~ADU. Green dots with errorbars: ADU/s as read from FLATs
+ to which the previously derived calibration has been applied, using
+ \texttt{cr2res\_util\_calib}. The closer to horizontal the points fall, the
+ better the correction, because the actual illumination is kept constant. The
+ standard-deviation from 1 is given in the title. Diamonds and shaded region: As
+ a cross-check, the plotting-script separately reads and applies the correction
+ to the raw values; should align with green dots and errors.}
+
+
+Users are generally provided with the static calibration data-product
+(\verb!PRO.CATG=CAL_DETLIN_COEFFS!) that is needed to apply the correction for
+the non-linear response of detector pixels.
+
+This file contains for each pixel the coefficients of a polynomial which, when
+evaluated at a certain ADU-level, yields the correction factor by which to
+multiply the raw ADU, so that the value becomes that which a linear response
+would have given.
+
+In order to derive this correction, a long series of exposures with the
+flat-field lamp are taken, with increasing DITs, starting from very short until
+well into saturation. This is repeated for several spectrograph settings in
+order to cover the gaps between the spectral orders. A series of DARKs with
+matching DIT is also obtained and subtracted from the FLATS, because the
+non-zero detector background pattern at short DITs would otherwise influence the
+determination of the linear response.
+
+The reduction of the data set is done by \verb!cr2res_cal_detlin!
+\begin{shell}[fontsize=\footnotesize]
+    %prompt cat detlin.sof
+    CRIRE.2021-10-18T09:50:30.827.fits DETLIN_LAMP
+    CRIRE.2021-10-18T09:50:32.845.fits DETLIN_LAMP
+    ...
+    CRIRE.2021-10-18T09:59:12:345.fits DETLIN_DARK
+    ...
+
+    %prompt esorex cr2res_cal_detlin detlin.sof
+\end{shell}
+
+For each pixel, the recipe carries out the following steps on the sequence of images:
+\begin{itemize}
+    \item Convert ADU to ADU/s by dividing by DIT. Plotting ADU/s versus ADU
+    gives a horizontal line in the linear regime (illuminating flux is kept
+    constant), and deviates downward for larger ADU (Fig.~\ref{fig:detlincorr}).
+    \item Assume linear response up to 4000 ADU and take median of all
+    measurements below this threshold to find the \emph{true ADU/s}.
+    \item Divide the non-linear ADU/s by the true value to get the correction
+    factors, depending on ADU-level.
+    \item Fit a parabola to the correction factors' dependence on ADU.
+    \item Save the coefficients into data product.
+\end{itemize}
+
+This procedure is repeated for the other spectrograph settings and in the end
+the coefficients are merged, with weights according to their errors.
+
+
+\putgraph{.8\linewidth}{detlin_corrfacs.png}{detlincorrfac}{The size of the non-linearity correction, depending on raw ADU-level.}
+
+
+\putgraph{.8\linewidth}{detlin_errmaps.png}{detlinerrmap}{Error maps for three
+ADU levels. These are the propagated errors of the correction factor for each
+pixel, at that ADU. Clearly visible are the spectral orders and gaps, with the
+largest errors for the pixels that are only illuminated by one of the three
+spectrograph settings.}
+
+
+\putgraph{.8\linewidth}{detlin_accur.png}{detlinaccur}{How well does a known
+constant illumination get recovered by applying the correction? This is what the
+deviation from the horizontal line at 1.0 in this figure shows. A value of 1.005
+on the y-axis corresponds to 0.5\% inaccuracy. Points are average deviations of
+random pixels for a certain ADU-bin; errorbars here are the standard-deviation
+of values in the same bin, not the propagated errors.}
+
+The additional figures \ref{fig:detlinerrmap}, \ref{fig:detlincorrfac} and \ref{fig:detlinaccur} show some statistics of the outcome.
+For example, one way to read these figures is that at 30,000 ADU, a correction
+of around 10\% needs to be applied, and this correction is accurate to around
+0.5\%. 
