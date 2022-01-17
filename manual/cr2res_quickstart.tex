@@ -203,21 +203,25 @@ B1 and B2, specifying adequate slit fractions.
 
 \begin{shell}[fontsize=\small]
     %prompt mkdir A1 A2 B1 B1 # create directories to store spectra
-    %prompt esorex --output-dir=A1 cr2res_util_extract --slit_frac=sf1,sf2 A.sof
-    %prompt esorex --output-dir=A2 cr2res_util_extract --slit_frac=sf3,sf4 A.sof
-    %prompt esorex --output-dir=B1 cr2res_util_extract --slit_frac=sf5,sf6 B.sof
-    %prompt esorex --output-dir=B2 cr2res_util_extract --slit_frac=sf7,sf8 B.sof 
+    %prompt esorex --output-dir=A1 cr2res_util_extract --slit_frac=0.23,0.30 A.sof
+    %prompt esorex --output-dir=A2 cr2res_util_extract --slit_frac=0.35,0.45 A.sof
+    %prompt esorex --output-dir=B1 cr2res_util_extract --slit_frac=0.74,0.84 B.sof
+    %prompt esorex --output-dir=B2 cr2res_util_extract --slit_frac=0.86,0.97 B.sof 
 \end{shell}
+
+The values of the slit-fraction listed here match the example from the figure;
+they need to be adapted for each observation! The range of \verb![0.0 ... 1.0]!
+corresponds to the [bottom ... top] edge 
 
 The SOF files \verb!A.sof! and \verb!B.sof! contain only the TW file and
 \begin{shell}[fontsize=\small]
-    cr2res_obs_nodding_combinedA.fits OBS_NODDING_OTHER
+    cr2res\_obs\_nodding\_combinedA.fits OBS_NODDING_OTHER
 \end{shell}
 for \verb!A.sof!, and the equivalent combinedB frame for \verb!B.sof!.
 No calibrations needed, because they are already applied to the combined frame.
 
 If the user wants a single spectrum from nodding position A and for each of the
-star, they still need to combine the A and B spectra - essentially interpolating
+star, they still need to combine the A and B spectra -- essentially interpolating
 one to the wavelength scales of the other.
 
 
