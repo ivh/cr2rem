@@ -83,9 +83,9 @@ bad. The default values should give good results.
 Next are the FLATs.
 \begin{shell}[fontsize=\small]
 %prompt cat flats.sof
-$RAW/flat1.fits
-$RAW/flat2.fits
-$RAW/flat3.fits
+$RAW/flat1.fits         FLAT
+$RAW/flat2.fits         FLAT
+$RAW/flat3.fits         FLAT
 $CALIB/dark_bpm.fits    CAL_DARK_BPM
 $CALIB/dark_master.fits CAL_DARK_MASTER
 $CALIB/tw.fits          UTIL_WAVE_TW
@@ -100,8 +100,8 @@ For wavelength-calibration, both the UNE and FPET frames should best be provided
 at once:
 \begin{shell}[fontsize=\small]
 %prompt cat wave.sof
-$RAW/une.fits
-$RAW/fpet.fits
+$RAW/une.fits           WAVE_UNE
+$RAW/fpet.fits          WAVE_FPET
 $CALIB/dark_bpm.fits    CAL_DARK_BPM
 $CALIB/dark_2s_master.fits CAL_DARK_MASTER
 $CALIB/tw.fits          UTIL_WAVE_TW
