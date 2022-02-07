@@ -428,7 +428,7 @@ esorex --log-file=03_cr2res_util_trace.log --output-dir=03_cr2res_util_trace_out
 esorex --log-file=04_cr2res_util_slit_curv.log --output-dir=04_cr2res_util_slit_curv_out
   cr2res_util_slit_curv 04_cr2res_util_slit_curv.sof
 esorex --log-file=05_cr2res_util_extract.log --output-dir=05_cr2res_util_extract_out
-  cr2res_util_extract --smooth_slit=3 -smooth_spec=2.0E-7 
+  cr2res_util_extract --smooth_slit=3 -smooth_spec=2 
   05_cr2res_util_extract.sof
 esorex --log-file=06_cr2res_util_normflat.log --output-dir=06_cr2res_util_normflat_out 
   cr2res_util_normflat 06_cr2res_util_normflat.sof
@@ -463,7 +463,7 @@ A few notes on the recipe parameters used:
   smoothing (regularization, actually) of the blaze spectrum is necessary
   because there are column-by-column variations in the detectors that would
   otherwise become part of the blaze, not part of the normalized flat-field, as
-  inteded.
+  intended.
   \item[7.] For short exposures the detector background-level can vary
   significantly, so we use \linebreak \verb! --subtract_nolight_rows! to somewhat improve
   on sub-optimal dark-subtraction.
