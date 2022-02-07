@@ -289,15 +289,41 @@ this is being kept track of.
 
 \subsubsection{Splicing and Continuum Normalization}
 
-Give the blaze function and spectra from several settings to
-\texttt{cr2res\_util\_splice} and it will divide by the blaze and then resample
-the overlap-regions between all spectra from individual detector-orders to be
-able to do a weighted average. The result is a single spectrum, continuous over
+Give extracted spectra, blaze functions and TWs from several 
+settings to \texttt{cr2res\_util\_splice} and it will divide by the blaze, and 
+resample the overlap regions between all spectra from individual detector-orders 
+to be able to do a weighted average. The result is a single spectrum, continuous over
 the regions covered by the inputs.
+
+\begin{figure}[!h]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{figures/util_splice}
+  \end{center}
+  \caption{
+    \label{fig:util_splice}
+    The top subplot shows extracted spectra in two overlapping
+    wavelength settings: H1567 and H1582 with an inset zoom to a narrow
+    wavelength region. The bottom subplot shows the output of the splicing
+    recipe. Notice that the normalization is far from perfect.}
+\end{figure}
 
 Please note that this recipe has not been tested extensively to produce reliable
 results in all cases. For now its data products should therefore be considered
-experimental and quality not ensured to be "science-ready".
+experimental and quality not ensured to be "science-ready". Fig.~\ref{fig:util_splice}
+shows a typical example of what can be achieved with this recipe. An example SOF
+file is printed below.
+
+\begin{shell}[fontsize=\small]
+%prompt cat splice.sof
+H1567-cr2res_obs_nodding_extracted_combined.fits UTIL_EXTRACT_1D
+H1582-cr2res_obs_nodding_extracted_combined.fits UTIL_EXTRACT_1D
+$CALIB/H1567_tw.fits UTIL_WAVE_TW
+$CALIB/H1582_tw.fits UTIL_WAVE_TW
+$CALIB/H1567/05_cr2res_util_extract_out/
+  cr2res_util_calib_calibrated_collapsed_extr1D.fits CAL_FLAT_EXTRACT_1D
+$CALIB/H1582/05_cr2res_util_extract_out/
+  cr2res_util_calib_calibrated_collapsed_extr1D.fits CAL_FLAT_EXTRACT_1D
+\end{shell}
 
 
 \subsection{Calibration, from scratch}
