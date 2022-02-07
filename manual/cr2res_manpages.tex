@@ -148,11 +148,11 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --bpm_kappa           : Kappa threshold for BPM detection. [1.8]
+  --bpm_kappa           : Kappa threshold for BPM detection. [8.0]
   --trace_degree        : polynomial degree for the fit to the orders. [2]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster. [5000]
   --trace_smooth_x      : Length of the smoothing kernel in x. [111]
-  --trace_smooth_y      : Length of the smoothing kernel in y. [401]
+  --trace_smooth_y      : Length of the smoothing kernel in y. [480]
   --trace_threshold     : Detection Threshold. [1.0]
   --trace_opening       : Use a morphological opening to rejoin clusters. [TRUE]
   --single_settings     : Create the products for each setting. [FALSE]
@@ -410,13 +410,13 @@ OPTIONS
   --wl_method           : Wavelength Method (XCORR / LINE1D / LINE2D). [XCORR]
   --wl_shift            : Wavelength shift (nm) to apply to the guess. [0.0]
   --wl_est              : Estimated wavelength start and end. [-1.0, -1.0]
-  --wl_err              : Estimated wavelength error (in nm). [-1.0]
-  --wl_degree           : Wavelegth Polynomial degree. [2]
+  --wl_err              : Estimated wavelength error (in nm). [0.04]
+  --wl_degree           : Wavelegth Polynomial degree. [0]
   --log                 : Flag for taking the Log() value of the lines. [FALSE]
   --fallback            : Flag for using the input WL when no computation.
                           [FALSE]
   --keep                : Flag for re-using higher degrees of first guess in
-                          Cross-Corr. [FALSE]
+                          Cross-Corr. [TRUE]
   --clean_spectrum      : Flag to automatically clean the missing lines. [TRUE]
   --display             : Flag for display. [FALSE]
   --display_range       : Wavelength range to display [start, end] (in nm).
@@ -539,10 +539,12 @@ DESCRIPTION
       master_flat.fits CAL_FLAT_MASTER [0 to 1]        
                                                                           
     Outputs                                                               
-      cr2res_obs_nodding_extractA.fits OBS_NODDING_EXTRACTA
-      cr2res_obs_nodding_extractB.fits OBS_NODDING_EXTRACTB
+      cr2res_obs_nodding_extractedA.fits OBS_NODDING_EXTRACTA
+      cr2res_obs_nodding_extractedB.fits OBS_NODDING_EXTRACTB
       cr2res_obs_nodding_combinedA.fits OBS_NODDING_COMBINEDA
       cr2res_obs_nodding_combinedB.fits OBS_NODDING_COMBINEDB
+      cr2res_obs_nodding_trace_wave_A.fits OBS_NODDING_TWA
+      cr2res_obs_nodding_trace_wave_B.fits OBS_NODDING_TWB
       cr2res_obs_nodding_modelA.fits OBS_NODDING_SLITMODELA
       cr2res_obs_nodding_modelB.fits OBS_NODDING_SLITMODELB
       cr2res_obs_nodding_slitfuncA.fits OBS_NODDING_SLITFUNCA
@@ -987,7 +989,10 @@ OPTIONS
 
   --detector            : Only reduce the specified detector. [0]
   --clean_bad           : Apply the cleaning to the bad pixels. [FALSE]
-  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --subtract_nolight_rows  : Subtract median row from baffled region at detector
+                             bottom. [FALSE]
+  --subtract_interorder_column  : Subtract column-by column fit to the pixel
+                                  values between spectral orders. [TRUE]
   --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
   --collapse            : Collapse the input (NONE, SUM, MEAN or MEDIAN). [NONE]
 
@@ -1601,7 +1606,8 @@ OPTIONS
   --wl_est              : Estimated wavelength [start, end] (in nm). [-1.0,
                           -1.0]
   --wl_err              : Estimated wavelength error (in nm). [-1.0]
-  --wl_degree           : Wavelength Polynomial degree. [2]
+  --wl_degree           : Wavelength Polynomial degree, main dipsersion. [5]
+  --wl_xdegree          : Wavelength Polynomial degree, cross-dispersion. [5]
   --log                 : Flag for taking the Log() value of the lines. [FALSE]
   --fallback            : Flag for using the input WL when no computation.
                           [FALSE]
