@@ -100,18 +100,17 @@ There are a few more parameters that influence the extraction:
     not set and the upper and lower edge polynomials of the trace are used to
     set the height. Setting this parameter therefore overrides the role of the
     edge polynomials in the extraction.
-    \item \verb!--extract_smooth! is a regularization parameter for the
+    \item \verb!--extract_smooth_slit! is a regularization parameter for the
     slit-illumination vector, as it is approximated during the extraction. The
     value is roughly the size of the smoothing kernel in pixels, and should not
-    be set be set below $1.0$ to avoid ringing. Default is $2.0$.
+    be set below $1.0$ to avoid ringing. Default is $2.0$.
+    \item \verb!--extract_smooth_spec! is analogous to the previous, but along
+    the spectrum instead. It defaults to $0.0$ to not degrade resolution, but
+    can be increased as needed.
 \end{itemize}
 
 For the utility recipe \verb!cr2res_util_extract! these parameters are named
-without the prefix \verb!extract_!, and \verb!--extract_smooth! is called
-\verb!--smooth_slit! instead, because there also is \verb!--smooth_spec! which
-is the same, but for the spectrum instead of the slit-function. Its value has a
-different scaling, so that $1E-7$ already imparts noticeable smoothing of the
-output spectrum.
+without the prefix \verb!extract_!.
 
 \subsection{Other extraction methods}
 \label{sec:otherextr}
@@ -209,9 +208,15 @@ spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 \subsubsection{Order Tracing}
 \label{sec:ordertrace}
 
-As written above, by a \emph{trace}, we mean a polynomial, in pixel-coordinates of a single detector, that follows the mid-line of a spectral order. And two more polynomials for the upper and lower edges of the slit projection, as shown in Fig.~\ref{fig:flat_trace}.
+As written above, by a \emph{trace}, we mean a polynomial, in pixel-coordinates
+of a single detector, that follows the mid-line of a spectral order. And two
+more polynomials for the upper and lower edges of the slit projection, as shown
+in Fig.~\ref{fig:flat_trace}.
 
-The way this is derived is by first determining which pixels in a FLAT frame contain signal, and which don't. To that end the image is smoothed first horizontally, then vertically, and then compared to the unsmoothed frame via thresholding.
+The way this is derived is by first determining which pixels in a FLAT frame
+contain signal, and which don't. To that end the image is smoothed first
+horizontally, then vertically, and then compared to the unsmoothed frame via
+thresholding.
 
 After that it is determined which spectral order the pixels belong to. For this purpose, the mean Y-coordinate for each order is present in the raw file headers.
 
