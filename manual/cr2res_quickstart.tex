@@ -282,10 +282,11 @@ them as being outliers in their non-linearity behavior, or in their overall
 sensitivity as seen in the normalized flat-field.
 
 The recipe \texttt{cr2res\_util\_bpm\_merge} allows you to merge these BPMs into
-a combined BPM, to be used for subsequent reduction steps.
-\texttt{cr2res\_util\_bpm\_split} does the inverse, that is splitting a BPM into
-its original components. A pixel can be marked as bad in more than one way and
-this is being kept track of.
+a combined BPM; \texttt{cr2res\_util\_bpm\_split} does the inverse, that is
+splitting a BPM into its original components. This is possible because these
+recipes keep track of why a pixel was marked as bad. When a BPM is then used in
+subsequent reduction steps, any kind of bad pixel gets masked and does not
+contribute to the result.
 
 \subsubsection{Splicing and Continuum Normalization}
 
