@@ -142,7 +142,7 @@ spectra \emph{before} this combination are considered the primary data product.
 The combined spectrum contains the summed ADUs from A and B.
 
 The jitter around positions A and B does not need to be treated explicitly by
-the DRS. Instead it makes use of the fact that the extraction algorithm
+the DRS. Instead, it makes use of the fact that the extraction algorithm
 (cf.~\ref{sec:extract}) can handle arbitrary slit-illumination functions, in
 this case the combined frame simply looks like multiple "stars" along the slit.
 
@@ -162,7 +162,17 @@ twice as long. In general, values below 5 give suboptimal results and values
 above 10 are appropriate when the slit-illumination changes sharply. See
 Ch.~\ref{sec:extract} for more details.
 
+In addition to the aforementioned data products, the recipe also saves two new
+TW tables with \linebreak\verb!PRO.CATG=OBS_NODDING_TW[AB]!. These correspond to the lower
+and upper halves of the slit, i.e. the A and B nodding positions, and thus have
+their respective slit-fractions set to \verb![0.0, 0.25, 0.5]! and
+\verb![0.0, 0.75, 1.0]!. They can come handy, for example, to re-run the extraction
+of a \verb!OBS_NODDING_COMBINED[AB]! frame, using \verb!cr2res_util_extract!;
+or to over-plot the traces on the combined frame to check the alignment of the
+target.
+
 \subsubsection{Extracting multiple sources in nodding}
+\label{sec:slitfracbinary}
 In the case when multiple targets are placed on the slit (e.g resolved binary
 stars) in nodding observations, a few simple steps are needed to extract the spectrum 
 of each target separately. In the remainder of this section, we assume the user 
@@ -215,7 +225,7 @@ corresponds to the [bottom ... top] edge
 
 The SOF files \verb!A.sof! and \verb!B.sof! contain only the TW file and
 \begin{shell}[fontsize=\small]
-    cr2res\_obs\_nodding\_combinedA.fits OBS_NODDING_OTHER
+    cr2res_obs_nodding_combinedA.fits OBS_NODDING_OTHER
 \end{shell}
 for \verb!A.sof!, and the equivalent combinedB frame for \verb!B.sof!.
 No calibrations needed, because they are already applied to the combined frame.
@@ -263,14 +273,14 @@ future iteration of this document.
 
 \subsubsection{Polarimetry}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
+TODO
+beam separation changes, therefore smaller swath?
+
+\verb!save_group!
 
 \subsubsection{Spectro-Astrometry}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
-
+Spectro-astrometry uses the instrument derotator to take spectra 
 
 \subsection{Optional Steps}
 

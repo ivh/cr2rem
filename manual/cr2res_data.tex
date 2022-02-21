@@ -1,46 +1,53 @@
 \section{Data}
 \label{sec:data}
 
-This chapter is work-in-progress.
 
 %\red{\textit{Description of the different raw frames processed by the
 %    pipeline, including data classification and association keywords (cf. example)}}
 
 \subsection{Raw Data}
 
-\begin{tabularx}{\linewidth}{|X|X|X|X|}
+\begin{tabularx}{\linewidth}{|X|X|X|}
     \hline
     \multicolumn{1}{|l|}{\textbf{DPR.TYPE}} &
     \multicolumn{1}{l|}{\textbf{DPR.CATG}} &
-    \multicolumn{1}{l|}{\textbf{Processed by}} &
-    \multicolumn{1}{l|}{\textbf{Remarks}} \\
+    \multicolumn{1}{l|}{\textbf{Processed by}}\\
     \hline
-    \texttt{DARK}                   & \texttt{CALIB} & \texttt{cr2res\_cal\_dark} & \\
-    \texttt{FLAT}                   & \texttt{CALIB} & \texttt{cr2res\_cal\_flat} & \\
-    \texttt{LAMP,METROLOGY}         & \texttt{CALIB} & None & \\
-    \texttt{WAVE,ABSORPTION\_SGC}   & \texttt{CALIB} & None, atm. & \\
-    \texttt{WAVE,ABSORPTION\_N2O}   & \texttt{CALIB} & None, atm. & \\
-    \texttt{WAVE,ABSORPTION-CELL}   & \texttt{CALIB} & None & \\
-    \texttt{WAVE,UNE}               & \texttt{CALIB} & \texttt{cr2res\_cal\_wave} & \\
-    \texttt{WAVE,FPET}              & \texttt{CALIB} & \texttt{cr2res\_cal\_wave} & \\
-    \texttt{WAVE,LAMP}              & \texttt{CALIB} & None. & \\
-    \texttt{FLAT,LAMP,DETCHECK}     & \texttt{CALIB} & \texttt{cr2res\_cal\_detlin} & \\
-    \texttt{DARK,DETCHECK}          & \texttt{CALIB} & \texttt{cr2res\_cal\_detlin} & \\
+    \texttt{DARK}                   & \texttt{CALIB} & \texttt{cr2res\_cal\_dark} \\
+    \texttt{FLAT}                   & \texttt{CALIB} & \texttt{cr2res\_cal\_flat} \\
+    \texttt{LAMP,METROLOGY}         & \texttt{CALIB} & None \\
+    \texttt{WAVE,ABSORPTION\_SGC}   & \texttt{CALIB} & None, atm. \\
+    \texttt{WAVE,ABSORPTION\_N2O}   & \texttt{CALIB} & None, atm. \\
+    \texttt{WAVE,ABSORPTION-CELL}   & \texttt{CALIB} & None \\
+    \texttt{WAVE,UNE}               & \texttt{CALIB} & \texttt{cr2res\_cal\_wave} \\
+    \texttt{WAVE,FPET}              & \texttt{CALIB} & \texttt{cr2res\_cal\_wave} \\
+    \texttt{WAVE,LAMP}              & \texttt{CALIB} & None. \\
+    \texttt{FLAT,LAMP,DETCHECK}     & \texttt{CALIB} & \texttt{cr2res\_cal\_detlin} \\
+    \texttt{DARK,DETCHECK}          & \texttt{CALIB} & \texttt{cr2res\_cal\_detlin} \\
     \hline
 \end{tabularx}
 \label{tab:raw-calibs}
 
 
-\begin{tabularx}{\linewidth}{|X|X|X|X|}
+The following table lists the files with \verb!DPR.CATG=SCIENCE!.
+
+\begin{tabular}{|l|l|l|}
     \hline
-    \multicolumn{1}{|l|}{\textbf{DPR.TYPE}} &
-    \multicolumn{1}{l|}{\textbf{DPR.CATG}} &
-    \multicolumn{1}{l|}{\textbf{Processed by}} &
-    \multicolumn{1}{l|}{\textbf{Remarks}} \\
+    \textbf{DPR.TYPE} &
+    \textbf{DPR.TECH} &
+    \textbf{Processed by}  \\
     \hline
-    \texttt{DARK,DETCHECK}          & \texttt{CALIB} & \texttt{cr2res\_cal\_detlin} & \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,DIRECT,OTHER}   & \texttt{cr2res\_obs\_staring} \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,NODDING,JITTER} & \texttt{cr2res\_obs\_nodding} \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,NODDING,OTHER}  & \texttt{cr2res\_obs\_nodding} \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,NODDING,OTHER,ASTROMETRY}   & \texttt{cr2res\_obs\_nodding} \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,NODDING,OTHER,POLARIMETRY}  & \texttt{cr2res\_obs\_pol} \\
+\texttt{OBJECT}   & \texttt{SPECTRUM,GENERIC}    & \texttt{cr2res\_obs\_2d} \\
+\texttt{SKY   }   & \texttt{SPECTRUM,GENERIC}    & \texttt{cr2res\_obs\_2d} \\
+\texttt{STD   }   & \texttt{SPECTRUM,NODDING,OTHER,POLARIMETRY}  & \texttt{cr2res\_obs\_pol} \\
+\texttt{STD   }   & \texttt{SPECTRUM,NODDING,OTHER}  & \texttt{cr2res\_obs\_nodding} \\
     \hline
-\end{tabularx}
+\end{tabular}
 \label{tab:raw-science}
 
 
@@ -100,6 +107,8 @@ In addition to the recipes listed in the tables, any raw file can also be proces
 \texttt{TW               } & \texttt{UTIL\_WAVE\_TW}                & \\
 \texttt{WAVE\_MAP         } & \texttt{CAL\_WAVE\_MAP}                & \\
 \texttt{WAVE\_MAP         } & \texttt{UTIL\_WAVE\_MAP}               & \\
+\texttt{CATALOG  } & \texttt{EMISSION\_LINES}               & from \texttt{cr2res\_util\_genlines} \\
+\texttt{PHOTO\_FLUX  } & \texttt{PHOTO\_FLUX}               &  from \texttt{cr2res\_util\_genstd} \\
 \hline
 \end{tabularx}
 \label{tab:cal-prods}

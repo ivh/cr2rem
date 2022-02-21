@@ -62,11 +62,12 @@ Each trace stores three polynomials: one for the mid-line, upper and lower edge,
 respectively. Polynomials are stored as coefficients, lowest power first, and
 evaluated for pixel columns starting with index 1. Fig.~\ref{fig:flat_trace}
 shows these polynomials plotted onto a flat-field frame. Associated with each
-trace is also its \emph{slit fraction}, that is a number $[0.0\ldots 1.0]$ which
+trace is also its \emph{slit-fraction}, that is a number $[0.0\ldots 1.0]$ which
 indicates the height along the slit, ranging from $0.0$ at the bottom to $1.0$
 at the top. Three values are provided, one each for lower edge, mid-line and
-upper edge of the trace, so that a trace the full slit has 
-\verb!SlitFraction=[0.0,0.5,1.0]!
+upper edge of the trace, so that a trace for the full slit has
+\verb!SlitFraction=[0.0,0.5,1.0]!. Partial slit-fractions are used for nodding
+and polarimetry; see also Ch.~\ref{sec:slitfracbinary}.
 
 Analogous to traces, the wavelength solution is stored as polynomial coefficients
 that represent the translation from pixel to wavelength space. Because the slit

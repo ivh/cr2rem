@@ -133,6 +133,8 @@ the 2D frame. It can take the following values.
     \item \verb!OPT_CURV!, the default optimal extraction, as described above.
 \end{itemize}
 
+For all other recipes, \verb!OPT_CURV! is the only choice.
+
 \subsection{Errors and Signal-to-Noise}
 \label{sec:errors}
 
@@ -199,11 +201,6 @@ spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
 
-%\subsection{Nodding}
-%\label{sec:nodd}
-%Nodding sequence \texttt{SEQ.NABCYCLES} \texttt{SEQ.NODPOS}
-%first combined, then calibs applied, then subtracted, then extraction
-
 
 \subsubsection{Order Tracing}
 \label{sec:ordertrace}
@@ -218,13 +215,13 @@ contain signal, and which don't. To that end the image is smoothed first
 horizontally, then vertically, and then compared to the unsmoothed frame via
 thresholding.
 
-After that it is determined which spectral order the pixels belong to. For this purpose, the mean Y-coordinate for each order is present in the raw file headers.
+After that it is determined which spectral order the pixels belong to. For this
+purpose, the mean Y-coordinate for each order is present in the raw file
+headers.
 
-Lastly, the pixels from the same order are fitted with a polynomial.
-
-%smooth in x. smooth strongly in y and compare to unsmoothed, threshold. unify
-%clusters. label them. threshold minimum number od pix in cluster. fit
-%%polynomial to all pix. fit edges.
+Lastly, the X and Y-coordinates for pixels within the same order are fitted with
+a polynomial, which gives the mid-line of the trace. In addition, edge-detection
+gives the upper and lower edges of the spectral order.
 
 \subsubsection{Measuring the slit-tilt}
 \label{sec:tilt}
@@ -238,7 +235,8 @@ x-coordinate more than once.
 The coefficients of these polynomials are then fitted with a P(x) for each
 degree. This ensures a smooth change of the slit tilt with wavelength, removes
 outliers, and allows to store the information in the TW in an analogous way to
-the polynomials for trace and wavelength solution. The TW-columns are named \verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
+the polynomials for trace and wavelength solution. The TW-columns are named
+\verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
 
 More detail will be provided in a future iteration of this document.
 
@@ -252,12 +250,30 @@ With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines is converted
 into a synthetic spectrum that is cross-correlated with the extracted lamp
 spectrum. Each detector-order is calibrated separately.
 
-The recipe \texttt{cr2res\_cal\_wave} combines two methods into one recipe, one
+degree=0, which means a shift of the zero-point only, keeping the polynomial coefficients for the higher degrees fixed.
+
+The line catalogs for Uranium lines come from \cite{2018A&A...618A.118S} and
+\cite{2011ApJS..195...24R}. They are used for YJ and HK-bands, respectively.
+Note that all wavelengths are vacuum, not air.
+
+
+
+The recipe \texttt{cr2res\_cal\_wave} executes several steps after one another that can be replicated with individual calls of util-recipes:
+
+\begin{itemize}
+    \item apply master calibrations to raw (UNE and FPET) frames, \verb!cr2res_util_calib!
+    \item extract spectra from the calibrated frames, \verb!cr2res_util_extract!
+    \item calibrate UNE with XCORR and degree=0, which means a shift of the zero-p
+    
+\end{itemize}
+
+TODO
+
+combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
-the appropriate method is applied.
+the appropriate method is applied. 
 
-Line catalogs from \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}.
 
 \subsubsection{Detector non-linearity}
 \label{sec:detlin}
@@ -319,7 +335,8 @@ This procedure is repeated for the other spectrograph settings and in the end
 the coefficients are merged, with weights according to their errors.
 
 
-\putgraph{.8\linewidth}{detlin_corrfacs.png}{detlincorrfac}{The size of the non-linearity correction, depending on raw ADU-level.}
+\putgraph{.8\linewidth}{detlin_corrfacs.png}{detlincorrfac}{The size of the
+non-linearity correction, depending on raw ADU-level.}
 
 
 \putgraph{.8\linewidth}{detlin_errmaps.png}{detlinerrmap}{Error maps for three
@@ -340,3 +357,10 @@ The additional figures \ref{fig:detlinerrmap}, \ref{fig:detlincorrfac} and \ref{
 For example, one way to read these figures is that at 30,000 ADU, a correction
 of around 10\% needs to be applied, and this correction is accurate to around
 0.5\%. 
+
+\subsubsection{Data Product Headers}
+
+TODO
+raw headers are propagated from the first file in SOF.
+
+REC1.*
