@@ -238,9 +238,10 @@ outliers, and allows to store the information in the TW in an analogous way to
 the polynomials for trace and wavelength solution. The TW-columns are named
 \verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
 
-More detail will be provided in a future iteration of this document.
 
 \subsubsection{Wavelength calibration}
+
+\putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{An example of residual values after wavelength calibration with the FPET.}
 
 There are several ways to calibrate the wavelength scale, and each corresponds
 to one of the values that the parameter \texttt{-{}-wl\_method} of
@@ -276,6 +277,8 @@ combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied. 
+
+
 
 for the L and M-bands, the TW
 molecfit

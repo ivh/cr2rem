@@ -61,11 +61,17 @@ In addition to the recipes listed in the tables, any raw file can also be proces
 
 \subsection{Data products}
 \label{sec:data-prods}
-\begin{tabularx}{\linewidth}{|X|X|X|X|}
+
+
+The following table lists the DRS data products. The \verb'PRO.TYPE' defines the
+format and content of a file, and \verb'PRO.CATG' name convention tells which
+recipe the file was made from.
+
+\begin{tabular}{|l|l|l|}
     \hline
-    \multicolumn{1}{|l|}{\textbf{PRO.TYPE}} &
-    \multicolumn{1}{l|}{\textbf{PRO.CATG}} &
-    \multicolumn{1}{l|}{\textbf{Remarks}} \\
+    \textbf{PRO.TYPE} &
+    \textbf{PRO.CATG} &
+    \textbf{Remarks} \\
     \hline
 \texttt{BPM              } & \texttt{CAL\_DARK\_BPM}                & \\
 \texttt{BPM              } & \texttt{CAL\_DETLIN\_BPM}              & \\
@@ -82,6 +88,7 @@ In addition to the recipes listed in the tables, any raw file can also be proces
 \texttt{EXTRACT\_1D       } & \texttt{OBS\_NODDING\_EXTRACT\_COMB}    & \\
 \texttt{EXTRACT\_1D       } & \texttt{UTIL\_EXTRACT\_1D}             & \\
 \texttt{EXTRACT\_1D       } & \texttt{UTIL\_WAVE\_EXTRACT\_1D}        & \\
+\texttt{EXTRACT\_2D       } & \texttt{OBS\_2D\_EXTRACT}        & \\
 \texttt{LINES\_DIAGNOSTICS} & \texttt{CAL\_WAVE\_LINES\_DIAGNOSTICS}  & \\
 \texttt{LINES\_DIAGNOSTICS} & \texttt{UTIL\_WAVE\_LINES\_DIAGNOSTICS} & \\
 \texttt{MASTER\_DARK      } & \texttt{CAL\_DARK\_MASTER}             & \\
@@ -110,13 +117,14 @@ In addition to the recipes listed in the tables, any raw file can also be proces
 \texttt{CATALOG  } & \texttt{EMISSION\_LINES}               & from \texttt{cr2res\_util\_genlines} \\
 \texttt{PHOTO\_FLUX  } & \texttt{PHOTO\_FLUX}               &  from \texttt{cr2res\_util\_genstd} \\
 \hline
-\end{tabularx}
+\end{tabular}
 \label{tab:cal-prods}
 
-Note that the \verb'PRO.TYPE' defines the format and content of a file and \verb'PRO.CATG' name convention tells which recipe the file was made from.
+\pagebreak
 
 
-The data products of \texttt{cr2res\_obs\_nodding} are named with suffixes as follows.
+The data products of \texttt{cr2res\_obs\_nodding} are saved in files which are
+named with suffixes as follows.
 \begin{itemize}
     \item \verb!_OBS_NODDING_COMBINED[AB]! are the combined frames from A and B, one minus the other, i.e. one positive and one negative image, before extraction.
     \item \verb!_OBS_NODDING_TW[AB].fits! are the TW tables for extraction of A or B, respectively. These are made from the input TW, depending on the NODTHROW.

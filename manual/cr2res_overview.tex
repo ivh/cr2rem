@@ -35,10 +35,8 @@ scripts or tools. Instead, the FITS extension \emph{name} should be used.
 
 \subsubsection{Data Product Headers}
 
-The DRS recipes use the FITS headers of the \emph{first} file in the SOF as
-basis for the data products' headers. Thus, if you expect some key value of the
-product to match the input raw frames, it makes sense to order your SOF such
-that the raw frames are at the top, before calibrations.
+The DRS recipes use the FITS headers of the \emph{first raw file} in the SOF as
+basis for the data products' headers.
 
 Recipes also add some new headers:
 
