@@ -163,13 +163,13 @@ above 10 are appropriate when the slit-illumination changes sharply. See
 Ch.~\ref{sec:extract} for more details.
 
 In addition to the aforementioned data products, the recipe also saves two new
-TW tables with \linebreak\verb!PRO.CATG=OBS_NODDING_TW[AB]!. These correspond to the lower
-and upper halves of the slit, i.e. the A and B nodding positions, and thus have
-their respective slit-fractions set to \verb![0.0, 0.25, 0.5]! and
-\verb![0.0, 0.75, 1.0]!. They can come handy, for example, to re-run the extraction
-of a \verb!OBS_NODDING_COMBINED[AB]! frame, using \verb!cr2res_util_extract!;
-or to over-plot the traces on the combined frame to check the alignment of the
-target.
+TW tables with \linebreak\verb!PRO.CATG=OBS_NODDING_TW[AB]!. These correspond to
+the lower and upper halves of the slit, i.e. the A and B nodding positions, and
+thus have their respective slit-fractions set to \verb![0.0, 0.25, 0.5]! and
+\verb![0.0, 0.75, 1.0]!. They can come handy, for example, to re-run the
+extraction of a \verb!OBS_NODDING_COMBINED[AB]! frame, using
+\verb!cr2res_util_extract!; or to over-plot the traces on the combined frame to
+check the alignment of the target.
 
 \subsubsection{Extracting multiple sources in nodding}
 \label{sec:slitfracbinary}
@@ -268,19 +268,41 @@ differ slightly between the spectra, so one needs to be resampled to the other.
 
 \subsubsection{Generic Offset}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
+For data taken with the generic-offset-template, the DRS assumes that the
+spatial resolution along the slit holds valuable information, and therefore does
+not collapse the data into 1D-spectra. Instead, the recipe \verb!cr2res_obs_2d!
+produces output tables with 2D spectra
+
+if Number of SKY == Number of OBJ
+     Loop on OBJ frames
+         Subtract the corresponding SKY (same position in the list),
+applying the DIT correction ratio.
+         Execute Extraction
+else
+     Average the SKY frames (if any)
+     Loop in OBJ frames
+         Subtract the Averaged Sky (if any) regardless of the DIT
+         Execute Extraction
+         
 
 \subsubsection{Polarimetry}
 
 TODO
-beam separation changes, therefore smaller swath?
+
+% TODO beam separation changes, therefore smaller swath?
 
 \verb!save_group!
 
 \subsubsection{Spectro-Astrometry}
 
-Spectro-astrometry uses the instrument derotator to take spectra 
+Spectro-astrometry uses the instrument derotator to take spectra with different
+position angles of the slit on the sky.
+
+The recipe \verb!cr2res_obs_nodding! can get raw input tagged like
+\verb!OBS_ASTROMETRY_OTHER! or \verb!OBS_ASTROMETRY_JITTER!. Given a sequence of
+these, it will separate them by position angle and reduce the set for each angle
+separately, just like plain nodding observations, with the same outputs. Any
+further steps are considered out of scope for the DRS and left to users.
 
 \subsection{Optional Steps}
 
@@ -297,6 +319,8 @@ splitting a BPM into its original components. This is possible because these
 recipes keep track of why a pixel was marked as bad. When a BPM is then used in
 subsequent reduction steps, any kind of bad pixel gets masked and does not
 contribute to the result.
+
+%TODO Explain NaNs
 
 \subsubsection{Splicing and Continuum Normalization}
 
@@ -336,6 +360,10 @@ $CALIB/H1582/05_cr2res_util_extract_out/
   cr2res_util_calib_calibrated_collapsed_extr1D.fits CAL_FLAT_EXTRACT_1D
 \end{shell}
 
+It should also be noted that it is probably a good idea to manually mask some
+regions, like the ones affected by the ghosts, before splicing, since otherwise
+this wavelength region would be degraded in the output, even if it was
+unaffected in data from a different setting. 
 
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
@@ -491,21 +519,3 @@ A few notes on the recipe parameters used:
   precluding it from subsequent steps. With this option, the input solution gets
   propagated into the output, in case calibration fails.
 \end{enumerate}
-%%%%%%%%%%%%%%
-
-%\subsubsection{Getting Started with \gasgano{}}
-%\label{sec:gasgano-quick}
-
-%\red{\textit{{Basic description of Gasgano and its usage with \instrument{} and
-%   its recipes. Maybe omitted if Gasgano, for technical reasons cannot be
-%   supported (MUSE memory requirements for instance). If present, major parts
-%   will be provided by ESO.}}}
-
-
-% \subsection{Data Organization}
-% \label{sec:dataorganization}
-
-% \red{\textit{Outline of how to organize \instrument{} data, i.e. how to get to
-%     a correct SOF file, which classification tags are accepted by the recipes
-%     and how they are defined in terms of header keywords.}}
-

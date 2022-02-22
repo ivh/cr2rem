@@ -251,6 +251,9 @@ into a synthetic spectrum that is cross-correlated with the extracted lamp
 spectrum. Each detector-order is calibrated separately.
 
 degree=0, which means a shift of the zero-point only, keeping the polynomial coefficients for the higher degrees fixed.
+TODO
+keep=true with XCORR.
+fallback
 
 The line catalogs for Uranium lines come from \cite{2018A&A...618A.118S} and
 \cite{2011ApJS..195...24R}. They are used for YJ and HK-bands, respectively.
@@ -274,6 +277,8 @@ for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied. 
 
+for the L and M-bands, the TW
+molecfit
 
 \subsubsection{Detector non-linearity}
 \label{sec:detlin}
@@ -289,14 +294,20 @@ the appropriate method is applied.
  to the raw values; should align with green dots and errors.}
 
 
-Users are generally provided with the static calibration data-product
+Users are provided (via the data archive) with the calibration data-product
 (\verb!PRO.CATG=CAL_DETLIN_COEFFS!) that is needed to apply the correction for
-the non-linear response of detector pixels.
+the non-linear response of detector pixels. This file contains for each pixel
+the coefficients of a polynomial which, when evaluated at a certain ADU-level,
+yields the correction factor by which to multiply the raw ADU, so that the value
+becomes that which a linear response would have given.
 
-This file contains for each pixel the coefficients of a polynomial which, when
-evaluated at a certain ADU-level, yields the correction factor by which to
-multiply the raw ADU, so that the value becomes that which a linear response
-would have given.
+The \verb!cr2res_obs_*! recipes take
+this file as optional input and apply the correction, so do some of the
+calibration recipes, most notably \verb!cr2res_cal_flat!. Since there is a
+degeneracy between the pixel response characterized by the normalized flat-field
+and the detlin-coefficients, users are advised to provide the detlin to either
+\emph{both} the flat-field and science reductions, or to \emph{neither} of them.
+
 
 In order to derive this correction, a long series of exposures with the
 flat-field lamp are taken, with increasing DITs, starting from very short until
@@ -357,10 +368,3 @@ The additional figures \ref{fig:detlinerrmap}, \ref{fig:detlincorrfac} and \ref{
 For example, one way to read these figures is that at 30,000 ADU, a correction
 of around 10\% needs to be applied, and this correction is accurate to around
 0.5\%. 
-
-\subsubsection{Data Product Headers}
-
-TODO
-raw headers are propagated from the first file in SOF.
-
-REC1.*
