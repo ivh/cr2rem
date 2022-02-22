@@ -35,10 +35,17 @@ scripts or tools. Instead, the FITS extension \emph{name} should be used.
 
 \subsubsection{Data Product Headers}
 
-TODO
-raw headers are propagated from the first file in SOF.
+The DRS recipes use the FITS headers of the \emph{first} file in the SOF as
+basis for the data products' headers. Thus, if you expect some key value of the
+product to match the input raw frames, it makes sense to order your SOF such
+that the raw frames are at the top, before calibrations.
 
-REC1.*
+Recipes also add some new headers:
+
+\begin{itemize}
+    \item The header keys specific to the data product are named \verb!PRO.*! and includes classification (\verb!PRO.TYPE!, \verb!PRO.CATG!), the list of input files (\verb!PRO.RECi,RAWj! and \verb!PRO.RECi.CALIBj!), and recipe parameters and their values (\verb!PRO.RECi.PARAMj!); with \verb!i,j! being integers increasing from $1$.
+    \item Named \verb!QC.*! are the results of quality control parameters, which are used for instrument monitoring. Note that these often reside in the extension headers, since they are derived for each detector.
+\end{itemize}
 
 \subsubsection{The TraceWave-Table}
 \label{sec:tracewave}
