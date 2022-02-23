@@ -89,6 +89,7 @@ recipe the file was made from.
 \texttt{EXTRACT\_1D       } & \texttt{UTIL\_EXTRACT\_1D}             & \\
 \texttt{EXTRACT\_1D       } & \texttt{UTIL\_WAVE\_EXTRACT\_1D}        & \\
 \texttt{EXTRACT\_2D       } & \texttt{OBS\_2D\_EXTRACT}        & \\
+
 \texttt{LINES\_DIAGNOSTICS} & \texttt{CAL\_WAVE\_LINES\_DIAGNOSTICS}  & \\
 \texttt{LINES\_DIAGNOSTICS} & \texttt{UTIL\_WAVE\_LINES\_DIAGNOSTICS} & \\
 \texttt{MASTER\_DARK      } & \texttt{CAL\_DARK\_MASTER}             & \\
@@ -118,10 +119,31 @@ recipe the file was made from.
 \texttt{PHOTO\_FLUX  } & \texttt{PHOTO\_FLUX}               &  from \texttt{cr2res\_util\_genstd} \\
 \hline
 \end{tabular}
-\label{tab:cal-prods}
+\label{tab:calobs-prods}
 
 \pagebreak
 
+Data products table continued:
+
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{PRO.TYPE} &
+    \textbf{PRO.CATG} &
+    \textbf{Remarks} \\
+    \hline
+    \texttt{   POL\_SPEC     } & \texttt{OBS\_POL\_SPECA}                & \\
+    \texttt{   POL\_SPEC     } & \texttt{OBS\_POL\_SPECB}                & \\
+\texttt{   EXTRACT\_1D     } & \texttt{OBS\_POL\_EXTRACTA}                & optional product\\
+\texttt{   EXTRACT\_1D     } & \texttt{OBS\_POL\_EXTRACTB}                & optional product\\
+\texttt{   TW     } & \texttt{OBS\_POL\_TWA}                & optional product\\
+\texttt{   TW     } & \texttt{OBS\_POL\_TWB}                & optional product\\
+\texttt{   CALIBRATED     } & \texttt{OBS\_POL\_CALIBA}                & optional product\\
+\texttt{   CALIBRATED     } & \texttt{OBS\_POL\_CALIBB}                & optional product\\
+\hline
+\end{tabular}
+\label{tab:pol-prods}
+
+\hrulefill
 
 The data products of \texttt{cr2res\_obs\_nodding} are saved in files which are
 named with suffixes as follows.
@@ -137,3 +159,6 @@ named with suffixes as follows.
 
 Here, \verb![AB]! is shorthand for "either one of \verb!A! or \verb!B!", i.e.
 the nodding positions.
+
+The optional intermediate data products for polarimetry are named in a similar
+fashion.

@@ -93,9 +93,11 @@ cr2res_detlin_coeffs.fits  CAL_DETLIN_COEFFS
 
 %prompt esorex cr2res_cal_flat flats.sof
 \end{shell}
-The main data product is the normalized flat-field (\verb!PRO.CATG=CAL_FLAT_MASTER!).
-
-TODO why need TW.
+The main data product is the normalized flat-field
+(\verb!PRO.CATG=CAL_FLAT_MASTER!). Note that even though the recipe can perform
+the order-tracting by itself, it is recommended to provide a TW as input;
+especially in the bands YJHK, where the slit-tilt can be characterized. This way
+absorption lines affect the flat-field less.
 
 
 For wavelength-calibration, both the UNE and FPET frames should best be provided

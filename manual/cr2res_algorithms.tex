@@ -212,8 +212,9 @@ in Fig.~\ref{fig:flat_trace}.
 
 The way this is derived is by first determining which pixels in a FLAT frame
 contain signal, and which don't. To that end the image is smoothed first
-horizontally, then vertically, and then compared to the unsmoothed frame via
-thresholding.
+horizontally, then vertically, and then compared to the un-smoothed frame via
+thresholding. The recipe option \verb!trace_opening!, true by default, joins
+together closely adjacent clusters of pixels.
 
 After that it is determined which spectral order the pixels belong to. For this
 purpose, the mean Y-coordinate for each order is present in the raw file
@@ -222,9 +223,6 @@ headers.
 Lastly, the X and Y-coordinates for pixels within the same order are fitted with
 a polynomial, which gives the mid-line of the trace. In addition, edge-detection
 gives the upper and lower edges of the spectral order.
-
-%TODO \verb!trace_opening!
-
 
 \subsubsection{Measuring the slit-tilt}
 \label{sec:tilt}
@@ -244,15 +242,15 @@ the polynomials for trace and wavelength solution. The TW-columns are named
 
 \subsubsection{Wavelength calibration}
 
-\putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{An example of residual values after wavelength calibration with the FPET.}
-
 There are several ways to calibrate the wavelength scale, and each corresponds
 to one of the values that the parameter \texttt{-{}-wl\_method} of
 \texttt{cr2res\_util\_wave} can take.
 
-With \texttt{-{}-wl\_method=XCORR} the provided catalog of lines is converted
+With \texttt{-{}-wl\_method=XCORR} the input catalog of lines is converted
 into a synthetic spectrum that is cross-correlated with the extracted lamp
-spectrum. Each detector-order is calibrated separately.
+spectrum. The first-guess solution is stretched
+
+Each detector-order is calibrated separately.
 
 degree=0, which means a shift of the zero-point only, keeping the polynomial coefficients for the higher degrees fixed.
 TODO
@@ -263,6 +261,7 @@ The line catalogs for Uranium lines come from \cite{2018A&A...618A.118S} and
 \cite{2011ApJS..195...24R}. They are used for YJ and HK-bands, respectively.
 Note that all wavelengths are vacuum, not air.
 
+\putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{An example of residual values after wavelength calibration with the FPET.}
 
 
 The recipe \texttt{cr2res\_cal\_wave} executes several steps after one another that can be replicated with individual calls of util-recipes:
@@ -330,12 +329,17 @@ side-effects in certain situations.
  to the raw values; should align with green dots and errors.}
 
 
-Users are provided (via the data archive) with the calibration data-product
-(\verb!PRO.CATG=CAL_DETLIN_COEFFS!) that is needed to apply the correction for
-the non-linear response of detector pixels. This file contains for each pixel
-the coefficients of a polynomial which, when evaluated at a certain ADU-level,
-yields the correction factor by which to multiply the raw ADU, so that the value
-becomes that which a linear response would have given.
+Users are provided (via the ESO Archive\footnote{As of writing (2022-02-22),
+this reduced calibration is not yet in the Archive, but should become available
+in the coming weeks. If 20GB of download and disk space are not an issue, then
+feel free to search for the raw data via
+\texttt{TPL.ID=CRIRES\_spec\_tec\_DetLinMon} and run the recipe yourself.}) with the
+calibration data-product (\verb!PRO.CATG=CAL_DETLIN_COEFFS!) that is needed to
+apply the correction for the non-linear response of detector pixels. This file
+contains for each pixel the coefficients of a polynomial which, when evaluated
+at a certain ADU-level, yields the correction factor by which to multiply the
+raw ADU, so that the value becomes that which a linear response would have
+given.
 
 The \verb!cr2res_obs_*! recipes take
 this file as optional input and apply the correction, so do some of the
