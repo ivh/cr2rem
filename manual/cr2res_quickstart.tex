@@ -287,11 +287,14 @@ else
 
 \subsubsection{Polarimetry}
 
-The spectro-polarimeter splits the light into two beams, and their light passes
-through a slit-mask, aka decker, either though the first and third quarter
-(2.5'') of the slit, or the second and fourth quarter (cf.~RD01\cite{CIRESMAN}).
-These two options make up the two nodding positions, and the recipe
-\verb!cr2res_obs_pol! is used in completely analogous way to the nodding-recipe.
+In polarimetry, the spectropolarimetry unit is inserted into the light path
+ahead of the slit. It splits the incoming light beam into two parallel beams
+of orthogonal polarization state, which then pass through a slit mask (also 
+called deckers). There are two deckers: one lets the light through the first
+and third quarter of the slit (each of them is 2.5" high), the other one
+through the second and fourth quarter (cf.~RD01\cite{CIRESMAN}).
+These two deckers are designed to cover two nodding positions, and the recipe
+\verb!cr2res_obs_pol! is used in a completely analogous way to the nodding-recipe.
 
 The SOF therefore looks just like the example from \ref{sec:sci-reduc}, except
 that the raw frames are tagged \linebreak\verb!OBS_POLARIMETRY_OTHER! instead.
@@ -306,19 +309,19 @@ For the reduction of position A, the four frames from B are averaged and
 subtracted, and vice versa. This works because the deckers block the light in
 the respective opposite quarters of the slit.
 
-Then the beams are extracted from each frame, using order traces for each decker
-hole. This means many more extractions than for non-polarimetric observations
+Then the two beams are extracted from each frame, using order traces for each decker
+hole. This means more extractions than for non-polarimetric observations
 which is why this recipe takes significantly longer to run.
 
-The resulting spectra are then cleverly combined with each other,
-following the demodulation scheme described by \cite{1997MNRAS.291..658D}. This
-minimizes instrumental effects and produces the following results, saved in a
-FITS table that is analogous to non-polarized spectra:
+The individual extracted spectra are then combined with each other,
+following the demodulation scheme described by \cite{1997MNRAS.291..658D}. The
+demodulation schme minimizes instrumental effects and produces the 
+following results, saved in a FITS table that is analogous to non-polarized spectra:
 
 \begin{itemize}
-    \item Intensity spectrum, i.e.~the sum of the beams. Table columns named like \verb!i_INTENS! where \verb!i! is the order number.
-    \item The Stokes parameter spectrum, i.e.~V, Q or U, in the columns \verb!i_STOKES!. Which of the Stokes parameters was observed in a dataset should be clear from your data organization, but can also be seen from the header \verb!INS.POL.TYPE!.
-    \item The Null spectrum. This is a diagnostic spectrum from the demodulation that characterizes the level of spurious polarization. In the ideal case, its value is very close to zero. \verb!i_NULL!.
+    \item Intensity spectrum, i.e.~the sum of all the beams. Table columns named like \verb!i_INTENS! where \verb!i! is the order number.
+    \item The Stokes parameter spectrum, i.e.~\textit{V}, \textit{Q} or \textit{U}, normalized by the intensity spectrum. These are stored in the columns \verb!i_STOKES!. Which of the Stokes parameters was observed in a dataset should be clear from your data organization, but can also be seen from the header \verb!INS.POL.TYPE!.
+    \item The Null spectrum normalized by the intensity spectrum. This is a diagnostic spectrum from the demodulation that characterizes the level of spurious polarization. In the ideal case, there should be no polarization signatures present in the Null spectrum. \verb!i_NULL!.
     \item Error spectra for each of the above, in columns named like these, plus the suffix \verb!_ERR!.
     \item The array of wavelengths for each of the spectral bins.
 \end{itemize}
