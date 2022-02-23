@@ -186,8 +186,8 @@ obtain the signal-to-noise ratio (S/N). No further conversions are necessary.
 However, in order to compare this S/N with the theoretical expectation from
 Poissonian statistics, users will have to scale the ADU-values of the spectrum
 by the gain and the number of averaged frames (NDIT or combined frames), before
-taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after extraction is
-somewhat lower than the theoretical value.
+taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after
+extraction is somewhat lower than the theoretical value.
 
 \begin{equation}
     \label{eq:snr}
@@ -223,7 +223,8 @@ Lastly, the X and Y-coordinates for pixels within the same order are fitted with
 a polynomial, which gives the mid-line of the trace. In addition, edge-detection
 gives the upper and lower edges of the spectral order.
 
-TODO trace_opening
+%TODO \verb!trace_opening!
+
 
 \subsubsection{Measuring the slit-tilt}
 \label{sec:tilt}
@@ -237,12 +238,8 @@ x-coordinate more than once.
 The coefficients of these polynomials are then fitted with a P(x) for each
 degree. This ensures a smooth change of the slit tilt with wavelength, removes
 outliers, and allows to store the information in the TW in an analogous way to
-<<<<<<< HEAD
-the polynomials for trace and wavelength solution. The TW-columns are named \verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
-=======
 the polynomials for trace and wavelength solution. The TW-columns are named
 \verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
->>>>>>> cf11d65d6919e3a722b25f12a8f24808e0023987
 
 
 \subsubsection{Wavelength calibration}
@@ -300,11 +297,22 @@ combination.
 There are two more ways to subtract background which can be activated with the
 following parameters of the appropriate recipes.
 
-The bottom $~40pix$ rows of the detectors are physically blocked from receiving light. When \verb!--subtract_nolight_rows=TRUE! then the DRS will 
+The bottom $~40pix$ rows of the detectors are physically blocked from receiving
+light. When \linebreak\verb!--subtract_nolight_rows=TRUE! then the DRS will take a
+vertical median over these rows, and then subtract the result from all detector
+rows.
 
-With \verb!--subtract_interorder_column=TRUE! given, recipes
+With \verb!--subtract_interorder_column=TRUE! given, recipes will fit a
+low-order polynomial to the pixel values between the spectral
+orders\footnote{The master-flat is used to determine these pixels, because at
+this stage of the frame calibration the DRS does not have access to a TW table.
+Therefore this method requires a flat-field to be present in calibration
+inputs.}, and then subtract the result. This is done for each column
+independently which allows it to address both scattered light and mitigate the
+occasional detector artifacts that randomly affect a certain vertical read-out
+channel.
 
-The latter has given good results in tests and is therefore turned on by
+The latter method has given good results in tests and is therefore turned on by
 default. We cannot however completely exclude the possibility of negative
 side-effects in certain situations.
 

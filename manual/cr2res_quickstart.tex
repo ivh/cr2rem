@@ -273,19 +273,42 @@ differ slightly between the spectra, so one needs to be resampled to the other.
 For data taken with the generic-offset-template, the DRS assumes that the
 spatial resolution along the slit holds valuable information, and therefore does
 not collapse the data into 1D-spectra. Instead, the recipe \verb!cr2res_obs_2d!
-produces output tables with 2D spectra
+produces output tables with 2D spectra, where each in-order and not-bad pixel
+has an entry with the following values and column names (prefixed with order and
+trace number as for 1D spectra).
 
-if Number of SKY == Number of OBJ
-     Loop on OBJ frames
-         Subtract the corresponding SKY (same position in the list),
-applying the DIT correction ratio.
-         Execute Extraction
-else
-     Average the SKY frames (if any)
-     Loop in OBJ frames
-         Subtract the Averaged Sky (if any) regardless of the DIT
-         Execute Extraction
-         
+\begin{itemize}
+    \item \verb!POSITIONX!, the original X-coordinate of the pixel
+    \item \verb!POSITIONY!, same for Y
+    \item \verb!SLIT_FRACTION!, from $[0..1]$, the spatial coordinate along the slit, i.e.~on sky.
+    \item \verb!WL!, the wavelength
+    \item \verb!SPEC!, the spectrum in ADU
+    \item \verb!ERR!, the error spectrum.
+\end{itemize}
+
+Plotting the against wavelength and slit-fraction as X,Y-coordinates yields a
+rectified 2D spectrum. Resampling to a regular grid is left to users.
+
+
+The recipe interface of \verb!cr2res_obs_2d!, and thus the SOF files, follows
+the same philosophy as the other \verb!cr2res_obs_*! recipes. The same processed
+calibrations are listed together with the to-be-reduced raw frames.
+
+
+The sky-pointings are subtracted from the object-pointings like this:
+
+\begin{verbatim}
+    if Number of SKY == Number of OBJ
+         Loop on OBJ frames
+             Subtract the corresponding SKY (same position in the list),
+               applying the DIT correction ratio.
+             Execute 2D-extraction
+    else
+         Average the SKY frames (if any)
+         Loop in OBJ frames
+             Subtract the Averaged Sky (if any) regardless of the DIT
+             Execute 2D-extraction
+\end{verbatim}         
 
 \subsubsection{Polarimetry}
 
