@@ -223,6 +223,8 @@ Lastly, the X and Y-coordinates for pixels within the same order are fitted with
 a polynomial, which gives the mid-line of the trace. In addition, edge-detection
 gives the upper and lower edges of the spectral order.
 
+TODO trace_opening
+
 \subsubsection{Measuring the slit-tilt}
 \label{sec:tilt}
 
@@ -281,6 +283,26 @@ the appropriate method is applied.
 
 for the L and M-bands, the TW
 molecfit
+
+
+\subsubsection{Background Subtraction}
+\label{sec:backgr}
+
+In general, the best way to subtract background  --  be it originating from the
+sky, telescope, instrument or detector  --  is to use nodding in observations.
+As explained above, the recipes take care of the frame subtraction and
+combination.
+
+There are two more ways to subtract background which can be activated with the
+following parameters of the appropriate recipes.
+
+The bottom $~40pix$ rows of the detectors are physically blocked from receiving light. When \verb!--subtract_nolight_rows=TRUE! then the DRS will 
+
+With \verb!--subtract_interorder_column=TRUE! given, recipes
+
+The latter has given good results in tests and is therefore turned on by
+default. We cannot however completely exclude the possibility of negative
+side-effects in certain situations.
 
 \subsubsection{Detector non-linearity}
 \label{sec:detlin}

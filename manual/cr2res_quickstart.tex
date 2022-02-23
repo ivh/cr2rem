@@ -95,6 +95,8 @@ cr2res_detlin_coeffs.fits  CAL_DETLIN_COEFFS
 \end{shell}
 The main data product is the normalized flat-field (\verb!PRO.CATG=CAL_FLAT_MASTER!).
 
+TODO why need TW.
+
 
 For wavelength-calibration, both the UNE and FPET frames should best be provided
 at once:
@@ -542,7 +544,7 @@ A few notes on the recipe parameters used:
   intended.
   \item[7.] For short exposures the detector background-level can vary
   significantly, so we use \linebreak \verb! --subtract_nolight_rows! to somewhat improve
-  on sub-optimal dark-subtraction.
+  on suboptimal dark-subtraction.
   \item[9.] The first pass of cross-correlation with a sufficiently large
   search-radius (\verb!--wl_err!). \verb!--wl_degree=0! means that only a shift
   in the zero-point is allowed, which means that we have to \verb!--keep! the
