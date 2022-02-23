@@ -32,6 +32,19 @@ Fig.~\ref{fig:fits_ext} illustrates this. The extensions are usually ordered,
 however we recommend to not rely on the index when opening files with custom
 scripts or tools. Instead, the FITS extension \emph{name} should be used.
 
+
+\subsubsection{Data Product Headers}
+
+The DRS recipes use the FITS headers of the \emph{first raw file} in the SOF as
+basis for the data products' headers.
+
+Recipes also add some new headers:
+
+\begin{itemize}
+    \item The header keys specific to the data product are named \verb!PRO.*! and includes classification (\verb!PRO.TYPE!, \verb!PRO.CATG!), the list of input files (\verb!PRO.RECi,RAWj! and \verb!PRO.RECi.CALIBj!), and recipe parameters and their values (\verb!PRO.RECi.PARAMj!); with \verb!i,j! being integers increasing from $1$.
+    \item Named \verb!QC.*! are the results of quality control parameters, which are used for instrument monitoring. Note that these often reside in the extension headers, since they are derived for each detector.
+\end{itemize}
+
 \subsubsection{The TraceWave-Table}
 \label{sec:tracewave}
 
@@ -62,11 +75,12 @@ Each trace stores three polynomials: one for the mid-line, upper and lower edge,
 respectively. Polynomials are stored as coefficients, lowest power first, and
 evaluated for pixel columns starting with index 1. Fig.~\ref{fig:flat_trace}
 shows these polynomials plotted onto a flat-field frame. Associated with each
-trace is also its \emph{slit fraction}, that is a number $[0.0\ldots 1.0]$ which
+trace is also its \emph{slit-fraction}, that is a number $[0.0\ldots 1.0]$ which
 indicates the height along the slit, ranging from $0.0$ at the bottom to $1.0$
 at the top. Three values are provided, one each for lower edge, mid-line and
-upper edge of the trace, so that a trace the full slit has 
-\verb!SlitFraction=[0.0,0.5,1.0]!
+upper edge of the trace, so that a trace for the full slit has
+\verb!SlitFraction=[0.0,0.5,1.0]!. Partial slit-fractions are used for nodding
+and polarimetry; see also Ch.~\ref{sec:slitfracbinary}.
 
 Analogous to traces, the wavelength solution is stored as polynomial coefficients
 that represent the translation from pixel to wavelength space. Because the slit
@@ -130,13 +144,12 @@ Our naming convention groups the recipes into
 
 Details about their inputs, outputs and parameters can be found in the
 \emph{man-pages} (Ch.~\ref{sec:manpages}).
-% and Ch.~\ref{sec:recipes-reference}.
-% TODO write and re-include that chapter
 
 In general, calibration and observing recipes will collapse/combine raw frames,
 when several are supplied. Utility recipes will loop over the given raw frames
 and produce separate outputs for each of them, unless \verb!--collapse! is
 set to one of \verb!SUM!, \verb!MEAN! or \verb!MEDIAN!.
+
 
 %%%%%%%%%% General things above, SCIENCE below, then CALIBS
 

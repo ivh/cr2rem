@@ -1,19 +1,25 @@
 \section{Scripts}
 \label{sec:scripts}
 
-Included in the DRS are also a number of scripts. These do not perform necessary
-actions and are not officially supported. Most are for visualization purposes
-only. Nevertheless, they can serve as a starting point, for example for how to
-open data products for further custom processing and analysis.
+There also exists a number of scripts, as listed below. Most are for visualization
+purposes only. Nevertheless, they can serve as a starting point, for example for
+how to open data products for further custom processing and analysis.
 
+They do not perform necessary actions, and are not officially supported
+-- please do not make support requests about them, or they might have to be
+removed altogether in the future.
+
+The scripts are not part of the RPM or MacPorts packages of the DRS, but are
+included in the source-kit, downloadable from
+\url{https://www.eso.org/sci/software/pipelines/}. Look for the file
+\linebreak\verb!cr2re-X.X.X.tar.gz! within the source kit, and then the subdirectory
+\verb!cr2re-X.X.X/tools/! therein.
+
+Most likely you will have to look at the source code for how to use each script.
 For the Python scripts, the only dependencies are \texttt{numpy},
 \texttt{matplotlib} and \texttt{astropy.io.fits}. Shell scripts use bash-isms
 and might or might not run in other shells.\footnote{Note that \texttt{/bin/sh}
 is not linked to \texttt{bash} on many modern linux-systems.}
-
-A short description of the purpose and usage of each script will be included in
-a future version of this document. In the meantime taking a look at the source
-code should to suffice, since they 
 
 % in cr2rep/tools/
 % ls *py | sed s/_/\\\\_/g | awk '//{printf "\\subsection{%s}\n",$1}'
@@ -60,5 +66,4 @@ Companion script to the previous one, to set up directory structure and SOFs.
 \subsection{cr2res\_plotsolution.py}
 \subsection{cr2res\_select\_catalogue.py}
 \subsection{cr2res\_show\_wavecal.py}
-\subsection{cr2res\_turbo\_colormap.py}
 \subsection{cr2res\_wlen\_table.py}

@@ -73,7 +73,8 @@ OPTIONS
   --ron_nsamples        : Number of samples for RON computation. [100]
   --gain                : Gain in [e- / ADU]. [2.1]
   --collapse.method     : Method used for collapsing the data. <MEAN |
-                          WEIGHTED_MEAN | MEDIAN | SIGCLIP | MINMAX> [MEAN]
+                          WEIGHTED_MEAN | MEDIAN | SIGCLIP | MINMAX | MODE>
+                          [MEAN]
   --collapse.sigclip.kappa-low  : Low kappa factor for kappa-sigma clipping
                                   algorithm. [3.0]
   --collapse.sigclip.kappa-high  : High kappa factor for kappa-sigma clipping
@@ -84,6 +85,14 @@ OPTIONS
                           algorithm. [1.0]
   --collapse.minmax.nhigh  : High number of pixels to reject for the minmax
                              clipping algorithm. [1.0]
+  --collapse.mode.histo-min  : Minimum pixel value to accept for mode
+                               computation. [10.0]
+  --collapse.mode.histo-max  : Maximum pixel value to accept for mode
+                               computation. [1.0]
+  --collapse.mode.bin-size  : Binsize of the histogram. [0.0]
+  --collapse.mode.method: Mode method (algorithm) to use. <MEDIAN | WEIGHTED |
+                          FIT> [MEDIAN]
+  --collapse.mode.error-niter  : Iterations to compute the mode error. [0]
 
 \end{verbatim}
 \normalsize
@@ -148,7 +157,7 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --bpm_kappa           : Kappa threshold for BPM detection. [8.0]
+  --bpm_thresh          : BPM threshold, max % non-linear at 20000 ADU. [15.0]
   --trace_degree        : polynomial degree for the fit to the orders. [2]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster. [5000]
   --trace_smooth_x      : Length of the smoothing kernel in x. [111]
@@ -285,7 +294,7 @@ OPTIONS
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
   --extract_smooth_slit : Smoothing along the slit. [3.0]
-  --extract_smooth_spec : Smoothing along the spectrum. [2e-07]
+  --extract_smooth_spec : Smoothing along the spectrum. [2.0]
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
@@ -490,7 +499,10 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --subtract_nolight_rows  : Subtract median row from baffled region at detector
+                             bottom. [FALSE]
+  --subtract_interorder_column  : Subtract column-by-column fit to the pixel
+                                  values between spectral orders. [TRUE]
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
@@ -613,7 +625,10 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --subtract_nolight_rows  : Subtract median row from baffled region at detector
+                             bottom. [FALSE]
+  --subtract_interorder_column  : Subtract column-by-column fit to the pixel
+                                  values between orders. [TRUE]
   --nodding_invert      : Flag to use when A is above B. [FALSE]
   --extract_oversample  : factor by which to oversample the extraction. [7]
   --extract_swath_width : The swath width. [800]
@@ -740,13 +755,18 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --subtract_nolight_rows  : Subtract median row from baffled region at detector
+                             bottom. [FALSE]
+  --subtract_interorder_column  : Subtract column-by-column fit to the pixel
+                                  values between orders. [TRUE]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
   --extract_smooth_spec : Smoothing along the spectrum. [0.0]
   --extract_smooth_slit : Smoothing along the slit. [2.0]
   --detector            : Only reduce the specified detector. [0]
+  --save_group          : Save extra files for the specified group number (0: no
+                          save). [0]
 
 \end{verbatim}
 \normalsize
@@ -827,7 +847,10 @@ DESCRIPTION
 OPTIONS
   The following options are provided by this recipe.
 
-  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --subtract_nolight_rows  : Subtract median row from baffled region at detector
+                             bottom. [FALSE]
+  --subtract_interorder_column  : Subtract column-by-column fit to the pixel
+                                  values between spectral orders. [TRUE]
   --slit_frac           : Wished slit fraction. [-1.0, -1.0]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
@@ -866,10 +889,12 @@ DESCRIPTION
     Outputs                                                               
       <recipe_name>.fits UTIL_BPM_MERGE
                                                                           
-    Algorithm         TODO                                                
+    Algorithm                                                             
+          read input BPMs and merge their types by adding the             
+          integers, in powers of 2.                                       
                                                                           
     Library functions used:                                               
-      cr2res_io_load_BPM()        TODO                                    
+      cr2res_io_load_BPM()                                                
       cr2res_io_save_BPM()                                                
   
 
@@ -991,7 +1016,7 @@ OPTIONS
   --clean_bad           : Apply the cleaning to the bad pixels. [FALSE]
   --subtract_nolight_rows  : Subtract median row from baffled region at detector
                              bottom. [FALSE]
-  --subtract_interorder_column  : Subtract column-by column fit to the pixel
+  --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between spectral orders. [TRUE]
   --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
   --collapse            : Collapse the input (NONE, SUM, MEAN or MEDIAN). [NONE]
@@ -1303,8 +1328,7 @@ SYNOPSIS
 
 DESCRIPTION
   Slit curvature computation                                              
-    For each input trace_wave file, the slit curvature is derived from    
-    each order that has at least 2 traces.                                
+    For each input trace_wave file, the slit curvature is derived.        
                                                                           
     Inputs                                                                
       trace.fits CAL_FLAT_TW [1 to n]                  
@@ -1320,7 +1344,6 @@ DESCRIPTION
       <input_lamp_name>_slit_curv.fits UTIL_SLIT_CURV  
       <input_lamp_name>_tw.fits UTIL_SLIT_CURV_TW       
                                                                           
-                       TODO
     Algorithm                                                             
       loop on input raw files pairs (t,l):                                
         loop on detectors d:                                              

@@ -142,7 +142,7 @@ spectra \emph{before} this combination are considered the primary data product.
 The combined spectrum contains the summed ADUs from A and B.
 
 The jitter around positions A and B does not need to be treated explicitly by
-the DRS. Instead it makes use of the fact that the extraction algorithm
+the DRS. Instead, it makes use of the fact that the extraction algorithm
 (cf.~\ref{sec:extract}) can handle arbitrary slit-illumination functions, in
 this case the combined frame simply looks like multiple "stars" along the slit.
 
@@ -162,7 +162,17 @@ twice as long. In general, values below 5 give suboptimal results and values
 above 10 are appropriate when the slit-illumination changes sharply. See
 Ch.~\ref{sec:extract} for more details.
 
+In addition to the aforementioned data products, the recipe also saves two new
+TW tables with \linebreak\verb!PRO.CATG=OBS_NODDING_TW[AB]!. These correspond to
+the lower and upper halves of the slit, i.e. the A and B nodding positions, and
+thus have their respective slit-fractions set to \verb![0.0, 0.25, 0.5]! and
+\verb![0.0, 0.75, 1.0]!. They can come handy, for example, to re-run the
+extraction of a \verb!OBS_NODDING_COMBINED[AB]! frame, using
+\verb!cr2res_util_extract!; or to over-plot the traces on the combined frame to
+check the alignment of the target.
+
 \subsubsection{Extracting multiple sources in nodding}
+\label{sec:slitfracbinary}
 In the case when multiple targets are placed on the slit (e.g resolved binary
 stars) in nodding observations, a few simple steps are needed to extract the spectrum 
 of each target separately. In the remainder of this section, we assume the user 
@@ -215,7 +225,7 @@ corresponds to the [bottom ... top] edge
 
 The SOF files \verb!A.sof! and \verb!B.sof! contain only the TW file and
 \begin{shell}[fontsize=\small]
-    cr2res\_obs\_nodding\_combinedA.fits OBS_NODDING_OTHER
+    cr2res_obs_nodding_combinedA.fits OBS_NODDING_OTHER
 \end{shell}
 for \verb!A.sof!, and the equivalent combinedB frame for \verb!B.sof!.
 No calibrations needed, because they are already applied to the combined frame.
@@ -258,19 +268,78 @@ differ slightly between the spectra, so one needs to be resampled to the other.
 
 \subsubsection{Generic Offset}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
+For data taken with the generic-offset-template, the DRS assumes that the
+spatial resolution along the slit holds valuable information, and therefore does
+not collapse the data into 1D-spectra. Instead, the recipe \verb!cr2res_obs_2d!
+produces output tables with 2D spectra
+
+if Number of SKY == Number of OBJ
+     Loop on OBJ frames
+         Subtract the corresponding SKY (same position in the list),
+applying the DIT correction ratio.
+         Execute Extraction
+else
+     Average the SKY frames (if any)
+     Loop in OBJ frames
+         Subtract the Averaged Sky (if any) regardless of the DIT
+         Execute Extraction
+         
 
 \subsubsection{Polarimetry}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
+The spectro-polarimeter splits the light into two beams, and their light passes
+through a slit-mask, aka decker, either though the first and third quarter
+(2.5'') of the slit, or the second and fourth quarter (cf.~RD01\cite{CIRESMAN}).
+These two options make up the two nodding positions, and the recipe
+\verb!cr2res_obs_pol! is used in completely analogous way to the nodding-recipe.
+
+The SOF therefore looks just like the example from \ref{sec:sci-reduc}, except
+that the raw frames are tagged \linebreak\verb!OBS_POLARIMETRY_OTHER! instead.
+In addition, the recipe expects the number of raw frames to be a multiple of
+$8$. This is because the observing template always takes $4$ exposures at each
+nodding position, with alternating rotations of the internal optical elements;
+and because the number of AB-cycles is expected to be $>0$, for background
+subtraction.
+
+As usual, the provided master calibrations are applied first. 
+For the reduction of position A, the four frames from B are averaged and
+subtracted, and vice versa. This works because the deckers block the light in
+the respective opposite quarters of the slit.
+
+Then the beams are extracted from each frame, using order traces for each decker
+hole. This means many more extractions than for non-polarimetric observations
+which is why this recipe takes significantly longer to run.
+
+The resulting spectra are then cleverly combined with each other,
+following the demodulation scheme described by \cite{1997MNRAS.291..658D}. This
+minimizes instrumental effects and produces the following results, saved in a
+FITS table that is analogous to non-polarized spectra:
+
+\begin{itemize}
+    \item Intensity spectrum, i.e.~the sum of the beams. Table columns named like \verb!i_INTENS! where \verb!i! is the order number.
+    \item The Stokes parameter spectrum, i.e.~V, Q or U, in the columns \verb!i_STOKES!. Which of the Stokes parameters was observed in a dataset should be clear from your data organization, but can also be seen from the header \verb!INS.POL.TYPE!.
+    \item The Null spectrum. This is a diagnostic spectrum from the demodulation that characterizes the level of spurious polarization. In the ideal case, its value is very close to zero. \verb!i_NULL!.
+    \item Error spectra for each of the above, in columns named like these, plus the suffix \verb!_ERR!.
+    \item The array of wavelengths for each of the spectral bins.
+\end{itemize}
+
+By default, \verb!cr2res_obs_pol! does not produce intermediate outputs like the
+calibrated raw frames and the decker-traces for extraction. The recipe parameter
+\verb!--save_group=1! can be used to save these for a single group of $8$ raw
+files, the first group in this case. Using this option results in $40$
+additional files that hold the calibrated and nodding-sutracted frames, the TWs,
+and the extracted spectra before demodulation.
 
 \subsubsection{Spectro-Astrometry}
 
-This was not offered during P108, so the example will be added in a
-future iteration of this document.
+Spectro-astrometry uses the instrument derotator to take spectra with different
+position angles of the slit on the sky.
 
+The recipe \verb!cr2res_obs_nodding! can get raw input tagged like
+\verb!OBS_ASTROMETRY_OTHER! or \linebreak\verb!OBS_ASTROMETRY_JITTER!. Given a sequence of
+these, it will separate them by position angle and reduce the set for each angle
+separately, just like plain nodding observations, with the same outputs. Any
+further steps are considered out of scope for the DRS and left to users.
 
 \subsection{Optional Steps}
 
@@ -282,18 +351,21 @@ them as being outliers in their non-linearity behavior, or in their overall
 sensitivity as seen in the normalized flat-field.
 
 The recipe \texttt{cr2res\_util\_bpm\_merge} allows you to merge these BPMs into
-a combined BPM, to be used for subsequent reduction steps.
-\texttt{cr2res\_util\_bpm\_split} does the inverse, that is splitting a BPM into
-its original components. A pixel can be marked as bad in more than one way and
-this is being kept track of.
+a combined BPM; \linebreak\texttt{cr2res\_util\_bpm\_split} does the inverse, that is
+splitting a BPM into its original components. This is possible because these
+recipes keep track of why a pixel was marked as bad. When a BPM is then used in
+subsequent reduction steps, any kind of bad pixel gets masked and does not
+contribute to the result.
+
 
 \subsubsection{Splicing and Continuum Normalization}
 
-Give extracted spectra, blaze functions and TWs from several 
-settings to \texttt{cr2res\_util\_splice} and it will divide by the blaze, and 
-resample the overlap regions between all spectra from individual detector-orders 
-to be able to do a weighted average. The result is a single spectrum, continuous over
-the regions covered by the inputs.
+Give extracted spectra, blaze functions and TWs from several settings to
+\texttt{cr2res\_util\_splice} and it will divide by the blaze, and resample the
+overlap regions between all spectra from individual detector-orders onto a
+common wavelength scale, in order to then combine them with a weighted average.
+The result is a single spectrum, continuous over the regions covered by the
+inputs.
 
 \begin{figure}[!h]
   \begin{center}
@@ -325,6 +397,10 @@ $CALIB/H1582/05_cr2res_util_extract_out/
   cr2res_util_calib_calibrated_collapsed_extr1D.fits CAL_FLAT_EXTRACT_1D
 \end{shell}
 
+It should also be noted that it is probably a good idea to manually mask some
+regions, like the ones affected by the ghosts, before splicing, since otherwise
+this wavelength region would be degraded in the output, even if it was
+unaffected in data from a different setting. 
 
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
@@ -480,21 +556,3 @@ A few notes on the recipe parameters used:
   precluding it from subsequent steps. With this option, the input solution gets
   propagated into the output, in case calibration fails.
 \end{enumerate}
-%%%%%%%%%%%%%%
-
-%\subsubsection{Getting Started with \gasgano{}}
-%\label{sec:gasgano-quick}
-
-%\red{\textit{{Basic description of Gasgano and its usage with \instrument{} and
-%   its recipes. Maybe omitted if Gasgano, for technical reasons cannot be
-%   supported (MUSE memory requirements for instance). If present, major parts
-%   will be provided by ESO.}}}
-
-
-% \subsection{Data Organization}
-% \label{sec:dataorganization}
-
-% \red{\textit{Outline of how to organize \instrument{} data, i.e. how to get to
-%     a correct SOF file, which classification tags are accepted by the recipes
-%     and how they are defined in terms of header keywords.}}
-
