@@ -248,41 +248,44 @@ to one of the values that the parameter \texttt{-{}-wl\_method} of
 
 With \texttt{-{}-wl\_method=XCORR} the input catalog of lines is converted
 into a synthetic spectrum that is cross-correlated with the extracted lamp
-spectrum. The first-guess solution is stretched
-
+spectrum. The first-guess solution is varied within the rage allowed by the parameters \verb!--wl_degree! and \verb!--wl_err!, also taking a \verb!--wl_shift! into account, if given. The result with the best cross-correlation outcome is kept as result.
 Each detector-order is calibrated separately.
 
-degree=0, which means a shift of the zero-point only, keeping the polynomial coefficients for the higher degrees fixed.
-TODO
-keep=true with XCORR.
-fallback
+The special case of \verb!--degree=0! means a shift of the zero-point only, without changing the dispersion or the higher orders of the input solution. Therefore \verb!--keep=TRUE! is needed, which does exactly that. Without it, the output solution always has the degree that is asked for via \verb!--degree!, and there cannot be a $0$th-degree solution.
 
-The line catalogs for Uranium lines come from \cite{2018A&A...618A.118S} and
-\cite{2011ApJS..195...24R}. They are used for YJ and HK-bands, respectively.
-Note that all wavelengths are vacuum, not air.
+By the way, the option \verb!--fallback!, when TRUE, also allows you to propagate an input solution into the output, but under a different condition. Namely when the calibration of a detector-order fails.
+
+The calibration spectra that are used for the cross-correlation are from an
+Uranium-Neon lamp (UNE). The catalogs for U-lines come from
+\cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}. They are used for YJ
+and HK-bands, respectively. Note that all wavelengths are vacuum, not air.
 
 \putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{An example of residual values after wavelength calibration with the FPET.}
 
 
-The recipe \texttt{cr2res\_cal\_wave} executes several steps after one another that can be replicated with individual calls of util-recipes:
+
+In contrast to \verb!cr2res_util_wave! which executes a single wavecal-method pre-processed data, the recipe \texttt{cr2res\_cal\_wave} works on raw 
+wavecal inputs and executes several calibration steps after one another.
+
+This calibration strategy could, if one were inclined to do so, be replicated with individual calls of util-recipes like this:
 
 \begin{itemize}
     \item apply master calibrations to raw (UNE and FPET) frames, \verb!cr2res_util_calib!
     \item extract spectra from the calibrated frames, \verb!cr2res_util_extract!
-    \item calibrate UNE with XCORR and degree=0, which means a shift of the zero-p
+    \item calibrate the UNE spectra with \verb!--method=XCORR!, \verb!degree=0! and \verb!--keep!, which means a shift of the zero-point.  \verb!cr2res_util_wave!
+    \item calibrate the extracted FPET spectra as described above, using the solution from the previous step as starting point.z
     
 \end{itemize}
-
-TODO
 
 combines two methods into one recipe, one
 for the UNE lamp frames, and the one for the FPET. The result from the former
 gets passed on to the latter, if both lamp inputs are present. If not, then only
 the appropriate method is applied. 
 
-
+As noted in \ref{sec:knownissues}, there is no active 
 for the L and M-bands, the TW
 molecfit
+\ref{sec:molecfit}
 
 
 \subsubsection{Background Subtraction}
