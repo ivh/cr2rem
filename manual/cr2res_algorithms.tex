@@ -260,32 +260,67 @@ Uranium-Neon lamp (UNE). The catalogs for U-lines come from
 \cite{2018A&A...618A.118S} and \cite{2011ApJS..195...24R}. They are used for YJ
 and HK-bands, respectively. Note that all wavelengths are vacuum, not air.
 
-\putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{An example of residual values after wavelength calibration with the FPET.}
+There are two other methods, not used by default, that can be applied to the UNE
+lamp data, \verb!LINE1D! and \verb!LINE2D!. Instead of cross-correlating a
+synthetic spectrum, these go through the list of catalog lines and try to fit
+each with a Gaussian. The line-centers found this way are then fit against the
+catalog wavelength to arrive at the solution. This method is naturally more
+sensitive to blended lines and depends on the catalog line being the strongest
+peak in the spectrum cut-out that is fitted, which in turn is determined by the
+input solution and \verb!--wl_err!. The catalogs with lines for each setting
+that are distributed with the DRS are selected with the XCORR in mind, because
+in some spectral regions lines are sparse enough that weak lines have to be
+used. Therefore it is likely necessary to make a further, or altogether
+different selection of lines to get reliable results with line-fitting.
+
+The difference between \verb!LINE1D! and \verb!LINE2D! is that the former treats
+each detector-order independently, like \verb!XCORR!, while the latter makes use
+of the grating equation that connects the solution between orders. The absolute
+order number becomes the Y-coordinate of the 2D-polynomial and the parameter
+\verb!--xdegree!\footnote{The \texttt{x} in the name stands for
+"cross-dispersion", not the X-coordinate.} sets the degree in this direction.
 
 
 
-In contrast to \verb!cr2res_util_wave! which executes a single wavecal-method pre-processed data, the recipe \texttt{cr2res\_cal\_wave} works on raw 
-wavecal inputs and executes several calibration steps after one another.
+%%%%%%%% UNE above, FPET below
+\putgraph{\linewidth}{wavecal_resids_H1567.png}{waveresids}{A representative example of residual values after wavelength calibration with the FPET. Each dot indicates the difference between expectation and reality, for the final wavelength solution that was found. Axes in several units are included.}
 
-This calibration strategy could, if one were inclined to do so, be replicated with individual calls of util-recipes like this:
+The method used for calibrating with the spectra from the FPET is
+\verb!--wl_method=ETALON! and it is heavily inspired by
+[RD05]\cite{2019A&A...624A.122C}. It makes use of the intrinsic regularity of
+the FPET peaks, and applies a 2D-fit to the spectra from each detector. More
+details in a future iteration of this document.
+
+
+% UNE + FPET below
+In contrast to \verb!cr2res_util_wave! which executes a single wavecal-method on
+pre-processed data, the recipe \texttt{cr2res\_cal\_wave} works on raw wavecal
+inputs and executes several calibration steps after one another, using both UNE
+and FPET as taken together by the wavecal template. (If only one or the other is supplied, then naturally only the appropriate method is executed.)
+
+The calibration strategy could, if one were inclined to do so, be replicated
+with individual calls of util-recipes, like this:
 
 \begin{itemize}
-    \item apply master calibrations to raw (UNE and FPET) frames, \verb!cr2res_util_calib!
+    \item apply master calibrations to raw (UNE and FPET) frames, with \verb!cr2res_util_calib!
     \item extract spectra from the calibrated frames, \verb!cr2res_util_extract!
-    \item calibrate the UNE spectra with \verb!--method=XCORR!, \verb!degree=0! and \verb!--keep!, which means a shift of the zero-point.  \verb!cr2res_util_wave!
-    \item calibrate the extracted FPET spectra as described above, using the solution from the previous step as starting point.z
-    
+    \item calibrate the UNE spectra with \verb!--wl_method=XCORR!, \verb!degree=0! and \verb!--keep!, which means a shift of the zero-point.  \verb!cr2res_util_wave!
+    \item calibrate the extracted FPET spectra, using the solution from the previous step as starting point.\linebreak\verb!cr2res_util_wave! \verb!--wl_method=ETALON! \verb!--degree=4! \verb!--xdegree=6!
 \end{itemize}
 
-combines two methods into one recipe, one
-for the UNE lamp frames, and the one for the FPET. The result from the former
-gets passed on to the latter, if both lamp inputs are present. If not, then only
-the appropriate method is applied. 
+This two-step strategy has been found to give reliable results in all instrument
+settings in Y-K bands. An example of final residuals is shown in
+Fig.~\ref{fig:waveresids}.
 
-As noted in \ref{sec:knownissues}, there is no active 
-for the L and M-bands, the TW
-molecfit
-\ref{sec:molecfit}
+% LM below
+As noted in \ref{sec:knownissues}, there is no active wavelength-calibration for
+the L and M-bands, since neither the UNE or the FPET are usable there. The use
+of gas-cells is being investigated, but in the meantime, using \verb!molecfit!
+has been found to give good results, see App.~\ref{sec:molecfit}.
+
+Also note that the TW tables that are delivered with the DRS static calibrations
+already have wavelength solutions derived this way, and should therefore be
+readily usable for observations taken with metrology.
 
 
 \subsubsection{Background Subtraction}
