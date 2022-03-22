@@ -9,7 +9,7 @@
 \subsection{General Algorithms}
 \label{sec:algorithms-general}
 
-\subsection{Optimal Extraction}
+\subsubsection{Optimal Extraction}
 \label{sec:extract}
 \begin{figure}[ht]
     \begin{center}
@@ -112,7 +112,7 @@ There are a few more parameters that influence the extraction:
 For the utility recipe \verb!cr2res_util_extract! these parameters are named
 without the prefix \verb!extract_!.
 
-\subsection{Other extraction methods}
+\subsubsection{Other extraction methods}
 \label{sec:otherextr}
 
 \verb!cr2res_util_extract! has another feature up its sleeve: the parameter
@@ -135,7 +135,7 @@ the 2D frame. It can take the following values.
 
 For all other recipes, \verb!OPT_CURV! is the only choice.
 
-\subsection{Errors and Signal-to-Noise}
+\subsubsection{Errors and Signal-to-Noise}
 \label{sec:errors}
 
 Raw frames contain pixel values in ADU. All data products are in ADU also,
@@ -198,9 +198,12 @@ For other types of observations replace accordingly. Polarimetric observations
 always take four exposures at different SPU-angles; the demodulated intensity
 spectrum (Stokes I) therefore needs an additional factor 4 in the equation.
 
+Note that an important factor in getting high S/N in spectra is to apply deep
+enough flat-fields, that ideally exceed the S/N in the observations. And that
+the detector linearity correction can be a limiting factor, see below.
+
 \subsection{Recipes Algorithms} 
 \label{sec:algorithms-recipes}
-
 
 \subsubsection{Order Tracing}
 \label{sec:ordertrace}
@@ -379,21 +382,21 @@ at a certain ADU-level, yields the correction factor by which to multiply the
 raw ADU, so that the value becomes that which a linear response would have
 given.
 
-The \verb!cr2res_obs_*! recipes take
-this file as optional input and apply the correction, so do some of the
-calibration recipes, most notably \verb!cr2res_cal_flat!. Since there is a
-degeneracy between the pixel response characterized by the normalized flat-field
-and the detlin-coefficients, users are advised to provide the detlin to either
-\emph{both} the flat-field and science reductions, or to \emph{neither} of them.
+The \verb!cr2res_obs_*! recipes take this file as optional input and apply the
+correction, as do some calibration recipes. Keep in mind however that the
+$0.5\%$ error of each pixel's correction effectively \textbf{limits the S/N} of
+the resulting spectra. The detlin should \emph{not} be applied to the flat-field
+because doing so introduces the noise a second time. Methods to reduce the
+detlin noise are being investigated.
 
 
 In order to derive this correction, a long series of exposures with the
-flat-field lamp are taken, with increasing DITs, starting from very short until
-well into saturation. This is repeated for several spectrograph settings in
-order to cover the gaps between the spectral orders. A series of DARKs with
-matching DIT is also obtained and subtracted from the FLATS, because the
-non-zero detector background pattern at short DITs would otherwise influence the
-determination of the linear response.
+flat-field lamp are taken by the aforementioned template, with increasing DITs,
+starting from very short until well into saturation. This is repeated for
+several spectrograph settings in order to cover the gaps between the spectral
+orders. A series of DARKs with matching DIT is also obtained and subtracted from
+the FLATS, because the non-zero detector background pattern at short DITs would
+otherwise influence the determination of the linear response.
 
 The reduction of the data set is done by \verb!cr2res_cal_detlin!
 \begin{shell}[fontsize=\footnotesize]
