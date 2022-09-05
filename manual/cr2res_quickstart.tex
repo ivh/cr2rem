@@ -376,17 +376,32 @@ further steps are considered out of scope for the DRS and left to users.
 \subsubsection{Refining the BPM}
 
 Using only the BPM that comes from \texttt{cr2res\_cal\_dark} usually gives
-satisfactory results. However, pixels can be marked as bad also by detecting
-them as being outliers in their non-linearity behavior, or in their overall
-sensitivity as seen in the normalized flat-field.
+satisfactory results. However, pixels can be marked as bad also by being
+outliers in their non-linearity behavior, or in their overall sensitivity, i.e.
+in the normalized flat-field. The respective recipes each produce a BPM, and
+have parameters for the thresholds.
 
 The recipe \texttt{cr2res\_util\_bpm\_merge} allows you to merge these BPMs into
-a combined BPM; \linebreak\texttt{cr2res\_util\_bpm\_split} does the inverse, that is
-splitting a BPM into its original components. This is possible because these
-recipes keep track of why a pixel was marked as bad. When a BPM is then used in
-subsequent reduction steps, any kind of bad pixel gets masked and does not
-contribute to the result.
+a combined BPM; \linebreak\texttt{cr2res\_util\_bpm\_split} does the inverse,
+that is splitting a BPM into its original components. This is possible because
+these recipes keep track of why a pixel was marked as bad. When a BPM is then
+used in subsequent reduction steps, any kind of bad pixel gets masked and does
+not contribute to the result.
 
+Note that BPMs are not checked to match in spectrograph setting, so that it is
+possible to use a BPM from a one setting with data from another. The same is
+true for DIT.
+
+Experience has shown that the pair-wise subtraction via nodding makes many
+pixels usable that were flagged as bad pixels from the DARK frames. It can
+therefore make sense, especially for low S/N spectra, to use the BPM from from
+\texttt{cr2res\_cal\_flat} instead (\verb!PRO.CATG=CAL_FLAT_BPM!). To do this,
+one needs to
+\begin{itemize}
+    \item set the \verb!--bpm_kappa! for \texttt{cr2res\_cal\_dark} to a large value (e.g. 1000) to get a master dark without pixels marked as bad. This is because otherwise the flat-field would inherit the BPM from the master dark.
+    \item adjust the parameters \verb!--bpm_low! and \verb!--bpm_high! for \texttt{cr2res\_cal\_flat} to appropriate relative sensitivity thresholds.
+    \item use the \verb!CAL_FLAT_BPM! in subsequent reduction steps.
+\end{itemize}
 
 \subsubsection{Splicing and Continuum Normalization}
 
