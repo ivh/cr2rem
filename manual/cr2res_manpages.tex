@@ -283,10 +283,10 @@ OPTIONS
   --bpm_lines_ratio     : Maximum ratio of bad pixels per line. [0.5]
   --trace_degree        : polynomial degree for the fit to the orders. [2]
   --trace_min_cluster   : size in pixels of the smallest allowed cluster.
-                          [200000]
+                          [100000]
   --trace_smooth_x      : Length of the smoothing kernel in x. [111]
   --trace_smooth_y      : Length of the smoothing kernel in y. [401]
-  --trace_threshold     : Detection Threshold. [3.0]
+  --trace_threshold     : Detection Threshold. [1.0]
   --trace_opening       : Use a morphological opening to rejoin clusters. [TRUE]
   --extract_method      : Extraction method (SUM / MEDIAN / TILTSUM / OPT_VERT /
                           OPT_CURV ). [OPT_CURV]
@@ -549,6 +549,7 @@ DESCRIPTION
             or UTIL_BPM_SPLIT                          
       master_dark.fits CAL_DARK_MASTER [0 to 1]        
       master_flat.fits CAL_FLAT_MASTER [0 to 1]        
+      photo_flux.fits PHOTO_FLUX [0 to 1]              
                                                                           
     Outputs                                                               
       cr2res_obs_nodding_extractedA.fits OBS_NODDING_EXTRACTA
@@ -613,7 +614,7 @@ DESCRIPTION
       cr2res_extract_traces()                                             
       cr2res_qc_obs_nodding_signal()                                      
       cr2res_qc_obs_nodding_transmission()                                
-      cr2res_qc_obs_nodding_slit_psf()                                    
+      cr2res_qc_obs_slit_psf()                                    
       cr2res_photom_engine()                                              
       cr2res_io_save_COMBINED()                                           
       cr2res_io_save_EXTRACT_1D()                                         
@@ -787,6 +788,7 @@ DESCRIPTION
     Inputs                                                                
       raw.fits OBS_STARING_OTHER [1 to n]                   
             or OBS_STARING_JITTER [1 to n]                  
+            or OBS_WAVE_SKY [1 to n]                
       trace.fits CAL_FLAT_TW [1]                       
               or CAL_FLAT_TW_MERGED                    
               or UTIL_TRACE_TW                         
@@ -978,6 +980,7 @@ DESCRIPTION
             or OBS_ASTROMETRY_JITTER                        
             or OBS_STARING_OTHER                            
             or OBS_STARING_JITTER                           
+            or OBS_WAVE_SKY                         
             or OBS_POLARIMETRY_OTHER                        
             or OBS_2D_OBJECT                                
             or OBS_2D_SKY                                   
@@ -1050,6 +1053,7 @@ DESCRIPTION
             or OBS_ASTROMETRY_JITTER                        
             or OBS_STARING_OTHER                            
             or OBS_STARING_JITTER                           
+            or OBS_WAVE_SKY                         
             or OBS_POLARIMETRY_OTHER                        
             or OBS_2D_OBJECT                                
             or OBS_2D_SKY                                   
