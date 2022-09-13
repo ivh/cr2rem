@@ -17,7 +17,20 @@ This is not a DRS-issue per se, but a current limitation of the instrument calib
 
 The strong thermal emission present in the DARKs in L and M band makes the detection of bad pixels more difficult than in the shorter bands. It makes sense therefore to compare the derived BPM with one from e.g.~Y-band and vary the parameter \verb!--bpm_kappa!.
 
-Simply using the BPM from another band has also been found to work well.
+Simply using the BPM from another band has also been found to work well, cf.~\ref*{sec:bpmrefine}.
+
+\subsection{Overestimated Errors in low S/N data}
+
+For spectra with low signal-to-noise ($\lessapprox  10$) it is possible that the
+normalization of the error spectrum is too pessimistic, i.e.~dividing the
+spectrum by the error spectrum gives a lower S/N (by a factor $\approx 3$) than
+is actually the case (from photon statistics or measured from the spectrum RMS).
+
+Since the error is derived from the residual between extraction model and data, adjusting the relevant recipe parameters is expected to remedy the discrepancy, namely
+\begin{itemize}
+    \item lowering the \emph{extraction height} as much as the data allows, and/or
+    \item increasing the \emph{swath width}, possilby up to the full detector size.
+\end{itemize}
 
 %\subsection{Bugs}
 %Issues that will be fixed in an upcoming release.
