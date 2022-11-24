@@ -238,7 +238,6 @@ If the user wants a single spectrum from nodding position A and for each of the
 star, they still need to combine the A and B spectra -- essentially interpolating
 one to the wavelength scales of the other.
 
-
 \subsubsection{Staring}
 
 \verb!cr2res_obs_staring! is very similar to \verb!cr2res_obs_nodding!, except
@@ -372,6 +371,17 @@ separately, just like plain nodding observations, with the same outputs. Any
 further steps are considered out of scope for the DRS and left to users.
 
 \subsection{Optional Steps}
+
+\subsubsection{Throughput from standard stars}
+\label{sec:throughput}
+The pipeline comes with a fixed list of spectrophotometric standard stars. When \texttt{cr2res\_obs\_nodding} checks the
+on-sky coordinates of the currently reduced target, and if they match one of those stars, it compares the reduced spectrum to the 
+reference. The resulting throughput gets saved into a separate
+data product (PRO.CATG=OBS\_NODDING\_THROUGHPUT).
+
+Note however, that absolute flux calibration is generally not 
+possible with \instrument\ because of varying slit-losses.
+
 
 \subsubsection{Refining the BPM}
 \label{sec:bpmrefine}

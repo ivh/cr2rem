@@ -32,5 +32,18 @@ Since the error is derived from the residual between extraction model and data, 
     \item increasing the \emph{swath width}, possilby up to the full detector size.
 \end{itemize}
 
-%\subsection{Bugs}
-%Issues that will be fixed in an upcoming release.
+\section{Frequently Asked Questions}
+
+\subsection{Barycentric correction}
+The pipeline does currently not correct spectra for velocity shifts. Users therefore need to carry out the barycentric velocity correction, if needed, with an external tool.
+
+It is however foreseen to use routines that were recently added to the
+common pipeline library HDRL, in order to provide this information in 
+data product headers.
+
+\subsection{Timestamps}
+For observations that comprise a time-sequence, e.g.~an exoplanet transit,
+the timestamp of reduced data is relevant. The DRS does currently not 
+calculate the (weighted) average timestamp of exposures that are combined. This ``midpoint'' in time will get added as a separate header key in the future.
+
+In general, data products inherit their FITS headers from the \emph{first raw frame} in the input SOF, this includes \texttt{OBS.MJD}. Of course, the timestamps of the raw frames allow users to carry out the calculation manually.

@@ -275,6 +275,72 @@ and each box corresponds to a single recipe call.
 \input{reflex_faq.tex}
 
 %Add here a section on troubleshooting problems.
+\section{Troubleshooting}
+
+\putgraph{12.5cm}{NoDataSet.png}{NoDataSet}
+{TheDataOrganizer interactive window reports an error 
+  ``:No DataSets have been created, check the data set and the OCA rules.''}
+\begin{enumerate}
+\item  {\bf I downloaded the data from the ESO archive, put them into
+  a new directory, tried to run {\tt Reflex} on them, but}
+\begin{enumerate}
+\item {\bf it crashes}
+
+The current release of the FORS pipeline includes some additional data in the static
+calibration frames. The recipes would choke if this data is not present. 
+However, the ESO archive with CalSelector may associate calibration data which
+is old and Reflex will pick the files either from the installed pipeline
+static data or from the CalSelector in a non-deterministic way. In order to 
+solve the issue, remove the static calibration data downloaded from the archive
+(all the files starting with M.FORS2).
+
+This may happen if one of the files was downloaded only partially
+(check for a file with the extension {\tt fits.Z.part}. You will have to
+download that file again in order to have an uncorrrupted file (and
+remove the partial one).
+
+\item {\bf The DataOrganiser fails with the error message 
+ ``:No DataSets have been created, check the data set and the OCA rules.''(see
+  Figure \ref{fig:NoDataSet}.)}
+
+This error may be due to the fact that the data provided by the ESO
+archive are compressed\\ ({\tt <filename>.fits.Z}).  Please 
+remember to uncompress the data before running the workflow in 
+{\tt Reflex}.\\[2mm]
+
+Also, please remember that each \instrument\ workflow supports only one mode.
+For example, if the data consists entirely of polarimetric observations,
+but any other workflow is executed, the Data Organiser actor will not
+construct any datasets, showing the mentioned error message.
+\end{enumerate}
+
+\item {\bf The ``Select DataSets'' window displays my datasets, but
+  some/all of them are greyed out. What is going on?}
+
+If a dataset in the ``Select DataSets'' window is greyed out, then it
+means that the dataset which was constructed is missing some key
+calibration(s) (i.e. the dataset is incomplete). To find out what
+calibration(s) are missing from a greyed out dataset, click on the
+dataset in question to highlight it in blue, and then click on the
+button \fbox{\tt Inspect Highlighted}. The ``Select Frames'' window
+that appears will report the category of the calibration data that are missing (e.g. DARK). From this the user has then to
+determine the missing raw data (in this case bias frames). If static
+calibrations are missing the mechanism unfortunately does not work,
+but such data should be found by {\tt reflex} in\\ {\tt
+  <install\_directory>/calib/<pipeline\_version>/cal}
+
+%\item {\bf I'm trying to reduce some old FORS2 data with the pipeline, but at
+%the moment of running {\tt fors\_calib}, the arc lamp frame is not found.}
+
+%The Reflex workflow with its default OCA rules works only for data
+%taken after October 2006, when the calibration plan was changed. To
+%process older data, right click on the {\tt DataOrganiser} to configure it,
+%and change the OCA rules file to {\tt fors2\_spec\_wkf\_pre2006.oca} (same
+%directory as the default OCA file), and  click on \fbox{\tt
+%  Commit}.
+
+\end{enumerate}
+
 
 \bibliography{cr2res_reflex_tutorial}
 \end{document}

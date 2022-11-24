@@ -98,8 +98,8 @@ There are a few more parameters that influence the extraction:
     \item \verb!--extract_height! sets the height in pixels of the extracted
     region, symmetrical around the mid-line of the trace. By default, this is
     not set and the upper and lower edge polynomials of the trace are used to
-    set the height. Setting this parameter therefore overrides the role of the
-    edge polynomials in the extraction.
+    set the height. Setting this parameter therefore overrides the role of the edge polynomials in the extraction. In other words, this parameter takes precedence over the slit-fraction when it comes to
+    specifying the extraction height.
     \item \verb!--extract_smooth_slit! is a regularization parameter for the
     slit-illumination vector, as it is approximated during the extraction. The
     value is roughly the size of the smoothing kernel in pixels, and should not
