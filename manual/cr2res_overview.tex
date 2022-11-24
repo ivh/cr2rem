@@ -1,6 +1,18 @@
 \section{Data Reduction Overview}
 \label{sec:overview}
 
+The \instrument{} pipeline, like most other recent ESO instrument pipelines, can be executed in three different ways: with \emph{Gasgano}, \emph{esorex} and \emph{Reflex}.
+Although these are somewhat different environments, it is always the
+same pipeline, as far as pipeline recipes are concerned.
+Gasgano
+is a FITS-file browser and running the pipeline this way is a ``manual'' task, typically good only for quick look checks.
+
+Reflex executes the recipes via graphic workflow interface which has advantages like sorting data and finding the necessary calibrations
+automatically, and keeping track of previous executions. 
+The reflex workflows are described in the Reflex Tutorial while this manual uses esorex in its examples on how to run the data reduction cascade.
+
+The details on recipe algorithms and parameters are contained in this document, and the Reflex workflows reduce the calibrations as described in Ch.~\ref*{sec:simcalexpl}, before executing one of the science recipes (Ch.~\ref*{sec:sci-reduc}).
+
 
 \subsection{Data Formats}
 \label{sec:data-fmt-quick}
