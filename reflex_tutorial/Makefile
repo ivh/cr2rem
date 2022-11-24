@@ -11,13 +11,13 @@ DOCDIR = ..
 
 USER_MANUAL = $(instrument)-reflex-tutorial-$(version).pdf
 
+VERBOSE=0
 
 CHMOD = chmod
 LATEX = pdflatex
 MV = mv -f
 
 CLEANFILES = *.aux *.idx *.log *.toc *.out *.bbl *.blg *.brf
-
 
 TEX_MASTER = cr2res_reflex_tutorial
 
