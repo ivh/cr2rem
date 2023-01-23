@@ -457,6 +457,16 @@ regions, like the ones affected by the ghosts, before splicing, since otherwise
 this wavelength region would be degraded in the output, even if it was
 unaffected in data from a different setting. 
 
+\subsubsection{Blaze correction}
+
+Most of the recipes performing a 1D extraction (cr2res\_obs\_staring,
+cr2res\_obs\_nodding, cr2res\_obs\_pol) accept as optional input the 
+blaze function computed by the cr2res\_cal\_flat recipe
+(PRO CATG = CAL\_FLAT\_EXTRACT\_1D).
+If the file is provided, the extracted spectrum is divided by the
+normalised blaze function. The normalisation factor is the 95th
+percentile of the blaze.
+
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
 Following the steps outlined in Ch.~\ref{sec:stepcalib} and accompanying text,
