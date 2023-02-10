@@ -1,21 +1,50 @@
 \section{Known Issues}
 \label{sec:knownissues}
 
-% \red{\textit{Know issues, problems and limitations related to the \textbf{current
-%     release} of the pipeline (if possible with a work-around) go here.}}
+\subsection{Superresolution}
+In good seeing conditions the AO system can produce a PSF that is sharp enough
+to not evenly fill the slit width of the spectrograph. While this produces spectra with a resolution higher than specified, it can also cause an offset in the wavelength scale, because how the AO places the PSF center is not reproducible enough. Wavelength shifts between reduced spectra from the nodding positions A and B of around $1 pix$ have been encountered.
+
+This is not something that the DRS can correct for and will need to be mitigated
+by allowing users to choose a "slit scanning" AO mode, in which the PSF center
+is moved by small amounts between the slit edges during exposures.
+
+Users can correct the wavelength offset between A and B spectra relatively easily, by cross-correlating one to the other before combining them.
+
+The following warning will be issued by the recipes \verb!cr2res_obs_nodding!
+and \verb!cr2res_obs_staring! when it looks like this is the case, judging from
+the illumination profile \emph{along} the slit. 
+\begin{verbatim}
+    Median FWMH of the PSF along the slit 
+    is NN pix, i.e. below the slit width. This means the slit 
+    is likely not evenly filled with light 
+    in the spectral direction. This can result in a 
+    wavelength offset between different postitions along the slit,
+     and with respect to calibrations.
+\end{verbatim}
+
+%\subsection{IDP}
 
 \subsection{Calibration caveats in L and M band}
 
-This is not a DRS-issue per se, but a current limitation of the instrument calibration in general. The UNE and FPET cover only the bands YJHK, which means that in L and M
+This is not a DRS-issue per se, but a current limitation of the instrument
+calibration in general. The UNE and FPET cover only the bands YJHK, which means
+that in L and M
 \begin{itemize}
-    \item the slit-tilt is not characterized and spectrum extraction happens along a vertical slit.
-    \item there is no wavelength calibration within the DRS. Instead the wavelength scale from static calibrations (derived with \emph{molecfit}), is propagated to the data products.
+    \item the slit-tilt is not characterized and spectrum extraction happens
+    along a vertical slit.
+    \item there is no wavelength calibration within the DRS. Instead the
+    wavelength scale from static calibrations (derived manually from telluric
+    lines), is propagated to the data products.
 \end{itemize}
 
 
 \subsection{BPM in L and M}
 
-The strong thermal emission present in the DARKs in L and M band makes the detection of bad pixels more difficult than in the shorter bands. It makes sense therefore to compare the derived BPM with one from e.g.~Y-band and vary the parameter \verb!--bpm_kappa!.
+The strong thermal emission present in the DARKs in L and M band makes the
+detection of bad pixels more difficult than in the shorter bands. It makes sense
+therefore to compare the derived BPM with one from e.g.~Y-band and vary the
+parameter \verb!--bpm_kappa!.
 
 Simply using the BPM from another band has also been found to work well, cf.~\ref*{sec:bpmrefine}.
 
@@ -29,7 +58,7 @@ is actually the case (from photon statistics or measured from the spectrum RMS).
 Since the error is derived from the residual between extraction model and data, adjusting the relevant recipe parameters is expected to remedy the discrepancy, namely
 \begin{itemize}
     \item lowering the \emph{extraction height} as much as the data allows, and/or
-    \item increasing the \emph{swath width}, possilby up to the full detector size.
+    \item increasing the \emph{swath width}, possibly up to the full detector size.
 \end{itemize}
 
 \section{Frequently Asked Questions}
