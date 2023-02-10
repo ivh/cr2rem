@@ -359,6 +359,9 @@ DESCRIPTION
       Save out_wave_map[une|fpet]                                         
                                                                           
       cr2res_cal_wave_reduce():                                           
+        If FPET RAW frame is present, compute the slit_curvature from it, 
+        use it in the following, and store it in the out_trace_wave_fpet. 
+                                                                          
         Successively for UNE and FPET RAW frames:                         
           Load the raw image list                                         
           Apply the calibrations to the image list                        
@@ -409,7 +412,8 @@ OPTIONS
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
-  --keep                : Subtract the no-light rows. [FALSE]
+  --slit_degree         : Slit fitting Polynomial degree (1 or 2). [2]
+  --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
   --collapse_method     : Collapse the input images (MEAN or MEDIAN). [MEDIAN]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
@@ -426,6 +430,8 @@ OPTIONS
                           [FALSE]
   --keep                : Flag for re-using higher degrees of first guess in
                           Cross-Corr. [TRUE]
+  --save                : Flag to save UNE results (if UNE and FPET are used as
+                          inputs). [FALSE]
   --clean_spectrum      : Flag to automatically clean the missing lines. [TRUE]
   --display             : Flag for display. [FALSE]
   --display_range       : Wavelength range to display [start, end] (in nm).
@@ -550,6 +556,7 @@ DESCRIPTION
       master_dark.fits CAL_DARK_MASTER [0 to 1]        
       master_flat.fits CAL_FLAT_MASTER [0 to 1]        
       photo_flux.fits PHOTO_FLUX [0 to 1]              
+      blaze.fits CAL_FLAT_EXTRACT_1D [0 to 1]          
                                                                           
     Outputs                                                               
       cr2res_obs_nodding_extractedA.fits OBS_NODDING_EXTRACTA
@@ -680,6 +687,7 @@ DESCRIPTION
             or UTIL_BPM_SPLIT                          
       master_dark.fits CAL_DARK_MASTER [0 to 1]        
       master_flat.fits CAL_FLAT_MASTER [0 to 1]        
+      blaze.fits CAL_FLAT_EXTRACT_1D [0 to 1]          
                                                                           
     Outputs                                                               
       cr2res_obs_pol_specA.fits OBS_POL_SPECA          
@@ -803,6 +811,7 @@ DESCRIPTION
             or UTIL_BPM_SPLIT                          
       master_dark.fits CAL_DARK_MASTER [0 to 1]        
       master_flat.fits CAL_FLAT_MASTER [0 to 1]        
+      blaze.fits CAL_FLAT_EXTRACT_1D [0 to 1]          
                                                                           
     Outputs                                                               
   	cr2res_obs_staring_slitfunc.fits OBS_STARING_SLITFUNC
@@ -861,6 +870,7 @@ OPTIONS
                           [2.0]
   --extract_smooth_spec : Smoothing along the spectrum. [0.0]
   --detector            : Only reduce the specified detector. [0]
+  --idp                 : Flag to produce  IDP files. [FALSE]
   --display_order       : Apply the display for the specified order. [0]
   --display_trace       : Apply the display for the specified trace. [0]
 
@@ -1374,6 +1384,7 @@ OPTIONS
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
+  --degree              : Polynomial degree for the fit (1 or 2). [2]
   --display             : X value to display (1->2048). [0]
 
 \end{verbatim}
