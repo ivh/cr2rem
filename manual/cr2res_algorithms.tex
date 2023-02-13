@@ -227,7 +227,7 @@ Lastly, the X and Y-coordinates for pixels within the same order are fitted with
 a polynomial, which gives the mid-line of the trace. In addition, edge-detection
 gives the upper and lower edges of the spectral order.
 
-\subsubsection{Measuring the slit-tilt}
+\subsubsection{Measuring the slit-shape}
 \label{sec:tilt}
 
 The recipe \verb!cr2res_util_slit_curv! takes as input a TW, for the order
@@ -242,6 +242,25 @@ outliers, and allows to store the information in the TW in an analogous way to
 the polynomials for trace and wavelength solution. The TW-columns are named
 \verb!SlitPolyA!, \verb!SlitPolyB! and \verb!SlitPolyC!.
 
+As of DRS version 1.2.4 (Feb 2023), two changes are introduced to the way the
+slit tilt and curvature are handled:
+
+\begin{enumerate}
+    \item The slit shape is no longer \emph{static}, in the sense that the
+    reductions using the \verb!cr2res_cal_*! recipes or the Reflex workflow not
+    longer rely on the values in the static TW-files. Instead the recipe
+    \verb!cr2res_cal_wave! now starts by measuring the slit shape and saves the
+    result together with the wavelength calibration in the output TW. This
+    change is because the slit tilt has unexpectedly been found to change after
+    a warm-up cycle.
+    \item The choice between a straight slit or a parabolic curve is no longer
+    hardcoded but offered as the parameter \verb!--degree! or
+    \verb!--slit_degree! on recipes \verb!cr2res_util_slit_curv! and
+    \verb!cr2res_cal_wave!, respectively. The default has been changed to second
+    degree, i.e.~a parabolic slit, which has been found to give slightly better
+    residuals after extraction, even though the slit is much more tilted than
+    curved.
+\end{enumerate}
 
 \subsubsection{Wavelength calibration}
 
