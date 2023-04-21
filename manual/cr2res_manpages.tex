@@ -288,8 +288,8 @@ OPTIONS
   --trace_smooth_y      : Length of the smoothing kernel in y. [401]
   --trace_threshold     : Detection Threshold. [1.0]
   --trace_opening       : Use a morphological opening to rejoin clusters. [TRUE]
-  --extract_method      : Extraction method (SUM / MEDIAN / TILTSUM / OPT_VERT /
-                          OPT_CURV ). [OPT_CURV]
+  --extract_method      : Extraction method (SUM / MEDIAN / TILTSUM / OPT_CURV
+                          ). [OPT_CURV]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
@@ -512,6 +512,7 @@ OPTIONS
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
+  --idp                 : Flag to produce  IDP files. [FALSE]
 
 \end{verbatim}
 \normalsize
@@ -648,6 +649,7 @@ OPTIONS
   --display_detector    : Apply the display for the specified detector. [0]
   --display_order       : Apply the display for the specified order. [1000]
   --display_trace       : Apply the display for the specified trace. [0]
+  --cosmics_corr        : Find and mark cosmic rays hits as bad. [FALSE]
 
 \end{verbatim}
 \normalsize
@@ -1010,7 +1012,7 @@ DESCRIPTION
                                                                           
     Algorithm                                                             
       loop on detectors d:                                                
-        Call cr2res_calib_imagelist()() to calibrate --calib_cosmics_corr,
+        Call cr2res_calib_imagelist()() to calibrate --cosmics_corr,
                  detlin, bpm, dark, flat                                  
           -> calibrated(d)                                                
         Collapse the calibrated image list to collapsed(d)                
@@ -1031,7 +1033,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between spectral orders. [TRUE]
-  --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
+  --cosmics_corr        : Correct the Cosmics. [FALSE]
   --collapse            : Collapse the input (NONE, SUM, MEAN or MEDIAN). [NONE]
 
 \end{verbatim}
@@ -1122,8 +1124,8 @@ OPTIONS
   --height              : Extraction height. [-1]
   --smooth_slit         : Smoothing along the slit at extraction. [2.0]
   --smooth_spec         : Smoothing spectrum at extraction. [0.0]
-  --method              : Extraction method (SUM / MEDIAN / TILTSUM / OPT_VERT /
-                          OPT_CURV ). [OPT_CURV]
+  --method              : Extraction method (SUM / MEDIAN / TILTSUM / OPT_CURV
+                          ). [OPT_CURV]
   --slit_frac           : Wished slit fraction. [-1.0, -1.0]
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]

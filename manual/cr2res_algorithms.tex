@@ -125,11 +125,8 @@ the 2D frame. It can take the following values.
     the sum. The value is multiplied by the extraction height, so that the
     normalization is the same as the other methods.
     \item \verb!TILTSUM! is like \verb!SUM!, but first shifts the detector rows
-    according to the slit tilt. Only integer shifts, so there is still smoothing
-    from sub-pixel tilt.
-    \item \verb!OPT_VERT! should not be used! It runs the optimal extraction
-    along a vertical slit, but is not optimized for speed and therefore slower
-    than
+    according to the slit tilt. Only integer shifts are applied, so there is
+    still smoothing from sub-pixel tilt.
     \item \verb!OPT_CURV!, the default optimal extraction, as described above.
 \end{itemize}
 
@@ -357,15 +354,15 @@ There are two more ways to subtract background which can be activated with the
 following parameters of the appropriate recipes.
 
 The bottom $~40pix$ rows of the detectors are physically blocked from receiving
-light. When \linebreak\verb!--subtract_nolight_rows=TRUE! then the DRS will take a
-vertical median over these rows, and then subtract the result from all detector
-rows.
+light. When \linebreak\verb!--subtract_nolight_rows=TRUE! then the DRS will take
+a vertical median over these rows, and then subtract the result from all
+detector rows.
 
 With \verb!--subtract_interorder_column=TRUE! given, recipes will fit a
 low-order polynomial to the pixel values between the spectral
 orders\footnote{The master-flat is used to determine these pixels, because at
 this stage of the frame calibration the DRS does not have access to a TW table.
-Therefore this method requires a flat-field to be present in calibration
+Therefore, this method requires a flat-field to be present in calibration
 inputs.}, and then subtract the result. This is done for each column
 independently which allows it to address both scattered light and mitigate the
 occasional detector artifacts that randomly affect a certain vertical read-out

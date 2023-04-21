@@ -25,7 +25,7 @@ spectra is lower than it should be.
 \subsection{Imperfect Order Traces}
 
 The tracing of spectral orders can be less reliable when telluric absorption
-very strong, like in some orders in L and M-bands. The parameters of
+is very strong, like in some orders in L and M-bands. The parameters of
 \texttt{cr2res\_util\_trace} allow to change the amount of smoothing in x and
 y-direction, and the threshold for signal-detection. Varying these is the first
 step to improve the traces.
@@ -39,6 +39,46 @@ a trace is fine, but the edges are not.
 If for some reason the traces cannot be derived from FLATs at all,
 \texttt{cr2res\_util\_trace} can be used on the science frame itself. This works
 well if the target has a reasonably strong continuum.
+
+
+\subsection{Data with low S/N}
+For data with low signal-to-noise ratio, and sources with low continuum
+emission, the \emph{swath width} can be increased, in order to allow the
+algorithm to get a good estimate of the slit-illumination function. It is even
+possible to extract each detector-order as a single
+swath(\verb!--swath-width=2048!).
+ 
+Furthermore, the parameter for smoothing (regularization) along the slit can be
+increased to match the data, e.g. atmospheric conditions and (non-)AO. The
+corresponding parameter to regularize in the spectral direction can be used to
+smooth to the slit-width (2.5 or 5 pixels), or beyond, if the full spectral
+resolution is not needed for the science.
+
+\subsection{Artifacts in 1D spectra}
+In general, the optimal extraction is robust towards local outliers, as long as
+they do not affect all pixels that contribute to a spectral bin. When this is
+the case though, like a cosmic ray that hit a large fraction of the extraction
+height, it can be beneficial to mask out the cosmic first. This can be done by
+setting \verb!--cosmics_corr=TRUE! when running the \verb!cr2res_obs_*! recipe.
+
+In DRL versions prior to 1.3, cosmics could in rare cases cause an extraction
+swath to converge wrongly, resulting in swath-width-sized, triangularly shaped
+depressions in the spectrum. If you encounter this in your spectra, we advise to
+re-reduce with the latest version of the DRS.
+
+\subsection{Speeding up}
+The optimal extraction that all \verb!cr2res_obs*! recipes (except
+\verb!cr2res_obs_2d!) use is computationally expensive. The easiest way to save
+time is to shorten the \emph{extraction height} to not include unnecessary parts
+of the slit. 
+
+For example, if the order trace matches your target (see above), no jitter was
+used and the seeing/AO conditions were good, the height can be set as low as 20
+pixels. We recommend however to check the slit-function and/or the extraction
+model to make sure, no part of the target PSF is being cut off.
+
+Cf. \ref{sec:slitfracbinary} for how to extract a specific part of the slit.
+
 
 \subsection{Debug Settings}
 
