@@ -277,7 +277,7 @@ OPTIONS
   The following options are provided by this recipe.
 
   --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
-  --calib_cosmics_corr  : Correct the Cosmics. [FALSE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --bpm_low             : Low threshold for BPM detection. [0.8]
   --bpm_high            : High threshold for BPM detection. [1.2]
   --bpm_lines_ratio     : Maximum ratio of bad pixels per line. [0.5]
@@ -414,6 +414,7 @@ OPTIONS
   --trace_nb            : Only reduce the specified trace number. [-1]
   --slit_degree         : Slit fitting Polynomial degree (1 or 2). [2]
   --subtract_nolight_rows  : Subtract the no-light rows. [FALSE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --collapse_method     : Collapse the input images (MEAN or MEDIAN). [MEDIAN]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
@@ -509,6 +510,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between spectral orders. [TRUE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --detector            : Only reduce the specified detector. [0]
   --order               : Only reduce the specified order. [-1]
   --trace_nb            : Only reduce the specified trace number. [-1]
@@ -638,6 +640,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between orders. [TRUE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --nodding_invert      : Flag to use when A is above B. [FALSE]
   --extract_oversample  : factor by which to oversample the extraction. [7]
   --extract_swath_width : The swath width. [800]
@@ -649,7 +652,6 @@ OPTIONS
   --display_detector    : Apply the display for the specified detector. [0]
   --display_order       : Apply the display for the specified order. [1000]
   --display_trace       : Apply the display for the specified trace. [0]
-  --cosmics_corr        : Find and mark cosmic rays hits as bad. [FALSE]
 
 \end{verbatim}
 \normalsize
@@ -770,6 +772,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between orders. [TRUE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
   --extract_height      : Extraction height. [-1]
@@ -864,6 +867,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between spectral orders. [TRUE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --slit_frac           : Wished slit fraction. [-1.0, -1.0]
   --extract_oversample  : factor by which to oversample the extraction. [5]
   --extract_swath_width : The swath width. [800]
@@ -1012,7 +1016,7 @@ DESCRIPTION
                                                                           
     Algorithm                                                             
       loop on detectors d:                                                
-        Call cr2res_calib_imagelist()() to calibrate --cosmics_corr,
+        Call cr2res_calib_imagelist()() to calibrate cosmics,             
                  detlin, bpm, dark, flat                                  
           -> calibrated(d)                                                
         Collapse the calibrated image list to collapsed(d)                
@@ -1033,7 +1037,7 @@ OPTIONS
                              bottom. [FALSE]
   --subtract_interorder_column  : Subtract column-by-column fit to the pixel
                                   values between spectral orders. [TRUE]
-  --cosmics_corr        : Correct the Cosmics. [FALSE]
+  --cosmics             : Find and mark cosmic rays hits as bad. [FALSE]
   --collapse            : Collapse the input (NONE, SUM, MEAN or MEDIAN). [NONE]
 
 \end{verbatim}

@@ -59,7 +59,7 @@ In general, the optimal extraction is robust towards local outliers, as long as
 they do not affect all pixels that contribute to a spectral bin. When this is
 the case though, like a cosmic ray that hit a large fraction of the extraction
 height, it can be beneficial to mask out the cosmic first. This can be done by
-setting \verb!--cosmics_corr=TRUE! when running the \verb!cr2res_obs_*! recipe.
+setting \verb!--cosmics=TRUE! when running the \verb!cr2res_obs_*! recipe.
 
 In DRL versions prior to 1.3, cosmics could in rare cases cause an extraction
 swath to converge wrongly, resulting in swath-width-sized, triangularly shaped
