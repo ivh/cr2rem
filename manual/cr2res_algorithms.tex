@@ -148,7 +148,8 @@ Some things to keep in mind about ADU values
     \item In a nodding sequence the pair-wise subtracted frames are also
     averaged.
     \item The normalization of the output-spectra is like that of a sum of pixel
-    values, collapsed along the slit, i.e. summed-up ADU.
+    values, collapsed along the slit, i.e. summed-up ADU, also for the
+    extraction methods \verb!OPT_CURV! and \verb!MEDIAN!.
 \end{itemize}
 
 
@@ -159,8 +160,9 @@ output
     \item Bad pixel map\footnote{BPMs have no errors, therefore no
     error-propagation at this step.}
     \item Detector non-linearity.
-    \item Shot-noise gets added to each pixel's error, based on $\sqrt{\verb!ADU!}$
-    divided by $\sqrt{\verb!NDIT!}$ and $\sqrt{\verb!GAIN!}$.
+    \item Shot-noise gets added to each pixel's error, based on
+    $\sqrt{\verb!ADU!}$, divided by $\sqrt{\verb!NDIT!}$ and
+    $\sqrt{\verb!GAIN!}$.
     \item Dark-subtraction. The master darks are DETLIN-corrected, because they
     are not "dark" but contain thermal emission.
     \item Optional subtraction of all detector rows with a row, that is derived
@@ -179,8 +181,11 @@ error of the spectral bin.
 
 This means that the spectrum can be directly divided by the error-spectrum to
 obtain the signal-to-noise ratio (S/N). No further conversions are necessary.
+However, because non-poissonian noise like cosmic rays affects the residual
+between data and model more than the spectrum itself, the error spectrum can be
+overly pessimistic (cf.~\ref{sec:erroroverest}).
 
-However, in order to compare this S/N with the theoretical expectation from
+In order to compare this S/N with the theoretical expectation from
 Poissonian statistics, users will have to scale the ADU-values of the spectrum
 by the gain and the number of averaged frames (NDIT or combined frames), before
 taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after
