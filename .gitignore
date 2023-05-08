@@ -9,6 +9,11 @@
 *.blg
 *.brf
 *.idx
+*.ind
+*.fls
+*.ilg
+*.fdb_latexmk
+*.synctex.gz
 *-pipeline-manua*.pdf
 *-reflex-tutoria*.pdf
 reflex_tutorial/pipedoc/
