@@ -575,7 +575,7 @@ esorex --log-file=06_cr2res_util_normflat.log --output-dir=06_cr2res_util_normfl
 esorex --log-file=07_cr2res_util_calib.log --output-dir=07_cr2res_util_calib_out 
   cr2res_util_calib --collapse="MEAN" --subtract_nolight_rows=TRUE 07_cr2res_util_calib.sof
 esorex --log-file=08_cr2res_util_extract.log --output-dir=08_cr2res_util_extract_out  
-  cr2res_util_extract --smooth_slit=3  08_cr2res_util_extract.sof
+  cr2res_util_extract --smooth_slit=30 --swath\_width=2048  08_cr2res_util_extract.sof
 esorex --log-file=09_cr2res_util_genlines.log  --output-dir=09_cr2res_util_genlines_out  
   cr2res_util_genlines 09_cr2res_util_genlines.sof
 esorex --log-file=11_cr2res_util_wave.log --output-dir=11_cr2res_util_wave_out 
@@ -605,14 +605,19 @@ A few notes on the recipe parameters used:
   otherwise become part of the blaze, not part of the normalized flat-field, as
   intended.
   \item[7.] For short exposures the detector background-level can vary
-  significantly, so we use \linebreak \verb! --subtract_nolight_rows! to somewhat improve
-  on suboptimal dark-subtraction.
+  significantly, so we use \linebreak \verb! --subtract_nolight_rows! to
+  somewhat improve on suboptimal dark-subtraction.
   \item[9.] The first pass of cross-correlation with a sufficiently large
   search-radius (\verb!--wl_err!). \verb!--wl_degree=0! means that only a shift
   in the zero-point is allowed, which means that we have to \verb!--keep! the
   higher degrees of the input solution polynomial.
-  \item[11.] In the second pass we decrease the search radius and increase the
-  degree.
+  \item[11.] The UNE frames have very little signal in some detector orders, we
+  therefore increase the smoothing along the slit and extract the full detector
+  width in one swath, in order to increase the reliability.
+  \item[12.] It is possible to run second pass on the UNE wavecal with decreased
+  search radius and increased polynomial degree. This is however \emph{not}
+  recommended any longer, since it is enough to get the zero-point from the UNE
+  and leave the higher degrees to be determined from the FPET.
   \item[15.] The numerous and regular lines of the FPET allow a polynomial with
   even higher degree.
   \item[9,11,15.] Without \verb!--fallback! the output would, in case of an
