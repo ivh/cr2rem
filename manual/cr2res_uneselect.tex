@@ -6,14 +6,14 @@
 Static calibration files containing UNE line lists are distributed with the
 pipeline, and are named like \linebreak \verb#lines_u_redman_H1575.fits#. These
 are the input to \verb#cr2res_cal_wave# or \verb#cr2res_util_wave# and contain a
-subset of lines from the full catalogs by \cite{2018A&A...618A.118S} and
-\cite{2011ApJS..195...24R} which has been manually selected to only contain
-usable lines for the current setting.
+subset of lines from the full catalogs by \cite{2018A&A...618A.118S} (for Y and
+J bands) and \cite{2011ApJS..195...24R} (for H and K). Each subset has been
+manually selected to only contain usable lines for the current setting.
 
 The raw catalogs are part of \emph{cr2rep}, as txt-files in the subdirectory
 \emph{catalogs/}, containing the wavelength and strength of the lines. In the
 subdirectory \emph{selections/} there are further txt-files, one for each
-setting. They contain one \emph{usable wavelength region} per line, i.e. start
+setting. They contain one \emph{usable wavelength region} per line, i.e.~start
 and end wavelength between which there are only usable lines in the full
 catalog. This can be a single line, a group of lines, or a whole detector-order; depending on how well the catalog locally matches the obtained spectra.
 
@@ -22,7 +22,6 @@ The recipe \verb#cr2res_util_genlines# then takes the catalogs and selection fil
 The following describes how to go about selecting lines. This might become necessary when the UNE lamp is exchanged\footnote{Yes, they can be surprisingly different.} or has aged, or when for some other reason the cross-correlation  between spectrum and catalog no longer gives a reliable zero-point to the wavelength solution.
 
 \subsection*{Selecting lines}
-
 
 \begin{figure}[ht]
     \begin{center}

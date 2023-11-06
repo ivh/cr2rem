@@ -2,14 +2,20 @@
 \label{sec:knownissues}
 
 \subsection{Superresolution}
+
 In good seeing conditions the AO system can produce a PSF that is sharp enough
-to not evenly fill the slit width of the spectrograph. While this produces spectra with a resolution higher than specified, it can also cause an offset in the wavelength scale, because how the AO places the PSF center is not reproducible enough. Wavelength shifts between reduced spectra from the nodding positions A and B of around $1 pix$ have been encountered.
+to not evenly fill the slit width of the spectrograph. While this produces
+spectra with a resolution higher than specified, it can also cause an offset in
+the wavelength scale, because how the AO places the PSF center is not
+reproducible enough. Wavelength shifts between reduced spectra from the nodding
+positions A and B of around $1 pix$ have been encountered.
 
 This is not something that the DRS can correct for and will need to be mitigated
 by allowing users to choose a "slit scanning" AO mode, in which the PSF center
 is moved by small amounts between the slit edges during exposures.
 
-Users can correct the wavelength offset between A and B spectra relatively easily, by cross-correlating one to the other before combining them.
+Users can correct the wavelength offset between A and B spectra relatively
+easily, by cross-correlating one to the other before combining them.
 
 The following warning will be issued by the recipes \verb!cr2res_obs_nodding!
 and \verb!cr2res_obs_staring! when it looks like this is the case, judging from
@@ -23,16 +29,16 @@ the illumination profile \emph{along} the slit.
      and with respect to calibrations.
 \end{verbatim}
 
-\subsection{IDP / SDP}
-The implementation of the IDP data format (cf.~\ref{sec:idp}) is available for the recipes \verb!cr2res_obs_nodding! and \verb!cr2res_obs_staring!, but not yet for \verb!cr2res_obs_2d! and \verb!cr2res_obs_pol!.
+\subsubsection{\ldots in polarimetry}
 
-Futhermore, the following improvements are still outstanding
+Although we are not aware of a data set that exhibits this, the wavelength-shift
+due to superresolution can be expected to affect the two beams of the
+polarimeter. The result after demodulation would be a non-zero polarization
+signal in all spectral lines.
 
-\begin{itemize}
-    \item Flagging of spectral bins from detector edges and regions affected by ghosts.
-    \item .
-    
-\end{itemize}
+Such data would need more manual effort in data reduction, namely extracting the
+beams one at a time and cross-correlating the spectra before demodulating.
+
 
 \subsection{Calibration caveats in L and M band}
 
@@ -40,9 +46,9 @@ This is not a DRS-issue per se, but a current limitation of the instrument
 calibration in general. The UNE and FPET cover only the bands YJHK, which means
 that in L and M
 \begin{itemize}
-    \item the slit-tilt is not characterized and spectrum extraction happens
+    \item the slit-tilt is not characterized, and spectrum extraction happens
     along a vertical slit.
-    \item there is no wavelength calibration within the DRS. Instead the
+    \item there is no wavelength calibration within the DRS. Instead, the
     wavelength scale from static calibrations (derived manually from telluric
     lines), is propagated to the data products.
 \end{itemize}
@@ -55,33 +61,33 @@ detection of bad pixels more difficult than in the shorter bands. It makes sense
 therefore to compare the derived BPM with one from e.g.~Y-band and vary the
 parameter \verb!--bpm_kappa!.
 
-Simply using the BPM from another band has also been found to work well, cf.~\ref*{sec:bpmrefine}.
-
-\subsection{Overestimated Errors}
-\label{sec:erroroverest}
-With the optimal extraction, the error spectrum is derived from the residuals
-between extraction model and data (cf.~\ref{sec:errors}). It can therefore
-happen, especially for spectra with low signal-to-noise, that the error spectrum
-is too pessimistic, in the sense that dividing the spectrum by the error
-spectrum gives a lower S/N (by up to a factor $\approx 3$) than is actually the
-case (from photon statistics or measured from the spectrum RMS).
-
-An improved error calculation has been implemented in version 1.3. In case the
-issue persists, we recommend adjusting the relevant recipe parameters, namely
-\begin{itemize}
-    \item lowering the \emph{extraction height} as much as the data allows,
-    \item increasing the \emph{swath width}, possibly up to the full detector
-    size,
-    \item setting \verb!--cosmics=TRUE! because outliers such as cosmic rays,
-    while usually not affecting the spectrum itself, still contribute to the
-    error estimate.
-\end{itemize}
+Simply using the BPM from another band has also been found to work well,
+cf.~\ref*{sec:bpmrefine}.
 
 
 \section{Frequently Asked Questions}
 
+\subsection{Overlapping spectra in IDP}
+
+For the IDP data format (cf.~\ref{sec:idp}), the spectra from all
+detector-orders in a setting are stored in single long arrays for wavelength,
+ADU and errors, sorted by wavelength.
+
+This naturally leads to large gaps in the spectrum, between detectors and
+orders. In the Y-band, there is also some wavelength-overlap between orders and
+this, in combination with the fact that spectra are not normalized, results in
+large ``jumps'' in the spectrum in the overlap region, when plotting outright.
+
+The solution is to use the additional data column, which gives the order number
+for each spectral bin, to separate the overlap regions. Only after normalization
+can the spectra be merged or spliced together, e.g.~using
+\verb!cr2res_utiul_splice!.
+
 \subsection{Barycentric correction}
-The pipeline does currently not correct spectra for velocity shifts. Users therefore need to carry out the barycentric velocity correction, if needed, with an external tool.
+
+The pipeline does currently not correct spectra for velocity shifts. Users
+therefore need to carry out the barycentric velocity correction, if needed, with
+an external tool.
 
 It is however foreseen to use routines that were recently added to the
 common pipeline library HDRL, in order to provide this information in 

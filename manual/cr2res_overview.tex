@@ -143,8 +143,11 @@ Data Products Standard, as per \cite{SDPSTD}.
 
 These additional data products are saved in separate files that carry the prefix
 \verb!idp_!. By default, the creation of these files is turned off; the flag
-\verb!--idp! needs to be provided to the \verb!cr2res_obs_*! recipes to activate
-this functionality.
+\verb!--idp! needs to be provided to the recipes \verb!cr2res_obs_nodding!,
+\verb!cr2res_obs_staring! or \verb!cr2res_obs_pol! to activate this
+functionality.
+
+\verb!cr2res_obs_2d! does not support IDP.
 
 \subsection{The Pipeline Recipes}
 \label{sec:recipes-quick}
