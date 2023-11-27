@@ -9,6 +9,8 @@ spectra with a resolution higher than specified, it can also cause an offset in
 the wavelength scale, because how the AO places the PSF center is not
 reproducible enough. Wavelength shifts between reduced spectra from the nodding
 positions A and B of around $1 pix$ have been encountered.
+\footnote{This is not to be confused with the totally normal spectrum offset
+due to slit tilt, see \ref{faq:tilt}}
 
 This is not something that the DRS can correct for and will need to be mitigated
 by allowing users to choose a "slit scanning" AO mode, in which the PSF center
@@ -66,6 +68,16 @@ cf.~\ref*{sec:bpmrefine}.
 
 
 \section{Frequently Asked Questions}
+
+\subsection{Spectra are shifted between nodding A and B}
+\label{faq:tilt}
+
+As mentioned throughout, the \instrument\ slit is not aligned with detector
+columns, which means that spectra from different positions along the slit will
+have different wavelength scales. The DRS takes care of this when assigning
+wavelengths to spectral bins, therefore features in spectra from nodding A and B
+should align when plotting against wavelength, not \emph{not} when plotting
+against pixels.
 
 \subsection{Overlapping spectra in IDP}
 
