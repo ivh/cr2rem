@@ -175,21 +175,36 @@ output
 
 The errors of each pixel are used in the optimal extraction, and once that is
 done, a \emph{model} gets reconstructed from the spectrum and the slit-function.
-The residual between data and model gets quadratically added to the pixel
-uncertainties, which in turn get divided by the slit function to become the
-error of the spectral bin.
+The accumulated signal strength in each spectral bin is assumed to be dominated
+by electron shot noise (Poissonian), taking the various multipliers (NDIT,
+number of averaged frames) and the detector gain into account.
+\footnote{Up to and including version 1.3 of the DRS, the errors were instead
+ based on the \emph{residual} of the extraction model. This frequently led to
+ an underestimation of the signal-to-noise ratio.}
 
-This means that the spectrum can be directly divided by the error-spectrum to
-obtain the signal-to-noise ratio (S/N). No further conversions are necessary.
-However, because non-poissonian noise like cosmic rays affects the residual
-between data and model more than the spectrum itself, the error spectrum can be
-overly pessimistic (cf.~\ref{sec:erroroverest}).
+Note that to and including version 1.3 of the DRS, the errors were instead based
+on the \emph{residual} of the extraction model. This frequently led to an
+underestimation of the signal-to-noise ratio (S/N), therefore the errors and
+S/N will \emph{change} when re-running previous reductions with the latest
+version of the DRS.
 
-In order to compare this S/N with the theoretical expectation from
+Outliers (e.g.~cosmics) that do not affect the extracted spectrum much,
+previously increased the corresponding error unnecessarily; this is no longer
+the case. On the other hand, the model residual is very large when the
+extraction model cannot accommodate the data, like in the regions affected by
+ghosts, which is why the ghost-regions had large errors before, but no longer do
+to the same extent.
+
+With the new method based on
+accumulated signal, the error can become undefined (NaN) when a spectral bin has
+close to zero signal, e.g.~in saturated absorption lines.
+
+The spectrum can be directly divided by the error-spectrum to obtain the
+S/N; no further conversions are necessary. 
+In order to manually compare this S/N with the theoretical expectation from
 Poissonian statistics, users will have to scale the ADU-values of the spectrum
 by the gain and the number of averaged frames (NDIT or combined frames), before
-taking the square-root (Eq.~\ref{eq:snr}). In general, the measured S/N after
-extraction is somewhat lower than the theoretical value.
+taking the square-root (Eq.~\ref{eq:snr}).
 
 \begin{equation}
     \label{eq:snr}

@@ -780,6 +780,7 @@ OPTIONS
   --extract_smooth_spec : Smoothing along the spectrum. [0.0]
   --extract_smooth_slit : Smoothing along the slit. [2.0]
   --detector            : Only reduce the specified detector. [0]
+  --idp                 : Flag to produce  IDP files. [FALSE]
   --save_group          : Save extra files for the specified group number (0: no
                           save). [0]
 
@@ -827,6 +828,7 @@ DESCRIPTION
     Algorithm                                                             
       loop on detectors d:                                                
         call cr2res_obs_staring_reduce()                                  
+          -> combined(d)                                                   
           -> extract(d)                                                   
           -> slitfunc(d)                                                  
           -> model(d)                                                     
@@ -842,6 +844,7 @@ DESCRIPTION
         Recompute a new trace wave with the specified slit fraction       
                (--slit_frac) if needed                                    
         Extract the spectra from the collapsed image                      
+          -> combined                                                     
           -> extracted                                                    
           -> slit_func                                                    
           -> model_master                                                 
