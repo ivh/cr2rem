@@ -419,8 +419,9 @@ therefore make sense, especially for low S/N spectra, to use the BPM from from
 one needs to
 \begin{itemize}
     \item set the \verb!--bpm_kappa! for \texttt{cr2res\_cal\_dark} to a large value (e.g. 1000) to get a master dark without pixels marked as bad. This is because otherwise the flat-field would inherit the BPM from the master dark.
-    \item adjust the parameters \verb!--bpm_low! and \verb!--bpm_high! for \texttt{cr2res\_cal\_flat} to appropriate relative sensitivity thresholds.
-    \item use the \verb!CAL_FLAT_BPM! in subsequent reduction steps.
+    \item Adjust the parameters \verb!--bpm_low! and \verb!--bpm_high! for \texttt{cr2res\_cal\_flat} to appropriate relative sensitivity thresholds.
+    \item The resulting \verb!CAL_FLAT_BPM! can be used directly in subsequent reduction steps. However, it also marks the inter-order regions as bad which prevents them to be used for background subtraction via \verb!--subtract_interorder_column! which defaults to \verb!TRUE! for the obs-recipes.
+    \item As a work-around, the BPM can be split into its components by feeding the \verb!CAL_FLAT_BPM! to \verb!cr2res_util_bpm_split! which separates the BPM by the reason why a pixel was marked as bad. The number $2$ signifies the outliers in the normalized flat-field, thus it is this BPM that can be passed to obs-recipes to allow inter-order background-subtraction.
 \end{itemize}
 
 \subsubsection{Splicing and Continuum Normalization}
