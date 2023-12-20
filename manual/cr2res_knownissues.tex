@@ -97,13 +97,16 @@ can the spectra be merged or spliced together, e.g.~using
 
 \subsection{Barycentric correction}
 
-The pipeline does currently not correct spectra for velocity shifts. Users
-therefore need to carry out the barycentric velocity correction, if needed, with
-an external tool.
+As of late 2023, the DRS provides a value for the barycentric velocity
+correction. This is not specific to \instrument\ but uses the appropriate
+functionality from the HDRL. For details on the algorithm and its inputs,
+see the documentation of the ESO Toolkit Library (ESOTK)\footnote{https://eso.org/sci/software/pipelines/esotk/esotk-pipe-recipes.html}.
 
-It is however foreseen to use routines that were recently added to the
-common pipeline library HDRL, in order to provide this information in 
-data product headers.
+The velocity offset is saved to the data products'
+header key \verb!DRS BARCORR!, and also printed in the logs.
+
+The correction is not applied to the wavelength scale of the spectra.
+
 
 \subsection{Timestamps}
 For observations that comprise a time-sequence, e.g.~an exoplanet transit,
