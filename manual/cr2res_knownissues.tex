@@ -2,6 +2,7 @@
 \label{sec:knownissues}
 
 \subsection{Superresolution}
+\label{sec:superres}
 
 In good seeing conditions the AO system can produce a PSF that is sharp enough
 to not evenly fill the slit width of the spectrograph. While this produces
@@ -75,9 +76,11 @@ cf.~\ref*{sec:bpmrefine}.
 As mentioned throughout, the \instrument\ slit is not aligned with detector
 columns, which means that spectra from different positions along the slit will
 have different wavelength scales. The DRS takes care of this when assigning
-wavelengths to spectral bins, therefore features in spectra from nodding A and B
-should align when plotting against wavelength, but \emph{not} when plotting
-against pixels.
+wavelengths to spectral bins, for example by calculating new wavelength
+solutions for the nodding positions A and B, using the slit tilt calibration.
+Therefore, features in spectra from A and B should align with each other when
+plotting against wavelength (unless \ref{sec:superres}), but \emph{not} when
+straight-up plotting the spectral bins against their index (i.e.~pixels).
 
 \subsection{Overlapping spectra in IDP}
 
