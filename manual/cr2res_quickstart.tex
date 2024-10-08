@@ -475,8 +475,10 @@ cr2res\_obs\_nodding, cr2res\_obs\_pol) accept as optional input the
 blaze function computed by the cr2res\_cal\_flat recipe
 (PRO CATG = CAL\_FLAT\_EXTRACT\_1D).
 If the file is provided, the extracted spectrum is divided by the
-normalised blaze function. The normalisation factor is the 95th
-percentile of the blaze.
+normalised blaze function. The global normalisation factor is taken 
+from a header keyword in the blaze file, if it was produced with version 1.6.0 or
+higher of the pipeline, otherwise the normalisation factor is the 95th
+percentile of the blaze for each spectral trace.
 
 \subsection{Calibration, from scratch}
 \label{sec:calibscratch}
