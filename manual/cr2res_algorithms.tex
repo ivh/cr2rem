@@ -174,25 +174,27 @@ output
     \item Optional correction for cosmic rays.
 \end{itemize}
 
+\begin{quote}
 
-N.B.: ESO is aware that the method described below often underestimates the errors.
+\textbf{N.B.}: ESO is aware that the method described below often underestimates the errors.
 This issue will be analysed and addressed in a future version of the DRS. For now
-three approaches have been implemented in cr2res_obs_nodding to aid the user in estimating the errors.
+three approaches have been implemented in \verb!cr2res_obs_nodding! to aid the user in estimating the errors.
 \begin{itemize}
     \item A DER SNR keyword is added to the FITS extensions containing the extracted spectra
-    of the form ESO QC DER SNRn, where n is the order number.
+    of the form \verb!ESO QC DER SNRn!, where n is the order number.
     This is an estimate of the average S/N in the whole trace following the method described in 
     \cite{2008ASPC..394..505S}. Due to the complex nature of many CRIRES+ spectra, this begins to
     lose accuracy at high S/N, but values below 70 should be accurate to at least 25\%. 
-    \item For IDP products, produced using the --idp flag, a correction term is added to the errors
+    \item For IDP products, produced using the \verb!--idp! flag, a correction term is added to the errors
     to bring the result closer to the S/N derived by the DER algorithm.
-    \item Using the parameter --error_method=Horne, the variance is calculated using the $\text{var}\left| f \right|=$...  
+    \item Using the parameter \verb!--error_method=Horne!, the variance is calculated using the $\text{var}\left| f \right|=$...  
     formula from equation 8 in Horne \cite{1986PASP...98..609H}, all input parameters are taken from the standard
     DRS extraction method. This method should provide relatively robust results, and will include contributions 
     from thermal background and telluric emission lines, at very high S/N it may underestimate the errors, as
     it does not include systematics or covariance.
 \end{itemize} 
 Note that none of the above methods have been fully verified as yet.
+\end{quote}
 
 For the optimal extraction
 the accumulated signal strength in each spectral bin is assumed to be dominated
